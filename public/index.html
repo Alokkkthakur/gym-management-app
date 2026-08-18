@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viraj Fitness Pro - Smart Reminder</title>
+    <title>Viraj Fitness Pro - Gym Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -15,11 +15,13 @@
         body {
             font-family: 'Rajdhani', 'Segoe UI', sans-serif;
             min-height: 100vh;
-            background: #0a0a0f;
+            background: #0d0d0d;
             position: relative;
             overflow-x: hidden;
+            color: #e0e0e0;
         }
         
+        /* ===== GYM THEME BACKGROUND ===== */
         body::before {
             content: '';
             position: fixed;
@@ -28,31 +30,37 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 30% 20%, rgba(247, 151, 30, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(247, 151, 30, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(15, 52, 96, 0.3) 0%, #0a0a0f 100%);
+                radial-gradient(ellipse at 20% 30%, rgba(255, 68, 0, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 200, 0, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(20, 20, 30, 0.8) 0%, #0d0d0d 100%);
             z-index: 0;
-            animation: bgPulse 8s ease-in-out infinite;
+            animation: gymPulse 6s ease-in-out infinite;
         }
         
-        @keyframes bgPulse {
-            0%, 100% { opacity: 0.8; }
+        @keyframes gymPulse {
+            0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
         
+        /* ===== GYM EQUIPMENT PATTERN ===== */
         body::after {
-            content: '';
+            content: '💪🏋️‍♂️🏋️‍♀️💪🏋️‍♂️🏋️‍♀️💪';
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: 
-                url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f7971e' fill-opacity='0.03'%3E%3Cpath d='M60 20 L65 30 L75 30 L67 37 L70 47 L60 42 L50 47 L53 37 L45 30 L55 30 Z'/%3E%3Cpath d='M20 80 L25 90 L35 90 L27 97 L30 107 L20 102 L10 107 L13 97 L5 90 L15 90 Z'/%3E%3Cpath d='M100 80 L105 90 L115 90 L107 97 L110 107 L100 102 L90 107 L93 97 L85 90 L95 90 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 120px 120px;
+            font-size: 60px;
+            letter-spacing: 40px;
+            word-spacing: 40px;
+            opacity: 0.03;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.5;
+            transform: rotate(-15deg) scale(1.5);
         }
         
         .particles {
@@ -68,30 +76,31 @@
         
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #f7971e;
+            width: 3px;
+            height: 3px;
+            background: #ff4400;
             border-radius: 50%;
             opacity: 0;
-            animation: floatParticle 15s infinite;
+            animation: floatParticle 20s infinite;
+            box-shadow: 0 0 6px #ff4400;
         }
         
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 25%; animation-delay: 2s; }
-        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
-        .particle:nth-child(4) { left: 55%; animation-delay: 6s; }
-        .particle:nth-child(5) { left: 70%; animation-delay: 8s; }
-        .particle:nth-child(6) { left: 85%; animation-delay: 10s; }
-        .particle:nth-child(7) { left: 15%; animation-delay: 3s; }
-        .particle:nth-child(8) { left: 45%; animation-delay: 7s; }
-        .particle:nth-child(9) { left: 75%; animation-delay: 11s; }
-        .particle:nth-child(10) { left: 90%; animation-delay: 5s; }
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; background: #ff6b00; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 2s; background: #ffcc00; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 4s; background: #ff4400; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 6s; background: #ff6b00; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 8s; background: #ffcc00; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 10s; background: #ff4400; }
+        .particle:nth-child(7) { left: 15%; animation-delay: 3s; background: #ff6b00; }
+        .particle:nth-child(8) { left: 45%; animation-delay: 7s; background: #ffcc00; }
+        .particle:nth-child(9) { left: 75%; animation-delay: 11s; background: #ff4400; }
+        .particle:nth-child(10) { left: 90%; animation-delay: 5s; background: #ff6b00; }
         
         @keyframes floatParticle {
             0% { top: -10%; opacity: 0; transform: translateX(0) scale(0); }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 110%; opacity: 0; transform: translateX(50px) scale(1); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { top: 110%; opacity: 0; transform: translateX(80px) scale(1.5); }
         }
         
         .container {
@@ -102,8 +111,9 @@
             z-index: 1;
         }
         
+        /* ===== HEADER ===== */
         .header {
-            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 40, 0.95));
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(10, 10, 15, 0.98));
             backdrop-filter: blur(20px);
             padding: 20px 30px;
             border-radius: 20px;
@@ -111,8 +121,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid rgba(247, 151, 30, 0.1);
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 68, 0, 0.15);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 68, 0, 0.05);
             position: relative;
             overflow: hidden;
         }
@@ -124,7 +134,18 @@
             right: -20%;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(247, 151, 30, 0.05), transparent 70%);
+            background: radial-gradient(circle, rgba(255, 68, 0, 0.05), transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 200, 0, 0.03), transparent 70%);
             border-radius: 50%;
         }
         
@@ -139,14 +160,14 @@
         .logo-icon {
             width: 65px;
             height: 65px;
-            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 32px;
             color: #fff;
-            box-shadow: 0 0 40px rgba(247, 151, 30, 0.2);
+            box-shadow: 0 0 40px rgba(255, 68, 0, 0.25);
             flex-shrink: 0;
             animation: logoGlow 3s ease-in-out infinite;
             position: relative;
@@ -157,7 +178,7 @@
             position: absolute;
             inset: -3px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             z-index: -1;
             opacity: 0.3;
             filter: blur(10px);
@@ -165,8 +186,8 @@
         }
         
         @keyframes logoGlow {
-            0%, 100% { box-shadow: 0 0 30px rgba(247, 151, 30, 0.2); }
-            50% { box-shadow: 0 0 60px rgba(247, 151, 30, 0.4); }
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 68, 0, 0.2); }
+            50% { box-shadow: 0 0 60px rgba(255, 68, 0, 0.4); }
         }
         
         .logo-text h1 {
@@ -174,7 +195,7 @@
             font-size: 26px;
             font-weight: 900;
             letter-spacing: 3px;
-            background: linear-gradient(135deg, #f7971e, #ffd200, #ff6b00);
+            background: linear-gradient(135deg, #ff4400, #ffcc00, #ff6b00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -184,7 +205,7 @@
         .logo-text h1::after {
             content: '™';
             font-size: 10px;
-            -webkit-text-fill-color: #f7971e;
+            -webkit-text-fill-color: #ff4400;
             position: absolute;
             top: -8px;
             right: -20px;
@@ -195,7 +216,7 @@
             color: #666;
             letter-spacing: 4px;
             text-transform: uppercase;
-            -webkit-text-fill-color: #666;
+            -webkit-text-fill-color: #888;
             font-weight: 300;
         }
         
@@ -220,19 +241,20 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 24px;
             font-weight: 700;
-            color: #f7971e;
+            color: #ff4400;
             display: block;
+            text-shadow: 0 0 20px rgba(255, 68, 0, 0.2);
         }
         
         .header-stat .label {
             font-size: 10px;
-            color: #555;
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         
         .header-stat .label span {
-            color: #f7971e;
+            color: #ff4400;
         }
         
         .header-tagline {
@@ -240,26 +262,27 @@
             color: #555;
             text-align: right;
             letter-spacing: 2px;
-            border-left: 1px solid rgba(247, 151, 30, 0.1);
+            border-left: 1px solid rgba(255, 68, 0, 0.1);
             padding-left: 20px;
         }
         
         .header-tagline span {
             display: block;
             font-size: 13px;
-            color: #ffd200;
+            color: #ffcc00;
             font-weight: 600;
             letter-spacing: 1px;
         }
         
+        /* ===== CARDS ===== */
         .card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
             backdrop-filter: blur(20px);
             padding: 28px;
             margin: 20px 0;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
@@ -272,14 +295,14 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, #f7971e, transparent);
-            opacity: 0.3;
+            background: linear-gradient(90deg, transparent, #ff4400, #ffcc00, transparent);
+            opacity: 0.4;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            border-color: rgba(247, 151, 30, 0.1);
-            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 68, 0, 0.1);
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5);
         }
         
         .card-title {
@@ -297,17 +320,18 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 16px;
             font-weight: 700;
-            color: #fff;
+            color: #e0e0e0;
             letter-spacing: 2px;
             text-transform: uppercase;
-            border-bottom: 2px solid rgba(247, 151, 30, 0.2);
+            border-bottom: 2px solid rgba(255, 68, 0, 0.2);
             padding-bottom: 8px;
         }
         
         .card-title h2 span {
-            color: #f7971e;
+            color: #ff4400;
         }
         
+        /* ===== FORM ===== */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -329,7 +353,7 @@
         }
         
         .form-group label .required {
-            color: #f7971e;
+            color: #ff4400;
         }
         
         .form-group .hint {
@@ -340,31 +364,31 @@
         
         input, select {
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             font-size: 14px;
-            color: #fff;
+            color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
             transition: all 0.3s ease;
             width: 100%;
         }
         
         input::placeholder {
-            color: #444;
+            color: #555;
             font-weight: 300;
         }
         
         input:focus, select:focus {
-            border-color: #f7971e;
-            box-shadow: 0 0 30px rgba(247, 151, 30, 0.05);
+            border-color: #ff4400;
+            box-shadow: 0 0 30px rgba(255, 68, 0, 0.06);
             outline: none;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
         
         select option {
-            background: #1a1a2e;
-            color: #fff;
+            background: #1a1a1a;
+            color: #e0e0e0;
         }
         
         .radio-group {
@@ -388,7 +412,7 @@
         .radio-group input[type="radio"] {
             width: 18px;
             height: 18px;
-            accent-color: #f7971e;
+            accent-color: #ff4400;
             cursor: pointer;
             flex-shrink: 0;
         }
@@ -397,6 +421,7 @@
             color: #fff;
         }
         
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 14px 35px;
             border: none;
@@ -413,14 +438,14 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             color: #fff;
-            box-shadow: 0 4px 25px rgba(247, 151, 30, 0.2);
+            box-shadow: 0 4px 25px rgba(255, 68, 0, 0.25);
         }
         
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 40px rgba(247, 151, 30, 0.4);
+            box-shadow: 0 8px 40px rgba(255, 68, 0, 0.4);
         }
         
         .btn-danger {
@@ -446,14 +471,14 @@
         }
         
         .btn-info {
-            background: linear-gradient(135deg, #17a2b8, #0dcaf0);
-            color: #fff;
-            box-shadow: 0 4px 25px rgba(23, 162, 184, 0.2);
+            background: linear-gradient(135deg, #ffcc00, #f59e0b);
+            color: #1a1a1a;
+            box-shadow: 0 4px 25px rgba(255, 204, 0, 0.2);
         }
         
         .btn-info:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(23, 162, 184, 0.3);
+            box-shadow: 0 8px 40px rgba(255, 204, 0, 0.4);
         }
         
         .btn-outline {
@@ -469,14 +494,14 @@
         }
         
         .btn-warning {
-            background: linear-gradient(135deg, #ffc107, #e0a800);
-            color: #000;
-            box-shadow: 0 4px 25px rgba(255, 193, 7, 0.2);
+            background: linear-gradient(135deg, #ffcc00, #f59e0b);
+            color: #1a1a1a;
+            box-shadow: 0 4px 25px rgba(255, 204, 0, 0.2);
         }
         
         .btn-warning:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(255, 193, 7, 0.3);
+            box-shadow: 0 8px 40px rgba(255, 204, 0, 0.4);
         }
         
         .btn-whatsapp {
@@ -490,23 +515,13 @@
             box-shadow: 0 8px 40px rgba(37, 211, 102, 0.4);
         }
         
-        .btn-telegram {
-            background: linear-gradient(135deg, #0088cc, #004f7a);
-            color: #fff;
-            box-shadow: 0 4px 25px rgba(0, 136, 204, 0.2);
-        }
-        
-        .btn-telegram:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(0, 136, 204, 0.4);
-        }
-        
         .btn-sm {
             padding: 8px 18px;
             font-size: 10px;
             letter-spacing: 1px;
         }
         
+        /* ===== BADGES ===== */
         .badge {
             padding: 5px 16px;
             border-radius: 50px;
@@ -517,16 +532,22 @@
             display: inline-block;
         }
         .badge-paid { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.1); }
-        .badge-pending { background: rgba(220, 53, 69, 0.2); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
-        .badge-partial { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.2); }
+        .badge-pending { background: rgba(220, 53, 69, 0.2); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); animation: blinkRed 1.5s infinite; }
+        .badge-partial { background: rgba(255, 204, 0, 0.2); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.2); }
         .badge-expired { background: rgba(220, 53, 69, 0.2); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
         .badge-active { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.1); }
-        .badge-warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.2); }
-        .badge-cardio { background: rgba(23, 162, 184, 0.2); color: #17a2b8; border: 1px solid rgba(23, 162, 184, 0.2); }
+        .badge-warning { background: rgba(255, 204, 0, 0.2); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.2); }
+        .badge-cardio { background: rgba(255, 68, 0, 0.15); color: #ff4400; border: 1px solid rgba(255, 68, 0, 0.1); }
         .badge-no-cardio { background: rgba(108, 117, 125, 0.2); color: #6c757d; border: 1px solid rgba(108, 117, 125, 0.2); }
         
+        @keyframes blinkRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* ===== MEMBER ITEMS ===== */
         .member-item {
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             padding: 18px 20px;
             margin: 10px 0;
             border-radius: 16px;
@@ -556,12 +577,12 @@
         .member-item:hover {
             background: rgba(255, 255, 255, 0.04);
             transform: translateX(5px);
-            border-color: rgba(247, 151, 30, 0.05);
+            border-color: rgba(255, 68, 0, 0.05);
         }
         
         .member-item.has-due {
             border-color: rgba(220, 53, 69, 0.3);
-            background: rgba(220, 53, 69, 0.05);
+            background: rgba(220, 53, 69, 0.04);
         }
         
         .member-item.has-due::before {
@@ -573,16 +594,17 @@
             color: #dc3545;
             font-size: 18px;
             font-weight: 900;
+            animation: blinkRed 1.5s infinite;
         }
         
         .member-item.expired {
             border-color: rgba(220, 53, 69, 0.3);
-            background: rgba(220, 53, 69, 0.05);
+            background: rgba(220, 53, 69, 0.04);
         }
         
         .member-item.expiring-soon {
-            border-color: rgba(255, 193, 7, 0.3);
-            background: rgba(255, 193, 7, 0.05);
+            border-color: rgba(255, 204, 0, 0.3);
+            background: rgba(255, 204, 0, 0.04);
         }
         
         .member-name {
@@ -644,6 +666,7 @@
             font-family: monospace;
         }
         
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -663,14 +686,14 @@
         .stat-card:hover {
             background: rgba(255, 255, 255, 0.04);
             transform: translateY(-3px);
-            border-color: rgba(247, 151, 30, 0.05);
+            border-color: rgba(255, 68, 0, 0.05);
         }
         
         .stat-card .number {
             font-family: 'Orbitron', sans-serif;
             font-size: 28px;
             font-weight: 900;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+            background: linear-gradient(135deg, #ff4400, #ffcc00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -691,14 +714,14 @@
         }
         
         .stat-card .number.warning {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
+            background: linear-gradient(135deg, #ffcc00, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
         .stat-card .number.info {
-            background: linear-gradient(135deg, #17a2b8, #0dcaf0);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -713,10 +736,11 @@
         }
         
         .stat-card .label span {
-            color: #f7971e;
-            -webkit-text-fill-color: #f7971e;
+            color: #ff4400;
+            -webkit-text-fill-color: #ff4400;
         }
         
+        /* ===== FILTER ===== */
         .filter-bar {
             display: flex;
             gap: 10px;
@@ -730,13 +754,13 @@
         }
         
         .filter-bar .btn.active {
-            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             color: #fff;
             border: none;
         }
         
         .filter-bar .btn.active-cardio {
-            background: linear-gradient(135deg, #17a2b8, #0dcaf0);
+            background: linear-gradient(135deg, #ff4400, #ff6b00);
             color: #fff;
             border: none;
         }
@@ -747,65 +771,7 @@
             border: none;
         }
         
-        /* ===== REMINDER SECTION ===== */
-        .reminder-methods {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 15px 0;
-        }
-        
-        .reminder-method-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .reminder-method-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-3px);
-        }
-        
-        .reminder-method-card .icon {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .reminder-method-card .title {
-            color: #fff;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .reminder-method-card .desc {
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        .reminder-method-card .status {
-            margin-top: 10px;
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 50px;
-            display: inline-block;
-        }
-        
-        .reminder-method-card .status.ready {
-            background: rgba(40, 167, 69, 0.15);
-            color: #28a745;
-        }
-        
-        .reminder-method-card .status.setup {
-            background: rgba(255, 193, 7, 0.15);
-            color: #ffc107;
-        }
-        
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -814,18 +780,18 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
         }
         
         .modal-content {
-            background: linear-gradient(135deg, rgba(15, 15, 30, 0.98), rgba(25, 25, 50, 0.98));
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(10, 10, 15, 0.98));
             margin: 5% auto;
             padding: 35px;
             border-radius: 24px;
             max-width: 600px;
-            border: 1px solid rgba(247, 151, 30, 0.05);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 68, 0, 0.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
             animation: modalSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-height: 85vh;
             overflow-y: auto;
@@ -844,7 +810,7 @@
         }
         
         .modal-content h3 span {
-            color: #f7971e;
+            color: #ff4400;
         }
         
         .modal-subtitle {
@@ -899,7 +865,7 @@
         }
         
         .modal-info .row .value.gold {
-            color: #f7971e;
+            color: #ffcc00;
         }
         
         .modal-content input,
@@ -910,13 +876,13 @@
             max-width: 100%;
             background: rgba(255, 255, 255, 0.03);
             border: 2px solid rgba(255, 255, 255, 0.03);
-            color: #fff;
+            color: #e0e0e0;
             border-radius: 12px;
         }
         
         .modal-content input:focus,
         .modal-content select:focus {
-            border-color: #f7971e;
+            border-color: #ff4400;
         }
         
         .reminder-item {
@@ -950,6 +916,91 @@
             font-size: 9px;
         }
         
+        .reminder-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .reminder-method-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .reminder-method-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-3px);
+            border-color: #ff4400;
+        }
+        
+        .reminder-method-card .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .reminder-method-card .title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .reminder-method-card .desc {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .reminder-method-card .status {
+            margin-top: 10px;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .reminder-method-card .status.ready {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+        
+        .reminder-method-card .status.setup {
+            background: rgba(255, 204, 0, 0.15);
+            color: #ffcc00;
+        }
+        
+        .test-reminder-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 10px 0;
+        }
+        
+        .test-reminder-box textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .test-reminder-box textarea:focus {
+            outline: none;
+            border-color: #ff4400;
+        }
+        
         .success { 
             color: #28a745; 
             padding: 14px; 
@@ -969,11 +1020,11 @@
             font-weight: 600;
         }
         .info-box { 
-            color: #17a2b8; 
+            color: #ffcc00; 
             padding: 14px; 
-            background: rgba(23, 162, 184, 0.05); 
+            background: rgba(255, 204, 0, 0.05); 
             border-radius: 12px; 
-            border: 1px solid rgba(23, 162, 184, 0.05);
+            border: 1px solid rgba(255, 204, 0, 0.05);
             margin-top: 15px;
             font-weight: 600;
         }
@@ -989,33 +1040,7 @@
         }
         
         .footer span {
-            color: #f7971e;
-        }
-        
-        .test-reminder-box {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin: 10px 0;
-        }
-        
-        .test-reminder-box textarea {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 14px;
-            min-height: 80px;
-            resize: vertical;
-        }
-        
-        .test-reminder-box textarea:focus {
-            outline: none;
-            border-color: #f7971e;
+            color: #ff4400;
         }
         
         @media (max-width: 992px) {
@@ -1119,19 +1144,20 @@
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0a0f;
+            background: #0d0d0d;
         }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #f7971e, #ff6b00);
+            background: linear-gradient(to bottom, #ff4400, #ff6b00);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ffd200;
+            background: #ffcc00;
         }
     </style>
 </head>
 <body>
     
+    <!-- ===== ANIMATED PARTICLES ===== -->
     <div class="particles">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -1150,10 +1176,10 @@
         <!-- ===== HEADER ===== -->
         <div class="header">
             <div class="logo-container">
-                <div class="logo-icon">💪</div>
+                <div class="logo-icon">🏋️</div>
                 <div class="logo-text">
                     <h1>VIRAJ FITNESS</h1>
-                    <p>🏋️ Elite Gym Management</p>
+                    <p>💪 Elite Gym Management</p>
                 </div>
             </div>
             
@@ -1169,15 +1195,13 @@
                     </div>
                 </div>
                 <div class="header-tagline">
-                    <span>⚡ POWER UP</span>
+                    <span>⚡ IRON PARADISE</span>
                     Since 2026
                 </div>
             </div>
         </div>
         
-        <!-- ============================================ -->
-        <!-- ===== CARD 1: ADD NEW MEMBER ===== -->
-        <!-- ============================================ -->
+        <!-- ===== CARD 1: ADD MEMBER ===== -->
         <div class="card">
             <div class="card-title">
                 <span class="icon">📝</span>
@@ -1245,9 +1269,7 @@
             <div id="addResult"></div>
         </div>
         
-        <!-- ============================================ -->
-        <!-- ===== CARD 2: MEMBER DASHBOARD ===== -->
-        <!-- ============================================ -->
+        <!-- ===== CARD 2: DASHBOARD ===== -->
         <div class="card">
             <div class="card-title">
                 <span class="icon">🔔</span>
@@ -1266,7 +1288,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="number warning" id="totalPartialMembers">0</div>
-                    <div class="label">🔄 <span style="color:#ffc107;">Partial</span></div>
+                    <div class="label">🔄 <span style="color:#ffcc00;">Partial</span></div>
                 </div>
                 <div class="stat-card">
                     <div class="number danger" id="totalExpiredMembers">0</div>
@@ -1274,7 +1296,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="number info" id="totalCardioMembers">0</div>
-                    <div class="label">🏃 <span style="color:#17a2b8;">With Cardio</span></div>
+                    <div class="label">🏃 <span style="color:#ff4400;">With Cardio</span></div>
                 </div>
                 <div class="stat-card">
                     <div class="number" id="totalNoCardioMembers">0</div>
@@ -1299,19 +1321,16 @@
         
         <!-- ===== FOOTER ===== -->
         <div class="footer">
-            © 2026 <span>Viraj Fitness</span> | Built with 💪 | Smart Reminder v2.0
+            © 2026 <span>Viraj Fitness</span> | Built with 💪 | Iron Paradise v2.0
         </div>
     </div>
     
-    <!-- ============================================ -->
     <!-- ===== REMINDER MODAL ===== -->
-    <!-- ============================================ -->
     <div id="reminderModal" class="modal">
         <div class="modal-content">
             <h3>📱 <span>Reminder</span> System</h3>
             <p class="modal-subtitle">Send payment reminders to members</p>
             
-            <!-- Reminder Methods -->
             <div class="reminder-methods">
                 <div class="reminder-method-card" onclick="sendReminderVia('whatsapp')">
                     <span class="icon">💬</span>
@@ -1323,20 +1342,19 @@
                     <span class="icon">📨</span>
                     <div class="title">SMS</div>
                     <div class="desc">Paid Service</div>
-                    <span class="status setup">⚙️ Setup Needed</span>
+                    <span class="status setup">⚙️ Setup</span>
                 </div>
                 <div class="reminder-method-card" onclick="sendReminderVia('email')">
                     <span class="icon">📧</span>
                     <div class="title">Email</div>
                     <div class="desc">Free (SMTP)</div>
-                    <span class="status setup">⚙️ Setup Needed</span>
+                    <span class="status setup">⚙️ Setup</span>
                 </div>
             </div>
             
             <div id="reminderContent">
                 <div id="reminderList" style="margin: 15px 0;"></div>
                 
-                <!-- Test Reminder Box -->
                 <div class="test-reminder-box">
                     <label style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">✏️ Edit Message</label>
                     <textarea id="reminderMessage">🔔 Reminder: Your gym fee is pending. Please pay ₹{amount} ASAP! - Viraj Fitness</textarea>
@@ -1352,9 +1370,7 @@
         </div>
     </div>
     
-    <!-- ============================================ -->
     <!-- ===== PAYMENT MODAL ===== -->
-    <!-- ============================================ -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h3>💰 <span>Payment</span> Gateway</h3>
@@ -1689,7 +1705,6 @@
         // 9. REMINDER SYSTEM
         // ============================================
         
-        // Open Reminder Modal
         function openReminderModal() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             
@@ -1718,7 +1733,6 @@
             document.getElementById('reminderModal').style.display = 'block';
             document.getElementById('reminderResult').innerHTML = '';
             
-            // Set default message
             document.getElementById('reminderMessage').value = 
                 `🔔 Reminder: Your gym fee of ₹{amount} is pending. Please pay ASAP! - Viraj Fitness`;
         }
@@ -1727,20 +1741,16 @@
             document.getElementById('reminderModal').style.display = 'none';
         }
         
-        // Select reminder method
         function sendReminderVia(method) {
             reminderMethod = method;
             
-            // Highlight selected method
             document.querySelectorAll('.reminder-method-card').forEach(card => {
                 card.style.borderColor = 'rgba(255,255,255,0.05)';
             });
-            // Use event to highlight
             const cards = document.querySelectorAll('.reminder-method-card');
             cards.forEach(card => {
                 card.style.borderColor = 'rgba(255,255,255,0.05)';
             });
-            // Find clicked card
             const clickedCard = Array.from(cards).find(card => {
                 const icon = card.querySelector('.icon');
                 if (method === 'whatsapp' && icon.textContent === '💬') return true;
@@ -1749,7 +1759,7 @@
                 return false;
             });
             if (clickedCard) {
-                clickedCard.style.borderColor = '#f7971e';
+                clickedCard.style.borderColor = '#ff4400';
             }
             
             const methods = {
@@ -1762,12 +1772,10 @@
                 `<div class="info-box">📱 Selected: ${methods[method].icon} ${methods[method].name}</div>`;
         }
         
-        // Send single reminder
         function sendSingleReminder(memberId) {
             const member = members.find(m => m._id === memberId);
             if (!member) return;
             
-            // Get custom message
             let messageTemplate = document.getElementById('reminderMessage').value;
             const message = messageTemplate.replace(/{amount}/g, member.remainingDues);
             
@@ -1776,10 +1784,7 @@
             
             if (member.phone) {
                 const phone = member.phone.startsWith('91') ? member.phone : '91' + member.phone;
-                
-                // WhatsApp
                 window.open(`https://wa.me/${phone}?text=${encodeURIComponent(fullMessage)}`, '_blank');
-                
                 document.getElementById('reminderResult').innerHTML = 
                     `<div class="success">📱 WhatsApp opened for ${member.name}!</div>`;
             } else {
@@ -1787,7 +1792,6 @@
             }
         }
         
-        // Send bulk reminder
         function sendBulkReminder() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             let sent = 0;
@@ -1806,8 +1810,6 @@
                     const message = messageTemplate.replace(/{amount}/g, m.remainingDues);
                     const cardioText = m.cardio === 'With Cardio' ? '🏃 (With Cardio)' : '🚫 (Without Cardio)';
                     const fullMessage = `${message} - ${m.name} ${cardioText}`;
-                    
-                    // Open WhatsApp in new tab for each member
                     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(fullMessage)}`, '_blank');
                     sent++;
                 }
@@ -1817,7 +1819,6 @@
                 `<div class="success">📱 ${sent} WhatsApp reminders opened!</div>`;
         }
         
-        // Copy reminder list
         function copyReminderList() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             
@@ -1893,7 +1894,6 @@
             }, 1500);
         }
         
-        // Click outside modal to close
         window.onclick = function(event) {
             if (event.target == document.getElementById('paymentModal')) {
                 closePaymentModal();
