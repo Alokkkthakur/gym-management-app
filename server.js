@@ -162,15 +162,18 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ===== START =====
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/gym-management')
-.then(() => {
-    console.log('✅ MongoDB connected successfully');
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
+// ===== MONGODB CONNECTION =====
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/gymdb';
+
+mongoose.connect(MONGODB_URI)
+    .then(() => {
+        console.log('✅ MongoDB connected successfully');
+        // Server start
+        app.listen(PORT, () => {
+            console.log(`🚀 Server running on http://localhost:${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.log('❌ MongoDB connection error:', err);
+        process.exit(1);
     });
-})
-.catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
-});
