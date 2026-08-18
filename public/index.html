@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viraj Fitness</title>
+    <title>Viraj Fitness Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,176 +13,804 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
             min-height: 100vh;
+            background: #0a0a0f;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* ===== ANIMATED GYM BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(247, 151, 30, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(247, 151, 30, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(15, 52, 96, 0.3) 0%, #0a0a0f 100%);
+            z-index: 0;
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* ===== GYM EQUIPMENT SVG PATTERN ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f7971e' fill-opacity='0.03'%3E%3Cpath d='M60 20 L65 30 L75 30 L67 37 L70 47 L60 42 L50 47 L53 37 L45 30 L55 30 Z'/%3E%3Cpath d='M20 80 L25 90 L35 90 L27 97 L30 107 L20 102 L10 107 L13 97 L5 90 L15 90 Z'/%3E%3Cpath d='M100 80 L105 90 L115 90 L107 97 L110 107 L100 102 L90 107 L93 97 L85 90 L95 90 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 120px 120px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        /* ===== ANIMATED PARTICLES ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #f7971e;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle 15s infinite;
+        }
+        
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 10s; }
+        .particle:nth-child(7) { left: 15%; animation-delay: 3s; }
+        .particle:nth-child(8) { left: 45%; animation-delay: 7s; }
+        .particle:nth-child(9) { left: 75%; animation-delay: 11s; }
+        .particle:nth-child(10) { left: 90%; animation-delay: 5s; }
+        
+        @keyframes floatParticle {
+            0% { top: -10%; opacity: 0; transform: translateX(0) scale(0); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; transform: translateX(50px) scale(1); }
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
-        /* ===== HEADER WITH LOGO ===== */
+        /* ===== PREMIUM HEADER ===== */
         .header {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            color: white;
-            padding: 25px 30px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 40, 0.95));
+            backdrop-filter: blur(20px);
+            padding: 20px 30px;
+            border-radius: 20px;
             margin-bottom: 30px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            justify-content: space-between;
+            border: 1px solid rgba(247, 151, 30, 0.1);
+            box-shadow: 
+                0 10px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(247, 151, 30, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.05), transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.03), transparent 70%);
+            border-radius: 50%;
         }
         
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 18px;
+            position: relative;
+            z-index: 1;
         }
         
         .logo-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #f7971e, #ff6b00);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 35px;
-            font-weight: 900;
-            color: #1a1a2e;
-            box-shadow: 0 0 20px rgba(255, 210, 0, 0.3);
+            font-size: 32px;
+            color: #fff;
+            box-shadow: 0 0 40px rgba(247, 151, 30, 0.2);
             flex-shrink: 0;
+            animation: logoGlow 3s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(247, 151, 30, 0.2); }
+            50% { box-shadow: 0 0 60px rgba(247, 151, 30, 0.4); }
         }
         
         .logo-text h1 {
-            font-size: 28px;
-            font-weight: 800;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #f7971e, #ffd200, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            position: relative;
+        }
+        
+        .logo-text h1::after {
+            content: '™';
+            font-size: 10px;
+            -webkit-text-fill-color: #f7971e;
+            position: absolute;
+            top: -8px;
+            right: -20px;
+        }
+        
+        .logo-text p {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            -webkit-text-fill-color: #666;
+            font-weight: 300;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .header-stat .number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #f7971e;
+            display: block;
+        }
+        
+        .header-stat .label {
+            font-size: 10px;
+            color: #555;
+            text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        
+        .header-stat .label span {
+            color: #f7971e;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #28a745;
+        }
+        
+        .online-status .dot {
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: dotPulse 2s infinite;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        .header-tagline {
+            font-size: 11px;
+            color: #555;
+            text-align: right;
+            letter-spacing: 2px;
+            border-left: 1px solid rgba(247, 151, 30, 0.1);
+            padding-left: 20px;
+        }
+        
+        .header-tagline span {
+            display: block;
+            font-size: 13px;
+            color: #ffd200;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        /* ===== PREMIUM CARDS ===== */
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(20px);
+            padding: 28px;
+            margin: 20px 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f7971e, transparent);
+            opacity: 0.3;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(247, 151, 30, 0.1);
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title .icon {
+            font-size: 24px;
+        }
+        
+        .card-title h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(247, 151, 30, 0.2);
+            padding-bottom: 8px;
+        }
+        
+        .card-title h2 span {
+            color: #f7971e;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .form-group label .required {
+            color: #f7971e;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        input, select {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        input::placeholder {
+            color: #444;
+            font-weight: 300;
+        }
+        
+        input:focus, select:focus {
+            border-color: #f7971e;
+            box-shadow: 0 0 30px rgba(247, 151, 30, 0.05);
+            outline: none;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+        
+        /* ===== PREMIUM BUTTONS ===== */
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #f7971e, #ff6b00);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(247, 151, 30, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(247, 151, 30, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg) translateX(-100%);
+            transition: 0.6s;
+        }
+        
+        .btn-primary:hover::after {
+            transform: rotate(45deg) translateX(100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(220, 53, 69, 0.2);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(40, 167, 69, 0.2);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #0dcaf0);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(23, 162, 184, 0.2);
+        }
+        
+        .btn-info:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(23, 162, 184, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+        
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+        
+        /* ===== BADGES ===== */
+        .badge {
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        .badge-paid { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.1); }
+        .badge-pending { background: rgba(220, 53, 69, 0.15); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.1); }
+        .badge-partial { background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.1); }
+        
+        /* ===== MEMBER ITEMS ===== */
+        .member-item {
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 18px 20px;
+            margin: 10px 0;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .member-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 3px;
+            background: linear-gradient(to bottom, #f7971e, #ff6b00);
+            border-radius: 0 3px 3px 0;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        
+        .member-item:hover::before {
+            opacity: 1;
+            top: 10%;
+            bottom: 10%;
+        }
+        
+        .member-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(5px);
+            border-color: rgba(247, 151, 30, 0.05);
+        }
+        
+        .member-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .member-phone {
+            color: #666;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .member-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .member-details .due {
+            font-weight: 700;
+        }
+        
+        .member-details .due.positive { color: #dc3545; }
+        .member-details .due.zero { color: #28a745; }
+        
+        .member-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .member-actions input,
+        .member-actions select {
+            max-width: 130px;
+            display: inline-block;
+            margin: 0;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 13px;
+        }
+        
+        .member-actions .btn {
+            padding: 8px 18px;
+            font-size: 10px;
+        }
+        
+        .member-id {
+            font-size: 10px;
+            color: #333;
+            font-family: monospace;
+        }
+        
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 18px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-3px);
+            border-color: rgba(247, 151, 30, 0.05);
+        }
+        
+        .stat-card .number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
             background: linear-gradient(135deg, #f7971e, #ffd200);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .logo-text p {
-            font-size: 13px;
-            color: #aaa;
-            letter-spacing: 2px;
-            -webkit-text-fill-color: #aaa;
+        .stat-card .label {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
         }
         
-        .header-tagline {
-            margin-left: auto;
-            text-align: right;
-            font-size: 12px;
-            color: #888;
-            border-left: 2px solid #333;
-            padding-left: 20px;
+        .stat-card .label span {
+            color: #f7971e;
+            -webkit-text-fill-color: #f7971e;
         }
         
-        .header-tagline span {
-            display: block;
-            font-size: 14px;
-            color: #ffd200;
-            font-weight: 600;
-        }
-        
-        /* ===== CARDS ===== */
-        .card {
-            background: white;
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        
-        .card h2 {
-            color: #1a1a2e;
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-bottom: 3px solid #f7971e;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-        
-        input, select {
-            padding: 12px;
-            margin: 6px 0;
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
             width: 100%;
-            max-width: 300px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15, 15, 30, 0.98), rgba(25, 25, 50, 0.98));
+            margin: 8% auto;
+            padding: 35px;
+            border-radius: 24px;
+            max-width: 450px;
+            border: 1px solid rgba(247, 151, 30, 0.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            animation: modalSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes modalSlide {
+            0% { transform: translateY(-30px) scale(0.95); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        .modal-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .modal-content h3 span {
+            color: #f7971e;
+        }
+        
+        .modal-subtitle {
+            color: #666;
             font-size: 14px;
-            transition: border 0.3s;
-            display: block;
+            margin-bottom: 20px;
         }
         
-        input:focus, select:focus {
-            border-color: #f7971e;
-            outline: none;
+        .modal-info {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
         
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            color: #1a1a2e;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
+        .modal-info .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            color: #888;
             font-size: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 5px 0;
         }
         
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.4);
-        }
-        
-        button.danger {
-            background: #dc3545;
-            color: white;
-        }
-        
-        button.danger:hover {
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
-        }
-        
-        .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        .modal-info .row .value {
+            color: #fff;
             font-weight: 600;
         }
-        .badge-paid { background: #d4edda; color: #155724; }
-        .badge-pending { background: #f8d7da; color: #721c24; }
-        .badge-partial { background: #fff3cd; color: #856404; }
         
-        .success { color: green; padding: 10px; background: #e8f5e9; border-radius: 8px; }
-        .error { color: red; padding: 10px; background: #ffebee; border-radius: 8px; }
-        
-        .member-item {
-            border: 1px solid #eee;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            background: #fafafa;
+        .modal-info .row .value.gold {
+            color: #f7971e;
         }
         
-        .member-item:hover {
-            background: #f5f5f5;
+        .modal-content input,
+        .modal-content select {
+            margin: 8px 0;
+            padding: 12px 16px;
+            width: 100%;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.03);
+            color: #fff;
+            border-radius: 12px;
         }
         
+        .modal-content input:focus,
+        .modal-content select:focus {
+            border-color: #f7971e;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons .btn {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .modal-buttons .btn-outline {
+            background: rgba(255, 255, 255, 0.03);
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .modal-buttons .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+        
+        /* ===== MESSAGES ===== */
+        .success { 
+            color: #28a745; 
+            padding: 14px; 
+            background: rgba(40, 167, 69, 0.05); 
+            border-radius: 12px; 
+            border: 1px solid rgba(40, 167, 69, 0.05);
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .error { 
+            color: #dc3545; 
+            padding: 14px; 
+            background: rgba(220, 53, 69, 0.05); 
+            border-radius: 12px; 
+            border: 1px solid rgba(220, 53, 69, 0.05);
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        
+        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
-            padding: 20px;
-            color: #888;
+            padding: 30px;
+            color: #333;
             font-size: 12px;
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            margin-top: 30px;
+        }
+        
+        .footer span {
+            color: #f7971e;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
         @media (max-width: 768px) {
@@ -193,34 +822,137 @@
             .logo-container {
                 flex-direction: column;
             }
+            .header-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+            }
             .header-tagline {
-                margin-left: 0;
                 border-left: none;
                 padding-left: 0;
-                border-top: 1px solid #333;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
                 padding-top: 15px;
+                text-align: center;
+                width: 100%;
             }
-            input, select {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: 1;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .stat-card .number {
+                font-size: 24px;
+            }
+            .member-actions input,
+            .member-actions select {
                 max-width: 100%;
             }
+            .member-actions {
+                flex-direction: column;
+            }
+            .member-actions .btn {
+                width: 100%;
+            }
+            .modal-content {
+                margin: 20% 15px;
+                padding: 25px;
+            }
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 12px;
+            }
+            .stat-card .number {
+                font-size: 20px;
+            }
+            .logo-text h1 {
+                font-size: 20px;
+            }
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            .header-stat .number {
+                font-size: 18px;
+            }
+        }
+        
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #f7971e, #ff6b00);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffd200;
         }
     </style>
 </head>
 <body>
+    
+    <!-- ===== ANIMATED PARTICLES ===== -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
     <div class="container">
         
-        <!-- ===== HEADER WITH LOGO ===== -->
+        <!-- ===== PREMIUM HEADER ===== -->
         <div class="header">
             <div class="logo-container">
                 <div class="logo-icon">💪</div>
                 <div class="logo-text">
                     <h1>VIRAJ FITNESS</h1>
-                    <p>🏋️‍♂️ YOUR FITNESS JOURNEY STARTS HERE</p>
+                    <p>🏋️ Elite Gym Management</p>
                 </div>
             </div>
-            <div class="header-tagline">
-                <span>💪 STRONGER TOGETHER</span>
-                Since 2026
+            
+            <div class="header-right">
+                <div class="header-stats" id="headerStats">
+                    <div class="header-stat">
+                        <span class="number" id="headerTotal">0</span>
+                        <span class="label">Total <span>Members</span></span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="number" id="headerActive">0</span>
+                        <span class="label">Active <span>Today</span></span>
+                    </div>
+                </div>
+                <div class="header-tagline">
+                    <span>⚡ POWER UP</span>
+                    Since 2026
+                </div>
             </div>
         </div>
         
@@ -228,24 +960,50 @@
         <!-- ===== CARD 1: ADD NEW MEMBER ===== -->
         <!-- ============================================ -->
         <div class="card">
-            <h2>📝 Add New Member</h2>
+            <div class="card-title">
+                <span class="icon">📝</span>
+                <h2>Add New <span>Member</span></h2>
+            </div>
+            
             <form id="addMemberForm">
-                <input type="text" id="name" placeholder="Name" required>
-                <input type="text" id="phone" placeholder="Phone (e.g., 91999999999)" required>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" id="name" placeholder="Enter member name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="text" id="phone" placeholder="e.g., 91999999999" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Membership Plan <span class="required">*</span></label>
+                        <select id="plan" required>
+                            <option value="Monthly">📆 Monthly</option>
+                            <option value="Quarterly">📆 Quarterly</option>
+                            <option value="Yearly">📆 Yearly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Fees (₹) <span class="required">*</span></label>
+                        <input type="number" id="totalFees" placeholder="Enter total fees" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount Paid (₹)</label>
+                        <input type="number" id="amountPaid" placeholder="Enter amount paid" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Admission Date <span class="required">*</span></label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Plan End Date <span class="required">*</span></label>
+                        <input type="date" id="endDate" required>
+                    </div>
+                </div>
                 
-                <select id="plan" required>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Quarterly">Quarterly</option>
-                    <option value="Yearly">Yearly</option>
-                </select>
-                
-                <input type="number" id="totalFees" placeholder="Total Fees (₹)" required>
-                <input type="number" id="amountPaid" placeholder="Amount Paid (₹)" value="0">
-                
-                <input type="date" id="startDate" required>
-                <input type="date" id="endDate" required>
-                
-                <button type="submit">➕ Add Member</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">
+                    ➕ Register Member
+                </button>
             </form>
             <div id="addResult"></div>
         </div>
@@ -254,20 +1012,90 @@
         <!-- ===== CARD 2: ALL MEMBERS ===== -->
         <!-- ============================================ -->
         <div class="card">
-            <h2>📋 All Members</h2>
-            <button onclick="loadMembers()">🔄 Load Members</button>
-            <div id="membersList"></div>
+            <div class="card-title">
+                <span class="icon">📊</span>
+                <h2>Member <span>Dashboard</span></h2>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid" id="stats">
+                <div class="stat-card">
+                    <div class="number" id="totalMembers">0</div>
+                    <div class="label">Total <span>Members</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="paidMembers">0</div>
+                    <div class="label">✅ <span>Paid</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="pendingMembers">0</div>
+                    <div class="label">⏳ <span>Pending</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="partialMembers">0</div>
+                    <div class="label">🔄 <span>Partial</span></div>
+                </div>
+            </div>
+            
+            <button onclick="loadMembers()" class="btn btn-outline" style="width: 100%;">
+                🔄 Refresh Members
+            </button>
+            <div id="membersList" style="margin-top: 15px;"></div>
         </div>
         
         <!-- ===== FOOTER ===== -->
         <div class="footer">
-            © 2026 Viraj Fitness | 💪 Stay Strong, Stay Fit
+            © 2026 <span>Viraj Fitness</span> | Built with 💪 | v2.0 Pro
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- ===== PAYMENT MODAL ===== -->
+    <!-- ============================================ -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h3>💰 <span>Payment</span> Gateway</h3>
+            <p class="modal-subtitle">Secure payment processing</p>
+            
+            <div class="modal-info">
+                <div class="row">
+                    <span>Member</span>
+                    <span class="value" id="modalMemberName">-</span>
+                </div>
+                <div class="row">
+                    <span>Current Due</span>
+                    <span class="value gold" id="modalCurrentDue">₹0</span>
+                </div>
+            </div>
+            
+            <input type="number" id="modalPaymentAmount" placeholder="Enter Amount (₹)" required>
+            <select id="modalPaymentMethod">
+                <option value="Cash">💵 Cash</option>
+                <option value="UPI">📱 UPI</option>
+                <option value="Card">💳 Card</option>
+                <option value="Bank Transfer">🏦 Bank Transfer</option>
+            </select>
+            <input type="text" id="modalPaymentNote" placeholder="Note (optional)">
+            
+            <div class="modal-buttons">
+                <button onclick="processPayment()" class="btn btn-success">✅ Pay Now</button>
+                <button onclick="closePaymentModal()" class="btn btn-outline">❌ Cancel</button>
+            </div>
+            <div id="modalPaymentResult"></div>
         </div>
     </div>
     
     <script>
         // ============================================
-        // 1. ADD MEMBER
+        // 1. SET DEFAULT ADMISSION DATE TO TODAY
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+        });
+
+        // ============================================
+        // 2. ADD MEMBER
         // ============================================
         document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -292,8 +1120,9 @@
                 const data = await response.json();
                 if (data.success) {
                     document.getElementById('addResult').innerHTML = 
-                        `<div class="success">✅ Member added! ID: ${data.data._id}</div>`;
+                        `<div class="success">✅ Member registered successfully!</div>`;
                     document.getElementById('addMemberForm').reset();
+                    document.getElementById('startDate').value = new Date().toISOString().split('T')[0];
                     loadMembers();
                 } else {
                     document.getElementById('addResult').innerHTML = 
@@ -306,49 +1135,107 @@
         });
         
         // ============================================
-        // 2. LOAD MEMBERS + DELETE
+        // 3. LOAD MEMBERS
         // ============================================
         async function loadMembers() {
             try {
                 const response = await fetch('/api/members');
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.success) {
                     let html = '';
+                    let total = 0, paid = 0, pending = 0, partial = 0;
+                    let activeToday = 0;
+                    
                     if (data.data.length === 0) {
-                        html = '<p>📭 No members found. Add a member first!</p>';
+                        html = '<p style="color: #444; text-align: center; padding: 40px; font-size: 16px;">📭 No members registered yet</p>';
                     } else {
                         data.data.forEach(member => {
+                            total++;
+                            if (member.paymentStatus === 'Paid') paid++;
+                            else if (member.paymentStatus === 'Pending') pending++;
+                            else if (member.paymentStatus === 'Partial') partial++;
+                            
+                            // Check if member is active today
+                            const today = new Date();
+                            const endDate = new Date(member.endDate);
+                            if (endDate >= today) activeToday++;
+                            
                             const statusClass = member.paymentStatus === 'Paid' ? 'badge-paid' : 
                                                member.paymentStatus === 'Partial' ? 'badge-partial' : 'badge-pending';
                             
-                            const dueColor = member.remainingDues > 0 ? '#dc3545' : '#28a745';
+                            const dueColor = member.remainingDues > 0 ? 'positive' : 'zero';
                             
-                            html += `<div class="member-item">
-                                <strong>${member.name}</strong> - ${member.phone}
-                                <br>📅 Plan: ${member.plan} | Expires: ${new Date(member.planEndDate).toLocaleDateString()}
-                                <br>💰 Total: ₹${member.totalFees} | Paid: ₹${member.amountPaid} 
-                                | <strong style="color: ${dueColor};">Due: ₹${member.remainingDues}</strong>
-                                <br><span class="badge ${statusClass}">${member.paymentStatus}</span>
-                                ${member.reminderSent ? ' ✅ Reminder sent' : ''}
-                                <br><small style="color: #666;">ID: ${member._id}</small>
-                                <br>
-                                <button onclick="deleteMember('${member._id}')" class="danger" style="padding: 5px 15px; font-size: 12px;">
-                                    🗑️ Delete
-                                </button>
+                            // Format admission date
+                            const startDate = member.startDate ? new Date(member.startDate).toLocaleDateString() : 'N/A';
+                            
+                            html += `<div class="member-item" id="member-${member._id}">
+                                <div>
+                                    <span class="member-name">${member.name}</span>
+                                    <span class="member-phone">📱 ${member.phone}</span>
+                                </div>
+                                <div class="member-details">
+                                    <span>📅 <strong>${member.plan}</strong></span>
+                                    <span>📆 Joined: ${startDate}</span>
+                                    <span>⏳ Expires: ${new Date(member.endDate).toLocaleDateString()}</span>
+                                    <span>💰 ₹${member.totalFees}</span>
+                                    <span>💳 Paid: ₹${member.amountPaid}</span>
+                                    <span class="due ${dueColor}">Due: ₹${member.remainingDues}</span>
+                                    <span class="badge ${statusClass}">${member.paymentStatus}</span>
+                                    ${member.reminderSent ? ' 🔔 Reminder Sent' : ''}
+                                </div>
+                                <div class="member-id">ID: ${member._id}</div>
+                                <div class="member-actions">
+                                    <input type="number" id="paymentAmount_${member._id}" 
+                                           placeholder="₹ Amount" style="max-width:120px;">
+                                    <select id="paymentMethod_${member._id}" style="max-width:120px;">
+                                        <option value="Cash">💵 Cash</option>
+                                        <option value="UPI">📱 UPI</option>
+                                        <option value="Card">💳 Card</option>
+                                        <option value="Bank Transfer">🏦 Transfer</option>
+                                    </select>
+                                    <button onclick="addPayment('${member._id}')" class="btn btn-success btn-sm">
+                                        💰 Pay
+                                    </button>
+                                    <button onclick="openPaymentModal('${member._id}', '${member.name}', '${member.remainingDues}')" 
+                                            class="btn btn-info btn-sm">
+                                        📊 Full
+                                    </button>
+                                    <button onclick="deleteMember('${member._id}')" class="btn btn-danger btn-sm">
+                                        🗑️
+                                    </button>
+                                </div>
+                                <div id="paymentResult_${member._id}"></div>
                             </div>`;
                         });
                     }
+                    
                     document.getElementById('membersList').innerHTML = html;
+                    
+                    // Update stats
+                    document.getElementById('totalMembers').textContent = total;
+                    document.getElementById('paidMembers').textContent = paid;
+                    document.getElementById('pendingMembers').textContent = pending;
+                    document.getElementById('partialMembers').textContent = partial;
+                    
+                    // Update header stats
+                    document.getElementById('headerTotal').textContent = total;
+                    document.getElementById('headerActive').textContent = activeToday;
                 }
             } catch (error) {
                 document.getElementById('membersList').innerHTML = 
                     `<div class="error">❌ ${error.message}</div>`;
+                console.error('Load members error:', error);
             }
         }
         
         // ============================================
-        // 3. DELETE MEMBER
+        // 4. DELETE MEMBER
         // ============================================
         async function deleteMember(memberId) {
             if (!confirm('⚠️ Are you sure you want to delete this member?')) {
@@ -370,6 +1257,114 @@
                 }
             } catch (error) {
                 alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        // ============================================
+        // 5. ADD PAYMENT (Quick Pay)
+        // ============================================
+        async function addPayment(memberId) {
+            const amountInput = document.getElementById(`paymentAmount_${memberId}`);
+            const methodSelect = document.getElementById(`paymentMethod_${memberId}`);
+            const resultDiv = document.getElementById(`paymentResult_${memberId}`);
+            
+            const amount = parseInt(amountInput.value);
+            
+            if (!amount || amount <= 0) {
+                resultDiv.innerHTML = `<div class="error">❌ Please enter a valid amount</div>`;
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/members/${memberId}/payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: amount,
+                        method: methodSelect.value,
+                        note: 'Payment received'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="success">✅ ₹${amount} paid successfully!</div>`;
+                    amountInput.value = '';
+                    
+                    setTimeout(() => {
+                        loadMembers();
+                    }, 1000);
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ ${error.message}</div>`;
+            }
+        }
+        
+        // ============================================
+        // 6. MODAL FUNCTIONS (Full Payment)
+        // ============================================
+        let currentMemberId = null;
+        
+        function openPaymentModal(memberId, memberName, currentDue) {
+            currentMemberId = memberId;
+            document.getElementById('modalMemberName').textContent = memberName;
+            document.getElementById('modalCurrentDue').textContent = currentDue;
+            document.getElementById('modalPaymentAmount').value = currentDue > 0 ? currentDue : '';
+            document.getElementById('modalPaymentResult').innerHTML = '';
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            currentMemberId = null;
+        }
+        
+        async function processPayment() {
+            const amount = parseInt(document.getElementById('modalPaymentAmount').value);
+            const method = document.getElementById('modalPaymentMethod').value;
+            const note = document.getElementById('modalPaymentNote').value;
+            const resultDiv = document.getElementById('modalPaymentResult');
+            
+            if (!amount || amount <= 0) {
+                resultDiv.innerHTML = `<div class="error">❌ Please enter valid amount</div>`;
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/members/${currentMemberId}/payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        amount: amount, 
+                        method: method, 
+                        note: note || 'Payment via modal' 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="success">✅ ₹${amount} paid successfully!</div>`;
+                    setTimeout(() => {
+                        closePaymentModal();
+                        loadMembers();
+                    }, 1500);
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ ${error.message}</div>`;
+            }
+        }
+        
+        // Click outside modal to close
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target == modal) {
+                closePaymentModal();
             }
         }
         
