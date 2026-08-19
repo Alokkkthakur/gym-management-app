@@ -1549,20 +1549,69 @@
     </div>
     
     <script>
-        let members = JSON.parse(localStorage.getItem('gymMembers')) || [];
+        // ============================================
+        // FILE STORAGE SETUP
+        // ============================================
+        let members = [];
         let currentFilter = 'all';
         let reminderMethod = 'whatsapp';
         let currentReminderTab = 'due';
-        
+
+        // ============================================
+        // LOAD DATA FROM FILE
+        // ============================================
+        async function loadMembersFromFile() {
+            try {
+                const response = await fetch('/api/members');
+                if (response.ok) {
+                    members = await response.json();
+                    console.log('✅ Data loaded from file:', members.length, 'members');
+                } else {
+                    console.log('⚠️ Using empty data');
+                    members = [];
+                }
+            } catch (error) {
+                console.error('❌ Failed to load data:', error);
+                members = [];
+            }
+            loadMembers();
+        }
+
+        // ============================================
+        // SAVE DATA TO FILE
+        // ============================================
+        async function saveMembersToFile() {
+            try {
+                const response = await fetch('/api/members/save-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(members)
+                });
+                if (response.ok) {
+                    console.log('✅ Data saved to file successfully');
+                } else {
+                    console.log('⚠️ Failed to save data');
+                }
+            } catch (error) {
+                console.error('❌ Error saving data:', error);
+            }
+        }
+
+        // ============================================
+        // 1. SET DEFAULT DATES
+        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('startDate').value = today;
             document.getElementById('endDate').value = today;
             document.getElementById('paymentDate').value = today;
-            loadMembers();
+            loadMembersFromFile();
         });
-        
-        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+
+        // ============================================
+        // 2. ADD MEMBER
+        // ============================================
+        document.getElementById('addMemberForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const cardioValue = document.querySelector('input[name="cardio"]:checked').value;
@@ -1592,7 +1641,7 @@
             else formData.paymentStatus = 'Pending';
             
             members.push(formData);
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            await saveMembersToFile();
             
             document.getElementById('addResult').innerHTML = 
                 `<div class="success">✅ Member registered successfully! (${formData.cardio})</div>`;
@@ -1604,7 +1653,10 @@
             document.querySelector('input[name="cardio"][value="With Cardio"]').checked = true;
             loadMembers();
         });
-        
+
+        // ============================================
+        // 3. CHECK EXPIRY STATUS
+        // ============================================
         function getExpiryStatus(endDateStr) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -1627,7 +1679,7 @@
                 return { status: 'active', label: `✅ ${diffDays} days left`, badge: 'badge-active', days: diffDays };
             }
         }
-        
+
         function getExpiringMembers() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -1644,11 +1696,14 @@
             
             return expiringMembers;
         }
-        
+
         function getAdvanceMembers() {
             return members.filter(m => (m.advancePayment || 0) > 0);
         }
-        
+
+        // ============================================
+        // 4. LOAD MEMBERS
+        // ============================================
         function loadMembers() {
             let filteredMembers = [...members];
             
@@ -1682,10 +1737,7 @@
             const cardioMembers = members.filter(m => m.cardio === 'With Cardio').length;
             const noCardioMembers = members.filter(m => m.cardio === 'Without Cardio').length;
             
-            // Advance members
             const advanceMembers = getAdvanceMembers();
-            
-            // Expiring members
             const expiringMembers = getExpiringMembers();
             
             document.getElementById('totalMembers').textContent = total;
@@ -1806,20 +1858,29 @@
                 else activeBtn.classList.add('active');
             }
         }
-        
+
+        // ============================================
+        // 5. FILTER
+        // ============================================
         function filterMembers(filter) {
             currentFilter = filter;
             loadMembers();
         }
-        
-        function deleteMember(memberId) {
+
+        // ============================================
+        // 6. DELETE
+        // ============================================
+        async function deleteMember(memberId) {
             if (!confirm('⚠️ Are you sure you want to delete this member?')) return;
             members = members.filter(m => m._id !== memberId);
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            await saveMembersToFile();
             loadMembers();
         }
-        
-        function addPayment(memberId) {
+
+        // ============================================
+        // 7. ADD PAYMENT
+        // ============================================
+        async function addPayment(memberId) {
             const amountInput = document.getElementById(`paymentAmount_${memberId}`);
             const methodSelect = document.getElementById(`paymentMethod_${memberId}`);
             const resultDiv = document.getElementById(`paymentResult_${memberId}`);
@@ -1876,12 +1937,15 @@
             
             member.paymentDate = new Date().toISOString().split('T')[0];
             
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            await saveMembersToFile();
             
             setTimeout(() => loadMembers(), 1000);
         }
-        
-        function renewMember(memberId) {
+
+        // ============================================
+        // 8. RENEW
+        // ============================================
+        async function renewMember(memberId) {
             const member = members.find(m => m._id === memberId);
             if (!member) return;
 
@@ -1926,16 +1990,17 @@
             else if (paid > 0) member.paymentStatus = 'Partial';
             else member.paymentStatus = 'Pending';
 
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            await saveMembersToFile();
 
             let advanceText = advanceAmount > 0 ? `\n🔮 Advance Paid: ₹${advanceAmount} (Next Month)` : '';
             alert(`✅ Renewed Successfully!\n\nTotal Fees: ₹${totalFees}\nAmount Paid: ₹${paid}\nRemaining Due: ₹${remainingDues}${advanceText}`);
 
             loadMembers();
         }
-        
-        // ===== EXPIRY REMINDER FUNCTIONS =====
-        
+
+        // ============================================
+        // 9. EXPIRY REMINDER FUNCTIONS
+        // ============================================
         function openExpiryReminderModal() {
             const expiringMembers = getExpiringMembers();
             
@@ -1968,11 +2033,11 @@
             document.getElementById('expiryMessage').value = 
                 `⏳ Reminder: Your gym membership expires in {days} days on {date}. Please renew ASAP! - Viraj Fitness`;
         }
-        
+
         function closeExpiryReminderModal() {
             document.getElementById('expiryReminderModal').style.display = 'none';
         }
-        
+
         function sendExpiryReminder(memberId) {
             const member = members.find(m => m._id === memberId);
             if (!member) return;
@@ -1995,7 +2060,7 @@
                 alert('❌ No phone number found!');
             }
         }
-        
+
         function sendExpiryReminders() {
             const expiringMembers = getExpiringMembers();
             let sent = 0;
@@ -2025,7 +2090,7 @@
             document.getElementById('expiryReminderResult').innerHTML = 
                 `<div class="success">📱 ${sent} Expiry WhatsApp reminders opened!</div>`;
         }
-        
+
         function copyExpiryList() {
             const expiringMembers = getExpiringMembers();
             
@@ -2047,9 +2112,10 @@
                 alert(text);
             });
         }
-        
-        // ===== ADVANCE PAYMENT FUNCTIONS =====
-        
+
+        // ============================================
+        // 10. ADVANCE PAYMENT FUNCTIONS
+        // ============================================
         function openAdvanceModal() {
             const advanceMembers = getAdvanceMembers();
             
@@ -2078,11 +2144,11 @@
             document.getElementById('advanceModal').style.display = 'block';
             document.getElementById('advanceResult').innerHTML = '';
         }
-        
+
         function closeAdvanceModal() {
             document.getElementById('advanceModal').style.display = 'none';
         }
-        
+
         function sendAdvanceReminder(memberId) {
             const member = members.find(m => m._id === memberId);
             if (!member) return;
@@ -2101,7 +2167,7 @@
                 alert('❌ No phone number found!');
             }
         }
-        
+
         function sendAdvanceReminders() {
             const advanceMembers = getAdvanceMembers();
             let sent = 0;
@@ -2126,7 +2192,7 @@
             document.getElementById('advanceResult').innerHTML = 
                 `<div class="success">📱 ${sent} Advance WhatsApp messages opened!</div>`;
         }
-        
+
         function copyAdvanceList() {
             const advanceMembers = getAdvanceMembers();
             
@@ -2147,9 +2213,10 @@
                 alert(text);
             });
         }
-        
-        // ===== REMINDER FUNCTIONS =====
-        
+
+        // ============================================
+        // 11. REMINDER FUNCTIONS
+        // ============================================
         function openReminderModal() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             
@@ -2181,11 +2248,11 @@
             document.getElementById('reminderMessage').value = 
                 `🔔 Reminder: Your gym fee of ₹{amount} is pending. Please pay ASAP! - Viraj Fitness`;
         }
-        
+
         function closeReminderModal() {
             document.getElementById('reminderModal').style.display = 'none';
         }
-        
+
         function sendReminderVia(method) {
             reminderMethod = method;
             
@@ -2216,7 +2283,7 @@
             document.getElementById('reminderResult').innerHTML = 
                 `<div class="info-box">📱 Selected: ${methods[method].icon} ${methods[method].name}</div>`;
         }
-        
+
         function sendSingleReminder(memberId) {
             const member = members.find(m => m._id === memberId);
             if (!member) return;
@@ -2236,7 +2303,7 @@
                 alert('❌ No phone number found!');
             }
         }
-        
+
         function sendBulkReminder() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             let sent = 0;
@@ -2263,7 +2330,7 @@
             document.getElementById('reminderResult').innerHTML = 
                 `<div class="success">📱 ${sent} WhatsApp reminders opened!</div>`;
         }
-        
+
         function copyReminderList() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
             
@@ -2284,9 +2351,12 @@
                 alert(text);
             });
         }
-        
+
+        // ============================================
+        // 12. PAYMENT MODAL
+        // ============================================
         let currentMemberId = null;
-        
+
         function openPaymentModal(memberId, memberName, currentDue) {
             currentMemberId = memberId;
             document.getElementById('modalMemberName').textContent = memberName;
@@ -2295,13 +2365,13 @@
             document.getElementById('modalPaymentResult').innerHTML = '';
             document.getElementById('paymentModal').style.display = 'block';
         }
-        
+
         function closePaymentModal() {
             document.getElementById('paymentModal').style.display = 'none';
             currentMemberId = null;
         }
-        
-        function processPayment() {
+
+        async function processPayment() {
             const amount = parseInt(document.getElementById('modalPaymentAmount').value);
             const method = document.getElementById('modalPaymentMethod').value;
             const note = document.getElementById('modalPaymentNote').value;
@@ -2326,7 +2396,7 @@
             
             member.paymentDate = new Date().toISOString().split('T')[0];
             
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            await saveMembersToFile();
             
             resultDiv.innerHTML = `<div class="success">✅ ₹${amount} paid successfully!</div>`;
             
@@ -2335,27 +2405,10 @@
                 loadMembers();
             }, 1500);
         }
-        
-        // Add filter button click for advance
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add advance filter button click handler
-            const advanceFilterBtn = document.getElementById('filterAdvance');
-            if (advanceFilterBtn) {
-                advanceFilterBtn.addEventListener('click', function() {
-                    filterMembers('advance');
-                });
-            }
-            
-            // Double click on advance stat card to show advance modal
-            const advanceStatCard = document.querySelector('.stat-card .advance-stat')?.closest('.stat-card');
-            if (advanceStatCard) {
-                advanceStatCard.style.cursor = 'pointer';
-                advanceStatCard.addEventListener('click', function() {
-                    openAdvanceModal();
-                });
-            }
-        });
-        
+
+        // ============================================
+        // 13. WINDOW CLICK HANDLER
+        // ============================================
         window.onclick = function(event) {
             if (event.target == document.getElementById('paymentModal')) {
                 closePaymentModal();
@@ -2370,8 +2423,19 @@
                 closeAdvanceModal();
             }
         }
-        
-        loadMembers();
+
+        // ============================================
+        // 14. STATS CARD CLICK - OPEN ADVANCE MODAL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const advanceStatCard = document.querySelector('.stat-card .advance-stat')?.closest('.stat-card');
+            if (advanceStatCard) {
+                advanceStatCard.style.cursor = 'pointer';
+                advanceStatCard.addEventListener('click', function() {
+                    openAdvanceModal();
+                });
+            }
+        });
     </script>
 </body>
 </html>
