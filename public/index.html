@@ -529,6 +529,17 @@
             box-shadow: 0 8px 40px rgba(255, 204, 0, 0.4);
         }
         
+        .btn-edit {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(23, 162, 184, 0.2);
+        }
+        
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(23, 162, 184, 0.3);
+        }
+        
         .btn-sm {
             padding: 8px 18px;
             font-size: 10px;
@@ -1548,6 +1559,62 @@
         </div>
     </div>
     
+    <!-- ===== EDIT MEMBER MODAL ===== -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>✏️ <span>Edit</span> Member Profile</h3>
+            <p class="modal-subtitle">Update member details</p>
+            
+            <input type="hidden" id="editMemberId">
+            
+            <div class="form-grid" style="margin-top:15px;">
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="editName" placeholder="Enter member name" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="text" id="editPhone" placeholder="e.g., 91999999999" required>
+                </div>
+                <div class="form-group">
+                    <label>Membership Plan <span class="required">*</span></label>
+                    <select id="editPlan" required>
+                        <option value="Monthly">📆 Monthly</option>
+                        <option value="Quarterly">📆 Quarterly</option>
+                        <option value="Yearly">📆 Yearly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Total Fees (₹) <span class="required">*</span></label>
+                    <input type="number" id="editTotalFees" placeholder="Enter total fees" required>
+                </div>
+                <div class="form-group">
+                    <label>📅 Plan End Date <span class="required">*</span></label>
+                    <input type="date" id="editEndDate" required>
+                </div>
+                <div class="form-group">
+                    <label>🏃 Cardio <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="editCardio" value="With Cardio">
+                            ✅ With Cardio 🏃
+                        </label>
+                        <label>
+                            <input type="radio" name="editCardio" value="Without Cardio">
+                            ❌ Without Cardio 🚫
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons" style="margin-top:20px;">
+                <button onclick="saveEditMember()" class="btn btn-success">💾 Save Changes</button>
+                <button onclick="closeEditModal()" class="btn btn-outline">❌ Cancel</button>
+            </div>
+            <div id="editResult"></div>
+        </div>
+    </div>
+    
     <script>
         // ============================================
         // FILE STORAGE SETUP
@@ -1825,6 +1892,7 @@
                             <button onclick="addPayment('${member._id}')" class="btn btn-success btn-sm">💰 Pay</button>
                             <button onclick="openPaymentModal('${member._id}', '${member.name}', '${member.remainingDues}')" 
                                     class="btn btn-info btn-sm">📊 Full</button>
+                            <button onclick="editMember('${member._id}')" class="btn btn-edit btn-sm">✏️ Edit</button>
                             <button onclick="renewMember('${member._id}')" class="btn btn-primary btn-sm">🔄 Renew</button>
                             <button onclick="deleteMember('${member._id}')" class="btn btn-danger btn-sm">🗑️</button>
                             ${hasDue ? `<button onclick="sendSingleReminder('${member._id}')" class="btn btn-whatsapp btn-sm">💬 Remind</button>` : ''}
@@ -1878,7 +1946,100 @@
         }
 
         // ============================================
-        // 7. ADD PAYMENT
+        // 7. EDIT MEMBER
+        // ============================================
+        function editMember(memberId) {
+            const member = members.find(m => m._id === memberId);
+            if (!member) {
+                alert('❌ Member not found!');
+                return;
+            }
+            
+            document.getElementById('editMemberId').value = memberId;
+            document.getElementById('editName').value = member.name;
+            document.getElementById('editPhone').value = member.phone;
+            document.getElementById('editPlan').value = member.plan;
+            document.getElementById('editTotalFees').value = member.totalFees;
+            document.getElementById('editEndDate').value = member.endDate;
+            
+            // Set cardio radio
+            if (member.cardio === 'With Cardio') {
+                document.querySelector('input[name="editCardio"][value="With Cardio"]').checked = true;
+            } else {
+                document.querySelector('input[name="editCardio"][value="Without Cardio"]').checked = true;
+            }
+            
+            document.getElementById('editResult').innerHTML = '';
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('editMemberId').value = '';
+            document.getElementById('editResult').innerHTML = '';
+        }
+
+        async function saveEditMember() {
+            const memberId = document.getElementById('editMemberId').value;
+            const member = members.find(m => m._id === memberId);
+            if (!member) {
+                document.getElementById('editResult').innerHTML = `<div class="error">❌ Member not found!</div>`;
+                return;
+            }
+            
+            // Get values
+            const name = document.getElementById('editName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const plan = document.getElementById('editPlan').value;
+            const totalFees = parseInt(document.getElementById('editTotalFees').value);
+            const endDate = document.getElementById('editEndDate').value;
+            const cardioValue = document.querySelector('input[name="editCardio"]:checked')?.value || 'Without Cardio';
+            
+            // Validation
+            if (!name) {
+                document.getElementById('editResult').innerHTML = `<div class="error">❌ Please enter name!</div>`;
+                return;
+            }
+            if (!phone) {
+                document.getElementById('editResult').innerHTML = `<div class="error">❌ Please enter phone number!</div>`;
+                return;
+            }
+            if (!totalFees || totalFees <= 0) {
+                document.getElementById('editResult').innerHTML = `<div class="error">❌ Please enter valid fees!</div>`;
+                return;
+            }
+            if (!endDate) {
+                document.getElementById('editResult').innerHTML = `<div class="error">❌ Please select end date!</div>`;
+                return;
+            }
+            
+            // Update member
+            member.name = name;
+            member.phone = phone;
+            member.plan = plan;
+            member.totalFees = totalFees;
+            member.endDate = endDate;
+            member.cardio = cardioValue;
+            
+            // Recalculate dues
+            member.remainingDues = member.totalFees - member.amountPaid;
+            
+            if (member.remainingDues === 0) member.paymentStatus = 'Paid';
+            else if (member.amountPaid > 0) member.paymentStatus = 'Partial';
+            else member.paymentStatus = 'Pending';
+            
+            await saveMembersToFile();
+            
+            document.getElementById('editResult').innerHTML = `<div class="success">✅ Member updated successfully!</div>`;
+            
+            setTimeout(() => {
+                closeEditModal();
+                loadMembers();
+            }, 1500);
+        }
+
+        // ============================================
+        // 8. ADD PAYMENT
         // ============================================
         async function addPayment(memberId) {
             const amountInput = document.getElementById(`paymentAmount_${memberId}`);
@@ -1943,7 +2104,7 @@
         }
 
         // ============================================
-        // 8. RENEW
+        // 9. RENEW
         // ============================================
         async function renewMember(memberId) {
             const member = members.find(m => m._id === memberId);
@@ -1999,7 +2160,7 @@
         }
 
         // ============================================
-        // 9. EXPIRY REMINDER FUNCTIONS
+        // 10. EXPIRY REMINDER FUNCTIONS
         // ============================================
         function openExpiryReminderModal() {
             const expiringMembers = getExpiringMembers();
@@ -2114,7 +2275,7 @@
         }
 
         // ============================================
-        // 10. ADVANCE PAYMENT FUNCTIONS
+        // 11. ADVANCE PAYMENT FUNCTIONS
         // ============================================
         function openAdvanceModal() {
             const advanceMembers = getAdvanceMembers();
@@ -2215,7 +2376,7 @@
         }
 
         // ============================================
-        // 11. REMINDER FUNCTIONS
+        // 12. REMINDER FUNCTIONS
         // ============================================
         function openReminderModal() {
             const dueMembers = members.filter(m => m.remainingDues > 0);
@@ -2353,7 +2514,7 @@
         }
 
         // ============================================
-        // 12. PAYMENT MODAL
+        // 13. PAYMENT MODAL
         // ============================================
         let currentMemberId = null;
 
@@ -2407,7 +2568,7 @@
         }
 
         // ============================================
-        // 13. WINDOW CLICK HANDLER
+        // 14. WINDOW CLICK HANDLER
         // ============================================
         window.onclick = function(event) {
             if (event.target == document.getElementById('paymentModal')) {
@@ -2422,10 +2583,13 @@
             if (event.target == document.getElementById('advanceModal')) {
                 closeAdvanceModal();
             }
+            if (event.target == document.getElementById('editModal')) {
+                closeEditModal();
+            }
         }
 
         // ============================================
-        // 14. STATS CARD CLICK - OPEN ADVANCE MODAL
+        // 15. STATS CARD CLICK - OPEN ADVANCE MODAL
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             const advanceStatCard = document.querySelector('.stat-card .advance-stat')?.closest('.stat-card');
