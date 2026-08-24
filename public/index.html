@@ -1149,12 +1149,53 @@
             color: #ff4400;
         }
         
+        /* ===== FINANCE ===== */
+        .finance-stats .stat-card .number {
+            font-size: 24px;
+            font-weight: 900;
+        }
+        .finance-stats .stat-card .label {
+            font-size: 10px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        .finance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .finance-item .name { color: #fff; font-weight: 500; }
+        .finance-item .amount { font-weight: 700; }
+        .finance-item .amount.income { color: #28a745; }
+        .finance-item .amount.expense { color: #dc3545; }
+        .finance-item .date { color: #666; font-size: 12px; }
+        .finance-item .delete-btn { 
+            background: rgba(220,53,69,0.2); 
+            border: none; 
+            color: #dc3545; 
+            padding: 2px 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 12px;
+        }
+        .finance-item .delete-btn:hover { background: rgba(220,53,69,0.4); }
+        
         @media (max-width: 992px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
             .reminder-methods {
                 grid-template-columns: 1fr 1fr;
+            }
+            .finance-stats {
+                grid-template-columns: repeat(2, 1fr) !important;
             }
         }
         
@@ -1223,6 +1264,9 @@
             .reminder-tabs {
                 flex-direction: column;
             }
+            .finance-stats {
+                grid-template-columns: 1fr 1fr !important;
+            }
         }
         
         @media (max-width: 480px) {
@@ -1246,6 +1290,9 @@
             }
             .header-stat .number {
                 font-size: 18px;
+            }
+            .finance-stats {
+                grid-template-columns: 1fr 1fr !important;
             }
         }
         
@@ -1431,6 +1478,7 @@
                 <button class="btn btn-sm btn-advance" onclick="filterMembers('advance')" id="filterAdvance">🔮 Advance</button>
                 <button class="btn btn-sm btn-info" onclick="openReminderModal()">📱 Reminders</button>
                 <button class="btn btn-sm expiry-alert" onclick="openExpiryReminderModal()">⏳ Expiry Alert</button>
+                <button class="btn btn-sm btn-success" onclick="openFinanceModal()" id="financeBtn">💰 Finance</button>
             </div>
             
             <div id="membersList" style="margin-top: 15px;"></div>
@@ -1614,6 +1662,69 @@
             <div id="editResult"></div>
         </div>
     </div>
+
+    <!-- ===== FINANCE MODAL ===== -->
+    <div id="financeModal" class="modal">
+        <div class="modal-content">
+            <h3>💰 <span>Finance</span> Dashboard</h3>
+            <p class="modal-subtitle">Track monthly income & expenses</p>
+            
+            <!-- Stats Cards -->
+            <div class="finance-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:15px 0;">
+                <div class="stat-card" style="background:rgba(40,167,69,0.1);border:1px solid rgba(40,167,69,0.2);">
+                    <div class="number success" id="totalIncomeDisplay" style="font-size:24px;">₹0</div>
+                    <div class="label">💰 Total Income</div>
+                </div>
+                <div class="stat-card" style="background:rgba(220,53,69,0.1);border:1px solid rgba(220,53,69,0.2);">
+                    <div class="number danger" id="totalExpenseDisplay" style="font-size:24px;">₹0</div>
+                    <div class="label">💸 Total Expense</div>
+                </div>
+                <div class="stat-card" style="background:rgba(255,204,0,0.1);border:1px solid rgba(255,204,0,0.2);">
+                    <div class="number warning" id="netProfitDisplay" style="font-size:24px;">₹0</div>
+                    <div class="label">📈 Net Profit</div>
+                </div>
+                <div class="stat-card" style="background:rgba(23,162,184,0.1);border:1px solid rgba(23,162,184,0.2);">
+                    <div class="number info" id="memberCountDisplay" style="font-size:24px;">0</div>
+                    <div class="label">👥 Total Members</div>
+                </div>
+            </div>
+            
+            <!-- Filter by Month -->
+            <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;align-items:center;">
+                <label style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">📅 Select Month:</label>
+                <input type="month" id="financeMonth" style="max-width:200px;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e0e0e0;">
+                <button onclick="refreshFinanceData()" class="btn btn-sm btn-info">🔄 Refresh</button>
+            </div>
+            
+            <!-- Income List -->
+            <div style="margin:15px 0;">
+                <h4 style="color:#28a745;font-size:14px;letter-spacing:1px;">💰 Income</h4>
+                <div id="incomeList" style="max-height:200px;overflow-y:auto;"></div>
+            </div>
+            
+            <!-- Expense List -->
+            <div style="margin:15px 0;">
+                <h4 style="color:#dc3545;font-size:14px;letter-spacing:1px;">💸 Expenses</h4>
+                <div id="expenseList" style="max-height:200px;overflow-y:auto;"></div>
+            </div>
+            
+            <!-- Add Expense Form -->
+            <div style="background:rgba(255,255,255,0.03);padding:15px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);">
+                <h4 style="color:#888;font-size:13px;letter-spacing:1px;margin-bottom:10px;">➕ Add Expense</h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                    <input type="text" id="expenseName" placeholder="Expense Name (e.g., Rent)" style="padding:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:8px;color:#e0e0e0;">
+                    <input type="number" id="expenseAmount" placeholder="Amount (₹)" style="padding:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:8px;color:#e0e0e0;">
+                    <input type="date" id="expenseDate" style="padding:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:8px;color:#e0e0e0;">
+                </div>
+                <button onclick="addExpense()" class="btn btn-danger btn-sm" style="margin-top:10px;width:100%;">➕ Add Expense</button>
+            </div>
+            
+            <div class="modal-buttons" style="margin-top:15px;">
+                <button onclick="closeFinanceModal()" class="btn btn-outline">❌ Close</button>
+            </div>
+            <div id="financeResult"></div>
+        </div>
+    </div>
     
     <script>
         // ============================================
@@ -1623,6 +1734,129 @@
         let currentFilter = 'all';
         let reminderMethod = 'whatsapp';
         let currentReminderTab = 'due';
+
+        // ============================================
+        // FINANCE - INCOME & EXPENSE TRACKER
+        // ============================================
+        let financeData = JSON.parse(localStorage.getItem('gymFinance')) || { income: [], expenses: [] };
+        
+        function saveFinanceData() {
+            localStorage.setItem('gymFinance', JSON.stringify(financeData));
+        }
+        
+        function openFinanceModal() {
+            const today = new Date();
+            const monthInput = document.getElementById('financeMonth');
+            monthInput.value = today.toISOString().slice(0, 7);
+            refreshFinanceData();
+            document.getElementById('financeModal').style.display = 'block';
+        }
+        
+        function closeFinanceModal() {
+            document.getElementById('financeModal').style.display = 'none';
+        }
+        
+        function refreshFinanceData() {
+            const month = document.getElementById('financeMonth').value;
+            if (!month) return;
+            
+            const [year, monthNum] = month.split('-').map(Number);
+            
+            // Calculate income from members (total fees collected this month)
+            const totalIncome = members.reduce((sum, m) => {
+                const paymentDate = new Date(m.paymentDate || m.admissionDate);
+                if (paymentDate.getFullYear() === year && paymentDate.getMonth() + 1 === monthNum) {
+                    return sum + (m.amountPaid || 0);
+                }
+                return sum;
+            }, 0);
+            
+            // Filter expenses for this month
+            const monthExpenses = financeData.expenses.filter(e => {
+                const expDate = new Date(e.date);
+                return expDate.getFullYear() === year && expDate.getMonth() + 1 === monthNum;
+            });
+            
+            const totalExpense = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const netProfit = totalIncome - totalExpense;
+            
+            // Update stats
+            document.getElementById('totalIncomeDisplay').textContent = '₹' + totalIncome.toLocaleString();
+            document.getElementById('totalExpenseDisplay').textContent = '₹' + totalExpense.toLocaleString();
+            document.getElementById('netProfitDisplay').textContent = '₹' + netProfit.toLocaleString();
+            document.getElementById('memberCountDisplay').textContent = members.length;
+            
+            // Income list - show members who paid this month
+            const incomeList = document.getElementById('incomeList');
+            const paidMembers = members.filter(m => {
+                const paymentDate = new Date(m.paymentDate || m.admissionDate);
+                return paymentDate.getFullYear() === year && paymentDate.getMonth() + 1 === monthNum;
+            });
+            
+            if (paidMembers.length === 0) {
+                incomeList.innerHTML = '<div style="color:#666;padding:10px;text-align:center;">No income this month</div>';
+            } else {
+                incomeList.innerHTML = paidMembers.map(m => `
+                    <div class="finance-item">
+                        <span class="name">${m.name}</span>
+                        <span class="amount income">₹${(m.amountPaid || 0).toLocaleString()}</span>
+                        <span class="date">${new Date(m.paymentDate || m.admissionDate).toLocaleDateString()}</span>
+                    </div>
+                `).join('');
+            }
+            
+            // Expense list
+            const expenseList = document.getElementById('expenseList');
+            if (monthExpenses.length === 0) {
+                expenseList.innerHTML = '<div style="color:#666;padding:10px;text-align:center;">No expenses this month</div>';
+            } else {
+                expenseList.innerHTML = monthExpenses.map((e, i) => `
+                    <div class="finance-item">
+                        <span class="name">${e.name}</span>
+                        <span class="amount expense">₹${e.amount.toLocaleString()}</span>
+                        <span class="date">${new Date(e.date).toLocaleDateString()}</span>
+                        <button onclick="deleteExpense(${i})" class="delete-btn">✕</button>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function addExpense() {
+            const name = document.getElementById('expenseName').value.trim();
+            const amount = parseInt(document.getElementById('expenseAmount').value);
+            const date = document.getElementById('expenseDate').value;
+            
+            if (!name) {
+                document.getElementById('financeResult').innerHTML = '<div class="error">❌ Please enter expense name</div>';
+                return;
+            }
+            if (!amount || amount <= 0) {
+                document.getElementById('financeResult').innerHTML = '<div class="error">❌ Please enter valid amount</div>';
+                return;
+            }
+            if (!date) {
+                document.getElementById('financeResult').innerHTML = '<div class="error">❌ Please select date</div>';
+                return;
+            }
+            
+            financeData.expenses.push({ name, amount, date });
+            saveFinanceData();
+            
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDate').value = '';
+            document.getElementById('financeResult').innerHTML = '<div class="success">✅ Expense added successfully!</div>';
+            
+            refreshFinanceData();
+            setTimeout(() => document.getElementById('financeResult').innerHTML = '', 3000);
+        }
+        
+        function deleteExpense(index) {
+            if (!confirm('Delete this expense?')) return;
+            financeData.expenses.splice(index, 1);
+            saveFinanceData();
+            refreshFinanceData();
+        }
 
         // ============================================
         // LOAD DATA FROM FILE
@@ -1768,30 +2002,19 @@
         // 4. ADVANCE PAYMENT - AUTO DETECT
         // ============================================
         function getAdvanceMembers() {
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-            
             return members.filter(m => {
-                // Check 1: Manual advancePayment field
                 if ((m.advancePayment || 0) > 0) return true;
                 
-                // Check 2: Auto detect advance payment
+                const paymentDate = new Date(m.paymentDate || m.admissionDate);
                 const endDate = new Date(m.endDate);
+                
+                const paymentMonth = paymentDate.getMonth();
+                const paymentYear = paymentDate.getFullYear();
                 const endMonth = endDate.getMonth();
                 const endYear = endDate.getFullYear();
                 
-                // If plan end date is in future month
-                if (endYear > currentYear || (endYear === currentYear && endMonth > currentMonth)) {
-                    // Check if payment was made before this month
-                    const paymentDate = new Date(m.paymentDate || m.admissionDate);
-                    const paymentMonth = paymentDate.getMonth();
-                    const paymentYear = paymentDate.getFullYear();
-                    
-                    // If payment was made in previous month and plan extends to next month
-                    if (paymentYear < currentYear || (paymentYear === currentYear && paymentMonth < currentMonth)) {
-                        return true;
-                    }
+                if (endYear > paymentYear || (endYear === paymentYear && endMonth > paymentMonth)) {
+                    return true;
                 }
                 
                 return false;
@@ -1799,29 +2022,20 @@
         }
 
         function isAdvancePayment(member) {
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-            
-            // Check 1: Manual advancePayment field
             if ((member.advancePayment || 0) > 0) return true;
             
-            // Check 2: Auto detect advance payment
+            const paymentDate = new Date(member.paymentDate || member.admissionDate);
             const endDate = new Date(member.endDate);
+            
+            const paymentMonth = paymentDate.getMonth();
+            const paymentYear = paymentDate.getFullYear();
             const endMonth = endDate.getMonth();
             const endYear = endDate.getFullYear();
             
-            // Plan end date is in future month
-            if (endYear > currentYear || (endYear === currentYear && endMonth > currentMonth)) {
-                const paymentDate = new Date(member.paymentDate || member.admissionDate);
-                const paymentMonth = paymentDate.getMonth();
-                const paymentYear = paymentDate.getFullYear();
-                
-                // Payment was made before current month
-                if (paymentYear < currentYear || (paymentYear === currentYear && paymentMonth < currentMonth)) {
-                    return true;
-                }
+            if (endYear > paymentYear || (endYear === paymentYear && endMonth > paymentMonth)) {
+                return true;
             }
+            
             return false;
         }
 
@@ -1861,7 +2075,6 @@
             const cardioMembers = members.filter(m => m.cardio === 'With Cardio').length;
             const noCardioMembers = members.filter(m => m.cardio === 'Without Cardio').length;
             
-            // Advance members using auto-detect
             const advanceMembers = getAdvanceMembers();
             const expiringMembers = getExpiringMembers();
             
@@ -1898,7 +2111,6 @@
                     const admissionDate = member.admissionDate ? new Date(member.admissionDate).toLocaleDateString() : 'N/A';
                     const paymentDate = member.paymentDate ? new Date(member.paymentDate).toLocaleDateString() : 'N/A';
                     
-                    // hasAdvance using auto-detect
                     const hasAdvance = (member.advancePayment || 0) > 0 || isAdvancePayment(member);
                     
                     const advanceText = hasAdvance ? 
@@ -2021,7 +2233,6 @@
             document.getElementById('editTotalFees').value = member.totalFees;
             document.getElementById('editEndDate').value = member.endDate;
             
-            // Set cardio radio
             if (member.cardio === 'With Cardio') {
                 document.querySelector('input[name="editCardio"][value="With Cardio"]').checked = true;
             } else {
@@ -2046,7 +2257,6 @@
                 return;
             }
             
-            // Get values
             const name = document.getElementById('editName').value.trim();
             const phone = document.getElementById('editPhone').value.trim();
             const plan = document.getElementById('editPlan').value;
@@ -2054,7 +2264,6 @@
             const endDate = document.getElementById('editEndDate').value;
             const cardioValue = document.querySelector('input[name="editCardio"]:checked')?.value || 'Without Cardio';
             
-            // Validation
             if (!name) {
                 document.getElementById('editResult').innerHTML = `<div class="error">❌ Please enter name!</div>`;
                 return;
@@ -2072,7 +2281,6 @@
                 return;
             }
             
-            // Update member
             member.name = name;
             member.phone = phone;
             member.plan = plan;
@@ -2080,7 +2288,6 @@
             member.endDate = endDate;
             member.cardio = cardioValue;
             
-            // Recalculate dues
             member.remainingDues = member.totalFees - member.amountPaid;
             
             if (member.remainingDues === 0) member.paymentStatus = 'Paid';
@@ -2648,6 +2855,9 @@
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
             }
+            if (event.target == document.getElementById('financeModal')) {
+                closeFinanceModal();
+            }
         }
 
         // ============================================
@@ -2660,6 +2870,13 @@
                 advanceStatCard.addEventListener('click', function() {
                     openAdvanceModal();
                 });
+            }
+            
+            // Set default month in finance modal
+            const today = new Date();
+            const monthInput = document.getElementById('financeMonth');
+            if (monthInput) {
+                monthInput.value = today.toISOString().slice(0, 7);
             }
         });
     </script>
