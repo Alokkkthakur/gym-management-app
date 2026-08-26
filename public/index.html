@@ -2001,43 +2001,62 @@
         // ============================================
         // 4. ADVANCE PAYMENT - AUTO DETECT
         // ============================================
-        function getAdvanceMembers() {
-            return members.filter(m => {
-                if ((m.advancePayment || 0) > 0) return true;
-                
-                const paymentDate = new Date(m.paymentDate || m.admissionDate);
-                const endDate = new Date(m.endDate);
-                
-                const paymentMonth = paymentDate.getMonth();
-                const paymentYear = paymentDate.getFullYear();
-                const endMonth = endDate.getMonth();
-                const endYear = endDate.getFullYear();
-                
-                if (endYear > paymentYear || (endYear === paymentYear && endMonth > paymentMonth)) {
-                    return true;
-                }
-                
-                return false;
-            });
-        }
-
-        function isAdvancePayment(member) {
-            if ((member.advancePayment || 0) > 0) return true;
-            
-            const paymentDate = new Date(member.paymentDate || member.admissionDate);
-            const endDate = new Date(member.endDate);
-            
-            const paymentMonth = paymentDate.getMonth();
-            const paymentYear = paymentDate.getFullYear();
-            const endMonth = endDate.getMonth();
-            const endYear = endDate.getFullYear();
-            
-            if (endYear > paymentYear || (endYear === paymentYear && endMonth > paymentMonth)) {
-                return true;
-            }
-            
+       function getAdvanceMembers() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return members.filter(m => {
+        const endDate = new Date(m.endDate);
+        endDate.setHours(0, 0, 0, 0);
+        
+        // ❌ Expired members ko advance mein mat dikhao
+        if (endDate < today) {
             return false;
         }
+        
+        // ✅ Active members ka check karo
+        if ((m.advancePayment || 0) > 0) {
+            return true;
+        }
+        
+        const paymentDate = new Date(m.paymentDate || m.admissionDate);
+        paymentDate.setHours(0, 0, 0, 0);
+        
+        if (endDate > paymentDate) {
+            return true;
+        }
+        
+        return false;
+    });
+}
+        function isAdvancePayment(member) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const endDate = new Date(member.endDate);
+    endDate.setHours(0, 0, 0, 0);
+    
+    // Pehle check karo: Plan expired toh nahi?
+    if (endDate < today) {
+        return false; // ❌ Expired members ko advance nahi dikhana
+    }
+    
+    // Ab advance check karo
+    // Manual advancePayment field (but only if plan is active)
+    if ((member.advancePayment || 0) > 0) {
+        return true;
+    }
+    
+    const paymentDate = new Date(member.paymentDate || member.admissionDate);
+    paymentDate.setHours(0, 0, 0, 0);
+    
+    // End Date > Payment Date (means advance payment)
+    if (endDate > paymentDate) {
+        return true;
+    }
+    
+    return false;
+}
 
         // ============================================
         // 5. LOAD MEMBERS

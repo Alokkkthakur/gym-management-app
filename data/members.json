@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "name": "Mithu Chaudhary",
+    "phone": "9142664286",
+    "plan": "Monthly",
+    "totalFees": 800,
+    "amountPaid": 800,
+    "admissionDate": "2026-06-22",
+    "endDate": "2026-07-22",
+    "paymentDate": "2026-06-22",
+    "cardio": "Without Cardio",
+    "_id": "1787759199512",
+    "createdAt": "2026-08-26T15:46:39.512Z",
+    "paidMonths": 1,
+    "advancePayment": 0,
+    "nextPaymentDate": "2026-07-22",
+    "remainingDues": 0,
+    "paymentStatus": "Paid"
+  }
+]
