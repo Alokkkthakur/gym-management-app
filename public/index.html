@@ -1850,43 +1850,59 @@
         // ============================================
         // LOAD DATA FROM FILE
         // ============================================
-        async function loadMembersFromFile() {
-            try {
-                const response = await fetch('/api/members');
-                if (response.ok) {
-                    members = await response.json();
-                    console.log('✅ Data loaded from file:', members.length, 'members');
-                } else {
-                    console.log('⚠️ Using empty data');
-                    members = [];
-                }
-            } catch (error) {
-                console.error('❌ Failed to load data:', error);
+       // Load data from file first, then localStorage as backup
+async function loadMembersFromFile() {
+    try {
+        const response = await fetch('/api/members');
+        if (response.ok) {
+            members = await response.json();
+            // Also save to localStorage as backup
+            localStorage.setItem('gymMembers', JSON.stringify(members));
+            console.log('✅ Data loaded from file:', members.length, 'members');
+        } else {
+            // Fallback to localStorage
+            const localData = localStorage.getItem('gymMembers');
+            if (localData) {
+                members = JSON.parse(localData);
+                console.log('✅ Data loaded from localStorage:', members.length, 'members');
+            } else {
                 members = [];
             }
-            loadMembers();
         }
-
+    } catch (error) {
+        console.error('❌ Failed to load data:', error);
+        // Fallback to localStorage
+        const localData = localStorage.getItem('gymMembers');
+        if (localData) {
+            members = JSON.parse(localData);
+        } else {
+            members = [];
+        }
+    }
+    loadMembers();
+}
         // ============================================
         // SAVE DATA TO FILE
         // ============================================
-        async function saveMembersToFile() {
-            try {
-                const response = await fetch('/api/members/save-all', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(members)
-                });
-                if (response.ok) {
-                    console.log('✅ Data saved to file successfully');
-                } else {
-                    console.log('⚠️ Failed to save data');
-                }
-            } catch (error) {
-                console.error('❌ Error saving data:', error);
-            }
+      // Save to both file and localStorage
+async function saveMembersToFile() {
+    try {
+        // Save to file
+        const response = await fetch('/api/members/save-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(members)
+        });
+        if (response.ok) {
+            // Also save to localStorage as backup
+            localStorage.setItem('gymMembers', JSON.stringify(members));
+            console.log('✅ Data saved to file and localStorage');
         }
-
+    } catch (error) {
+        console.error('❌ Error saving to file, saving to localStorage only:', error);
+        localStorage.setItem('gymMembers', JSON.stringify(members));
+    }
+}
         // ============================================
         // 1. SET DEFAULT DATES
         // ============================================
