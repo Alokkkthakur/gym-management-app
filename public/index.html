@@ -2001,57 +2001,59 @@
         // ============================================
         // 4. ADVANCE PAYMENT - AUTO DETECT
         // ============================================
-       function getAdvanceMembers() {
+ function getAdvanceMembers() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
     return members.filter(m => {
-        const endDate = new Date(m.endDate);
-        endDate.setHours(0, 0, 0, 0);
-        
-        // ❌ Expired members ko advance mein mat dikhao
-        if (endDate < today) {
-            return false;
-        }
-        
-        // ✅ Active members ka check karo
-        if ((m.advancePayment || 0) > 0) {
-            return true;
-        }
+        // Check 1: Manual advancePayment field
+        if ((m.advancePayment || 0) > 0) return true;
         
         const paymentDate = new Date(m.paymentDate || m.admissionDate);
         paymentDate.setHours(0, 0, 0, 0);
         
-        if (endDate > paymentDate) {
+        const endDate = new Date(m.endDate);
+        endDate.setHours(0, 0, 0, 0);
+        
+        if (endDate < today) return false;
+        
+        // Calculate months difference
+        let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
+        monthDiff += endDate.getMonth() - paymentDate.getMonth();
+        
+        // Advance only if end date is at least 2 months ahead
+        if (monthDiff >= 2) {
             return true;
         }
         
         return false;
     });
 }
-        function isAdvancePayment(member) {
+
+function isAdvancePayment(member) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    const endDate = new Date(member.endDate);
-    endDate.setHours(0, 0, 0, 0);
-    
-    // Pehle check karo: Plan expired toh nahi?
-    if (endDate < today) {
-        return false; // ❌ Expired members ko advance nahi dikhana
-    }
-    
-    // Ab advance check karo
-    // Manual advancePayment field (but only if plan is active)
-    if ((member.advancePayment || 0) > 0) {
-        return true;
-    }
+    // Check 1: Manual advancePayment field
+    if ((member.advancePayment || 0) > 0) return true;
     
     const paymentDate = new Date(member.paymentDate || member.admissionDate);
     paymentDate.setHours(0, 0, 0, 0);
     
-    // End Date > Payment Date (means advance payment)
-    if (endDate > paymentDate) {
+    const endDate = new Date(member.endDate);
+    endDate.setHours(0, 0, 0, 0);
+    
+    // Check 2: Plan expired hai toh advance nahi
+    if (endDate < today) {
+        return false;
+    }
+    
+    // Check 3: Calculate months difference
+    let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
+    monthDiff += endDate.getMonth() - paymentDate.getMonth();
+    
+    // Advance only if end date is at least 2 months ahead (current + next)
+    if (monthDiff >= 2) {
         return true;
     }
     
