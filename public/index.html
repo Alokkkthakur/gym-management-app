@@ -1149,7 +1149,6 @@
             color: #ff4400;
         }
         
-        /* ===== FINANCE ===== */
         .finance-stats .stat-card .number {
             font-size: 24px;
             font-weight: 900;
@@ -1478,7 +1477,7 @@
                 <button class="btn btn-sm btn-advance" onclick="filterMembers('advance')" id="filterAdvance">🔮 Advance</button>
                 <button class="btn btn-sm btn-info" onclick="openReminderModal()">📱 Reminders</button>
                 <button class="btn btn-sm expiry-alert" onclick="openExpiryReminderModal()">⏳ Expiry Alert</button>
-                <button class="btn btn-sm btn-success" onclick="openFinanceModal()" id="financeBtn">💰 Finance</button>
+                <button class="btn btn-sm btn-success" onclick="openFinanceModal()">💰 Finance</button>
             </div>
             
             <div id="membersList" style="margin-top: 15px;"></div>
@@ -1538,7 +1537,7 @@
     <div id="expiryReminderModal" class="modal">
         <div class="modal-content">
             <h3>⏳ <span>Expiry</span> Alert</h3>
-            <p class="modal-subtitle">Members whose plan expires in 3 days or less</p>
+            <p class="modal-subtitle">Members whose plan expires in 3 days or less + Expired Members</p>
             
             <div id="expiryReminderList" style="margin: 15px 0;"></div>
             
@@ -1669,7 +1668,6 @@
             <h3>💰 <span>Finance</span> Dashboard</h3>
             <p class="modal-subtitle">Track monthly income & expenses</p>
             
-            <!-- Stats Cards -->
             <div class="finance-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:15px 0;">
                 <div class="stat-card" style="background:rgba(40,167,69,0.1);border:1px solid rgba(40,167,69,0.2);">
                     <div class="number success" id="totalIncomeDisplay" style="font-size:24px;">₹0</div>
@@ -1689,26 +1687,22 @@
                 </div>
             </div>
             
-            <!-- Filter by Month -->
             <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;align-items:center;">
                 <label style="color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px;">📅 Select Month:</label>
                 <input type="month" id="financeMonth" style="max-width:200px;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e0e0e0;">
                 <button onclick="refreshFinanceData()" class="btn btn-sm btn-info">🔄 Refresh</button>
             </div>
             
-            <!-- Income List -->
             <div style="margin:15px 0;">
                 <h4 style="color:#28a745;font-size:14px;letter-spacing:1px;">💰 Income</h4>
                 <div id="incomeList" style="max-height:200px;overflow-y:auto;"></div>
             </div>
             
-            <!-- Expense List -->
             <div style="margin:15px 0;">
                 <h4 style="color:#dc3545;font-size:14px;letter-spacing:1px;">💸 Expenses</h4>
                 <div id="expenseList" style="max-height:200px;overflow-y:auto;"></div>
             </div>
             
-            <!-- Add Expense Form -->
             <div style="background:rgba(255,255,255,0.03);padding:15px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);">
                 <h4 style="color:#888;font-size:13px;letter-spacing:1px;margin-bottom:10px;">➕ Add Expense</h4>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
@@ -1762,7 +1756,6 @@
             
             const [year, monthNum] = month.split('-').map(Number);
             
-            // Calculate income from members (total fees collected this month)
             const totalIncome = members.reduce((sum, m) => {
                 const paymentDate = new Date(m.paymentDate || m.admissionDate);
                 if (paymentDate.getFullYear() === year && paymentDate.getMonth() + 1 === monthNum) {
@@ -1771,7 +1764,6 @@
                 return sum;
             }, 0);
             
-            // Filter expenses for this month
             const monthExpenses = financeData.expenses.filter(e => {
                 const expDate = new Date(e.date);
                 return expDate.getFullYear() === year && expDate.getMonth() + 1 === monthNum;
@@ -1780,13 +1772,11 @@
             const totalExpense = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
             const netProfit = totalIncome - totalExpense;
             
-            // Update stats
             document.getElementById('totalIncomeDisplay').textContent = '₹' + totalIncome.toLocaleString();
             document.getElementById('totalExpenseDisplay').textContent = '₹' + totalExpense.toLocaleString();
             document.getElementById('netProfitDisplay').textContent = '₹' + netProfit.toLocaleString();
             document.getElementById('memberCountDisplay').textContent = members.length;
             
-            // Income list - show members who paid this month
             const incomeList = document.getElementById('incomeList');
             const paidMembers = members.filter(m => {
                 const paymentDate = new Date(m.paymentDate || m.admissionDate);
@@ -1805,7 +1795,6 @@
                 `).join('');
             }
             
-            // Expense list
             const expenseList = document.getElementById('expenseList');
             if (monthExpenses.length === 0) {
                 expenseList.innerHTML = '<div style="color:#666;padding:10px;text-align:center;">No expenses this month</div>';
@@ -2001,64 +1990,63 @@
         // ============================================
         // 4. ADVANCE PAYMENT - AUTO DETECT
         // ============================================
- function getAdvanceMembers() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    return members.filter(m => {
-        // Check 1: Manual advancePayment field
-        if ((m.advancePayment || 0) > 0) return true;
-        
-        const paymentDate = new Date(m.paymentDate || m.admissionDate);
-        paymentDate.setHours(0, 0, 0, 0);
-        
-        const endDate = new Date(m.endDate);
-        endDate.setHours(0, 0, 0, 0);
-        
-        if (endDate < today) return false;
-        
-        // Calculate months difference
-        let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
-        monthDiff += endDate.getMonth() - paymentDate.getMonth();
-        
-        // Advance only if end date is at least 2 months ahead
-        if (monthDiff >= 2) {
-            return true;
+        function getAdvanceMembers() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            return members.filter(m => {
+                // Check 1: Manual advancePayment field
+                if ((m.advancePayment || 0) > 0) return true;
+                
+                const paymentDate = new Date(m.paymentDate || m.admissionDate);
+                paymentDate.setHours(0, 0, 0, 0);
+                
+                const endDate = new Date(m.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                
+                // Check 2: Plan expired hai toh advance nahi
+                if (endDate < today) return false;
+                
+                // Check 3: Calculate months difference
+                let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
+                monthDiff += endDate.getMonth() - paymentDate.getMonth();
+                
+                // Advance only if end date is at least 2 months ahead (current + next)
+                if (monthDiff >= 2) {
+                    return true;
+                }
+                
+                return false;
+            });
         }
-        
-        return false;
-    });
-}
 
-function isAdvancePayment(member) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    // Check 1: Manual advancePayment field
-    if ((member.advancePayment || 0) > 0) return true;
-    
-    const paymentDate = new Date(member.paymentDate || member.admissionDate);
-    paymentDate.setHours(0, 0, 0, 0);
-    
-    const endDate = new Date(member.endDate);
-    endDate.setHours(0, 0, 0, 0);
-    
-    // Check 2: Plan expired hai toh advance nahi
-    if (endDate < today) {
-        return false;
-    }
-    
-    // Check 3: Calculate months difference
-    let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
-    monthDiff += endDate.getMonth() - paymentDate.getMonth();
-    
-    // Advance only if end date is at least 2 months ahead (current + next)
-    if (monthDiff >= 2) {
-        return true;
-    }
-    
-    return false;
-}
+        function isAdvancePayment(member) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Check 1: Manual advancePayment field
+            if ((member.advancePayment || 0) > 0) return true;
+            
+            const paymentDate = new Date(member.paymentDate || member.admissionDate);
+            paymentDate.setHours(0, 0, 0, 0);
+            
+            const endDate = new Date(member.endDate);
+            endDate.setHours(0, 0, 0, 0);
+            
+            // Check 2: Plan expired hai toh advance nahi
+            if (endDate < today) return false;
+            
+            // Check 3: Calculate months difference
+            let monthDiff = (endDate.getFullYear() - paymentDate.getFullYear()) * 12;
+            monthDiff += endDate.getMonth() - paymentDate.getMonth();
+            
+            // Advance only if end date is at least 2 months ahead (current + next)
+            if (monthDiff >= 2) {
+                return true;
+            }
+            
+            return false;
+        }
 
         // ============================================
         // 5. LOAD MEMBERS
@@ -2191,6 +2179,8 @@ function isAdvancePayment(member) {
                             ${expiry.status === 'expiring-soon' || expiry.status === 'expires-today' ? 
                                 `<button onclick="sendExpiryReminder('${member._id}')" class="btn btn-warning btn-sm">⏳ Expiry</button>` : ''}
                             ${hasAdvance ? `<button onclick="sendAdvanceReminder('${member._id}')" class="btn btn-advance btn-sm">🔮 Advance</button>` : ''}
+                            ${expiry.status === 'expired' ? 
+                                `<button onclick="sendExpiredReminder('${member._id}')" class="btn btn-whatsapp btn-sm">🎁 Offer</button>` : ''}
                         </div>
                         <div id="paymentResult_${member._id}"></div>
                     </div>`;
@@ -2328,163 +2318,168 @@ function isAdvancePayment(member) {
         // ============================================
         // 9. ADD PAYMENT
         // ============================================
-       async function addPayment(memberId) {
-    const amountInput = document.getElementById(`paymentAmount_${memberId}`);
-    const resultDiv = document.getElementById(`paymentResult_${memberId}`);
-    
-    const amount = parseInt(amountInput.value);
-    
-    if (!amount || amount <= 0) {
-        resultDiv.innerHTML = `<div class="error">❌ Please enter a valid amount</div>`;
-        return;
-    }
-    
-    const member = members.find(m => m._id === memberId);
-    if (!member) {
-        resultDiv.innerHTML = `<div class="error">❌ Member not found</div>`;
-        return;
-    }
-    
-    // Payment type
-    const paymentType = prompt(
-        '📅 Payment Type:\n\n' +
-        '1️⃣ Current Month\n' +
-        '2️⃣ Next Month (Advance)\n' +
-        '3️⃣ Both (Current + Next)\n\n' +
-        'Enter 1, 2, or 3:'
-    );
-    
-    let paidMonths = 1;
-    let advanceAmount = 0;
-    let nextPaymentDate = new Date(member.endDate);
-    
-    if (paymentType === '2') {
-        paidMonths = 0;
-        advanceAmount = amount;
-        nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
-        resultDiv.innerHTML = `<div class="info-box">🔮 Advance payment recorded for next month!</div>`;
-    } else if (paymentType === '3') {
-        paidMonths = 2;
-        advanceAmount = amount / 2;
-        nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
-        resultDiv.innerHTML = `<div class="info-box">✅ Current + Next month both paid!</div>`;
-    } else {
-        paidMonths = 1;
-        advanceAmount = 0;
-        resultDiv.innerHTML = `<div class="success">✅ Current month payment recorded!</div>`;
-    }
-    
-    member.amountPaid += amount;
-    member.remainingDues = member.totalFees - member.amountPaid;
-    member.paidMonths = (member.paidMonths || 0) + paidMonths;
-    member.advancePayment = (member.advancePayment || 0) + advanceAmount;
-    member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
-    
-    if (member.remainingDues === 0) member.paymentStatus = 'Paid';
-    else if (member.amountPaid > 0) member.paymentStatus = 'Partial';
-    
-    member.paymentDate = new Date().toISOString().split('T')[0];
-    
-    await saveMembersToFile();
-    
-    setTimeout(() => loadMembers(), 1000);
-}
+        async function addPayment(memberId) {
+            const amountInput = document.getElementById(`paymentAmount_${memberId}`);
+            const methodSelect = document.getElementById(`paymentMethod_${memberId}`);
+            const resultDiv = document.getElementById(`paymentResult_${memberId}`);
+            
+            const amount = parseInt(amountInput.value);
+            
+            if (!amount || amount <= 0) {
+                resultDiv.innerHTML = `<div class="error">❌ Please enter a valid amount</div>`;
+                return;
+            }
+            
+            const member = members.find(m => m._id === memberId);
+            if (!member) {
+                resultDiv.innerHTML = `<div class="error">❌ Member not found</div>`;
+                return;
+            }
+            
+            const paymentType = prompt(
+                '📅 Payment Type:\n\n' +
+                '1️⃣ Current Month\n' +
+                '2️⃣ Next Month (Advance)\n' +
+                '3️⃣ Both (Current + Next)\n\n' +
+                'Enter 1, 2, or 3:'
+            );
+            
+            let paidMonths = 1;
+            let advanceAmount = 0;
+            let nextPaymentDate = new Date(member.endDate);
+            
+            if (paymentType === '2') {
+                paidMonths = 0;
+                advanceAmount = amount;
+                nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+                resultDiv.innerHTML = `<div class="info-box">🔮 Advance payment recorded for next month!</div>`;
+            } else if (paymentType === '3') {
+                paidMonths = 2;
+                advanceAmount = amount / 2;
+                nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+                resultDiv.innerHTML = `<div class="info-box">✅ Current + Next month both paid!</div>`;
+            } else {
+                paidMonths = 1;
+                advanceAmount = 0;
+                resultDiv.innerHTML = `<div class="success">✅ Current month payment recorded!</div>`;
+            }
+            
+            member.amountPaid += amount;
+            member.remainingDues = member.totalFees - member.amountPaid;
+            member.paidMonths = (member.paidMonths || 0) + paidMonths;
+            member.advancePayment = (member.advancePayment || 0) + advanceAmount;
+            member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
+            
+            if (member.remainingDues === 0) member.paymentStatus = 'Paid';
+            else if (member.amountPaid > 0) member.paymentStatus = 'Partial';
+            
+            member.paymentDate = new Date().toISOString().split('T')[0];
+            
+            await saveMembersToFile();
+            
+            setTimeout(() => loadMembers(), 1000);
+        }
+
         // ============================================
         // 10. RENEW
         // ============================================
-    async function renewMember(memberId) {
-    const member = members.find(m => m._id === memberId);
-    if (!member) {
-        alert('❌ Member not found!');
-        return;
-    }
-
-    // Step 1: New End Date
-    const newEndDate = prompt('📅 Enter new end date (YYYY-MM-DD):', member.endDate);
-    if (!newEndDate) return;
-    
-    // Validate date
-    if (isNaN(new Date(newEndDate).getTime())) {
-        alert('❌ Invalid date format! Please use YYYY-MM-DD');
-        return;
-    }
-
-    // Step 2: New Total Fees
-    const newFees = prompt('💰 Enter new total fees (₹):', member.totalFees);
-    if (!newFees) return;
-    if (isNaN(parseInt(newFees)) || parseInt(newFees) <= 0) {
-        alert('❌ Please enter a valid amount!');
-        return;
-    }
-
-    // Step 3: Amount Paid
-    const amountPaid = prompt('💳 Enter amount paid (₹):', member.totalFees);
-    if (amountPaid === null) return;
-    if (isNaN(parseInt(amountPaid)) || parseInt(amountPaid) < 0) {
-        alert('❌ Please enter a valid amount!');
-        return;
-    }
-
-    // Step 4: Advance Payment Option
-    const advanceOption = confirm('🔮 Do you want to pay for next month in advance?');
-    let advanceAmount = 0;
-    let paidMonths = 1;
-    let nextPaymentDate = new Date(newEndDate);
-    
-    if (advanceOption) {
-        const advance = prompt('💰 Enter advance amount for next month (₹):', member.totalFees);
-        if (advance !== null) {
-            if (isNaN(parseInt(advance)) || parseInt(advance) < 0) {
-                alert('❌ Please enter a valid advance amount!');
+        async function renewMember(memberId) {
+            const member = members.find(m => m._id === memberId);
+            if (!member) {
+                alert('❌ Member not found!');
                 return;
             }
-            advanceAmount = parseInt(advance) || 0;
-            paidMonths = 2;
-            nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+
+            const newEndDate = prompt('📅 Enter new end date (YYYY-MM-DD):', member.endDate);
+            if (!newEndDate) return;
+            if (isNaN(new Date(newEndDate).getTime())) {
+                alert('❌ Invalid date format! Please use YYYY-MM-DD');
+                return;
+            }
+
+            const newFees = prompt('💰 Enter new total fees (₹):', member.totalFees);
+            if (!newFees) return;
+            if (isNaN(parseInt(newFees)) || parseInt(newFees) <= 0) {
+                alert('❌ Please enter a valid amount!');
+                return;
+            }
+
+            const amountPaid = prompt('💳 Enter amount paid (₹):', member.totalFees);
+            if (amountPaid === null) return;
+            if (isNaN(parseInt(amountPaid)) || parseInt(amountPaid) < 0) {
+                alert('❌ Please enter a valid amount!');
+                return;
+            }
+
+            const advanceOption = confirm('🔮 Do you want to pay for next month in advance?');
+            let advanceAmount = 0;
+            let paidMonths = 1;
+            let nextPaymentDate = new Date(newEndDate);
+            
+            if (advanceOption) {
+                const advance = prompt('💰 Enter advance amount for next month (₹):', member.totalFees);
+                if (advance !== null) {
+                    if (isNaN(parseInt(advance)) || parseInt(advance) < 0) {
+                        alert('❌ Please enter a valid advance amount!');
+                        return;
+                    }
+                    advanceAmount = parseInt(advance) || 0;
+                    paidMonths = 2;
+                    nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+                }
+            }
+
+            const totalFees = parseInt(newFees);
+            const paid = parseInt(amountPaid) || 0;
+            const remainingDues = totalFees - paid;
+
+            member.endDate = newEndDate;
+            member.totalFees = totalFees;
+            member.amountPaid = paid;
+            member.remainingDues = remainingDues;
+            member.admissionDate = new Date().toISOString().split('T')[0];
+            member.paymentDate = new Date().toISOString().split('T')[0];
+            member.paidMonths = paidMonths;
+            member.advancePayment = (member.advancePayment || 0) + advanceAmount;
+            member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
+
+            if (remainingDues === 0) member.paymentStatus = 'Paid';
+            else if (paid > 0) member.paymentStatus = 'Partial';
+            else member.paymentStatus = 'Pending';
+
+            await saveMembersToFile();
+
+            let advanceText = advanceAmount > 0 ? `\n🔮 Advance Paid: ₹${advanceAmount} (Next Month)` : '';
+            alert(`✅ Renewed Successfully!\n\n📅 New End Date: ${newEndDate}\n💰 Total Fees: ₹${totalFees}\n💳 Amount Paid: ₹${paid}\n📊 Remaining Due: ₹${remainingDues}${advanceText}`);
+
+            loadMembers();
         }
-    }
 
-    const totalFees = parseInt(newFees);
-    const paid = parseInt(amountPaid) || 0;
-    const remainingDues = totalFees - paid;
-
-    // Update member
-    member.endDate = newEndDate;
-    member.totalFees = totalFees;
-    member.amountPaid = paid;
-    member.remainingDues = remainingDues;
-    member.admissionDate = new Date().toISOString().split('T')[0];
-    member.paymentDate = new Date().toISOString().split('T')[0];
-    member.paidMonths = paidMonths;
-    member.advancePayment = (member.advancePayment || 0) + advanceAmount;
-    member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
-
-    // Payment status update
-    if (remainingDues === 0) member.paymentStatus = 'Paid';
-    else if (paid > 0) member.paymentStatus = 'Partial';
-    else member.paymentStatus = 'Pending';
-
-    // Save to file
-    await saveMembersToFile();
-
-    // Show success message
-    let advanceText = advanceAmount > 0 ? `\n🔮 Advance Paid: ₹${advanceAmount} (Next Month)` : '';
-    alert(`✅ Renewed Successfully!\n\n📅 New End Date: ${newEndDate}\n💰 Total Fees: ₹${totalFees}\n💳 Amount Paid: ₹${paid}\n📊 Remaining Due: ₹${remainingDues}${advanceText}`);
-
-    loadMembers();
-}
         // ============================================
         // 11. EXPIRY REMINDER FUNCTIONS
         // ============================================
         function openExpiryReminderModal() {
-            const expiringMembers = getExpiringMembers();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
-            if (expiringMembers.length === 0) {
-                alert('🎉 No members expiring in the next 3 days!');
+            const expiringMembers = getExpiringMembers();
+            const expiredMembers = members.filter(m => {
+                const endDate = new Date(m.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                return endDate < today;
+            });
+            
+            const allMembers = [...expiringMembers, ...expiredMembers];
+            
+            if (allMembers.length === 0) {
+                alert('🎉 No members expiring or expired!');
                 return;
             }
             
-            let html = `<div style="margin-bottom:10px;color:#ffcc00;">⏳ ${expiringMembers.length} members expiring in 3 days or less</div>`;
+            let html = `<div style="margin-bottom:10px;color:#ffcc00;">
+                ⏳ ${expiringMembers.length} members expiring in 3 days or less<br>
+                ⛔ ${expiredMembers.length} members expired
+            </div>`;
             
             expiringMembers.forEach(m => {
                 const expiry = getExpiryStatus(m.endDate);
@@ -2497,6 +2492,23 @@ function isAdvancePayment(member) {
                     <div>
                         <span class="amount">${expiry.label}</span>
                         <button onclick="sendExpiryReminder('${m._id}')" class="btn btn-sm btn-warning" style="margin-left:10px;">⏳ Send</button>
+                        <button onclick="renewMember('${m._id}')" class="btn btn-sm btn-primary" style="margin-left:5px;">🔄 Renew</button>
+                    </div>
+                </div>`;
+            });
+            
+            expiredMembers.forEach(m => {
+                const cardioIcon = m.cardio === 'With Cardio' ? '🏃' : '🚫';
+                const daysExpired = Math.floor((today - new Date(m.endDate)) / (1000 * 60 * 60 * 24));
+                html += `<div class="reminder-item" style="border-left:3px solid #dc3545;">
+                    <div>
+                        <span class="name">${m.name}</span>
+                        <span class="phone">${cardioIcon} ${m.phone || 'No phone'}</span>
+                    </div>
+                    <div>
+                        <span class="amount" style="color:#dc3545;">⛔ Expired (${daysExpired} days ago)</span>
+                        <button onclick="renewMember('${m._id}')" class="btn btn-sm btn-primary" style="margin-left:5px;">🔄 Renew</button>
+                        <button onclick="sendExpiredReminder('${m._id}')" class="btn btn-sm btn-whatsapp" style="margin-left:5px;">🎁 Offer</button>
                     </div>
                 </div>`;
             });
@@ -2536,25 +2548,93 @@ function isAdvancePayment(member) {
             }
         }
 
+        function sendExpiredReminder(memberId) {
+            const member = members.find(m => m._id === memberId);
+            if (!member) return;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const endDate = new Date(member.endDate);
+            endDate.setHours(0, 0, 0, 0);
+            const daysExpired = Math.floor((today - endDate) / (1000 * 60 * 60 * 24));
+            
+            const offers = [
+                { discount: 20, text: '🎉 20% OFF on your next month renewal!', code: 'WELCOME20' },
+                { discount: 15, text: '🎉 15% OFF on your next month renewal!', code: 'BACK15' },
+                { discount: 10, text: '🎉 10% OFF on your next month renewal!', code: 'RETURN10' },
+                { discount: 25, text: '🎉 25% OFF on your next month renewal!', code: 'FIT25' },
+                { discount: 0, text: '🎉 First month FREE on 3-month plan!', code: 'FREE3' },
+                { discount: 0, text: '🎉 Get 1 month FREE on yearly plan!', code: 'YEARFREE' }
+            ];
+            
+            const offer = offers[Math.floor(Math.random() * offers.length)];
+            
+            const message = `🏋️ We Miss You at Viraj Fitness!
+
+Dear ${member.name},
+
+Your membership expired on ${new Date(member.endDate).toLocaleDateString()} (${daysExpired} days ago).
+
+${offer.text}
+
+💰 Your Original Plan: ₹${member.totalFees}/month
+💪 Offer Valid Till: ${new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString()}
+🔑 Use Code: ${offer.code}
+
+Don't miss this chance! Renew now and get back to your fitness journey!
+
+💬 Reply or Visit us at Viraj Fitness
+📞 Contact: 91xxxxxxxxxx
+
+- Viraj Fitness Team 💪`;
+            
+            if (member.phone) {
+                const phone = member.phone.startsWith('91') ? member.phone : '91' + member.phone;
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+                document.getElementById('expiryReminderResult').innerHTML = 
+                    `<div class="success">📱 WhatsApp opened for ${member.name}!</div>`;
+            } else {
+                alert('❌ No phone number found!');
+            }
+        }
+
         function sendExpiryReminders() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
             const expiringMembers = getExpiringMembers();
+            const expiredMembers = members.filter(m => {
+                const endDate = new Date(m.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                return endDate < today;
+            });
+            
+            const allMembers = [...expiringMembers, ...expiredMembers];
             let sent = 0;
             
-            if (expiringMembers.length === 0) {
+            if (allMembers.length === 0) {
                 document.getElementById('expiryReminderResult').innerHTML = 
-                    `<div class="error">❌ No expiring members!</div>`;
+                    `<div class="error">❌ No members to remind!</div>`;
                 return;
             }
             
             let messageTemplate = document.getElementById('expiryMessage').value;
             
-            expiringMembers.forEach(m => {
+            allMembers.forEach(m => {
                 if (m.phone) {
                     const expiry = getExpiryStatus(m.endDate);
                     const phone = m.phone.startsWith('91') ? m.phone : '91' + m.phone;
-                    const message = messageTemplate
-                        .replace(/{days}/g, expiry.days)
-                        .replace(/{date}/g, new Date(m.endDate).toLocaleDateString());
+                    let message;
+                    
+                    if (expiry.status === 'expired') {
+                        const daysExpired = Math.floor((today - new Date(m.endDate)) / (1000 * 60 * 60 * 24));
+                        message = `⛔ Dear ${m.name}, your membership expired ${daysExpired} days ago. Please renew now to continue! - Viraj Fitness`;
+                    } else {
+                        message = messageTemplate
+                            .replace(/{days}/g, expiry.days)
+                            .replace(/{date}/g, new Date(m.endDate).toLocaleDateString());
+                    }
+                    
                     const cardioText = m.cardio === 'With Cardio' ? '🏃 (With Cardio)' : '🚫 (Without Cardio)';
                     const fullMessage = `${message} - ${m.name} ${cardioText}`;
                     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(fullMessage)}`, '_blank');
@@ -2563,19 +2643,29 @@ function isAdvancePayment(member) {
             });
             
             document.getElementById('expiryReminderResult').innerHTML = 
-                `<div class="success">📱 ${sent} Expiry WhatsApp reminders opened!</div>`;
+                `<div class="success">📱 ${sent} reminders opened!</div>`;
         }
 
         function copyExpiryList() {
-            const expiringMembers = getExpiringMembers();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
-            if (expiringMembers.length === 0) {
-                alert('No expiring members!');
+            const expiringMembers = getExpiringMembers();
+            const expiredMembers = members.filter(m => {
+                const endDate = new Date(m.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                return endDate < today;
+            });
+            
+            const allMembers = [...expiringMembers, ...expiredMembers];
+            
+            if (allMembers.length === 0) {
+                alert('No members!');
                 return;
             }
             
-            let text = '⏳ Expiring Members List (3 days or less):\n\n';
-            expiringMembers.forEach((m, i) => {
+            let text = '⏳ Expiry & Expired Members List:\n\n';
+            allMembers.forEach((m, i) => {
                 const expiry = getExpiryStatus(m.endDate);
                 text += `${i+1}. ${m.name} - ${expiry.label} - ${m.phone || 'No phone'}\n`;
             });
@@ -2920,11 +3010,9 @@ function isAdvancePayment(member) {
                 });
             }
             
-            // Set default month in finance modal
-            const today = new Date();
             const monthInput = document.getElementById('financeMonth');
             if (monthInput) {
-                monthInput.value = today.toISOString().slice(0, 7);
+                monthInput.value = new Date().toISOString().slice(0, 7);
             }
         });
     </script>
