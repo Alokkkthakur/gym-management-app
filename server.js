@@ -12,18 +12,17 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 
 // Data file path
+// server.js me ye change karein
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
-// Ensure data directory exists
+// Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'));
 }
 
-// Initialize data file if not exists
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
 }
-
 // ===== API ROUTES =====
 
 // GET - Load all members

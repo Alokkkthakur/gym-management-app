@@ -1859,30 +1859,30 @@
         // LOAD DATA FROM FILE
         // ============================================
        // Load data from file first, then localStorage as backup
+// Yeh code check karein - data ko localStorage me bhi save kar raha hai?
 async function loadMembersFromFile() {
     try {
         const response = await fetch('/api/members');
         if (response.ok) {
             members = await response.json();
-            // Also save to localStorage as backup
-            localStorage.setItem('gymMembers', JSON.stringify(members));
+            // ✅ Backup to localStorage (but don't use it as primary)
+            localStorage.setItem('gymMembersBackup', JSON.stringify(members));
             console.log('✅ Data loaded from file:', members.length, 'members');
         } else {
-            // Fallback to localStorage
-            const localData = localStorage.getItem('gymMembers');
-            if (localData) {
-                members = JSON.parse(localData);
-                console.log('✅ Data loaded from localStorage:', members.length, 'members');
+            // Fallback to backup
+            const backup = localStorage.getItem('gymMembersBackup');
+            if (backup) {
+                members = JSON.parse(backup);
+                console.log('✅ Data loaded from backup:', members.length, 'members');
             } else {
                 members = [];
             }
         }
     } catch (error) {
         console.error('❌ Failed to load data:', error);
-        // Fallback to localStorage
-        const localData = localStorage.getItem('gymMembers');
-        if (localData) {
-            members = JSON.parse(localData);
+        const backup = localStorage.getItem('gymMembersBackup');
+        if (backup) {
+            members = JSON.parse(backup);
         } else {
             members = [];
         }
