@@ -16,10 +16,10 @@ const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
 // Ensure data directory exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
-    fs.mkdirSync(path.join(__dirname, 'data'));
+    fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
-// Initialize data file if not exists
+// ✅ IMPORTANT: Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
 }
@@ -40,6 +40,22 @@ app.get('/api/members', (req, res) => {
     }
 });
 
+// POST - Save all data (bulk save) - YEH ROUTE IMPORTANT HAI!
+app.post('/api/members/save-all', (req, res) => {
+    try {
+        const members = req.body;
+        if (!Array.isArray(members)) {
+            return res.status(400).json({ error: 'Invalid data format' });
+        }
+        fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
+        console.log('✅ Data saved to file:', members.length, 'members');
+        res.json({ success: true, message: 'All data saved successfully', count: members.length });
+    } catch (error) {
+        console.error('❌ Error saving data:', error);
+        res.status(500).json({ error: 'Failed to save data' });
+    }
+});
+
 // POST - Add new member
 app.post('/api/members', (req, res) => {
     try {
@@ -52,19 +68,6 @@ app.post('/api/members', (req, res) => {
         members.push(newMember);
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         res.json({ success: true, member: newMember });
-    } catch (error) {
-        console.error('❌ Error saving data:', error);
-        res.status(500).json({ error: 'Failed to save data' });
-    }
-});
-
-// POST - Save all data (bulk save) - YEH ROUTE IMPORTANT HAI!
-app.post('/api/members/save-all', (req, res) => {
-    try {
-        const members = req.body;
-        fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
-        console.log('✅ Data saved to file:', members.length, 'members');
-        res.json({ success: true, message: 'All data saved successfully' });
     } catch (error) {
         console.error('❌ Error saving data:', error);
         res.status(500).json({ error: 'Failed to save data' });
