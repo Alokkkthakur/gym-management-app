@@ -1895,20 +1895,23 @@ async function loadMembersFromFile() {
       // Save to both file and localStorage
 async function saveMembersToFile() {
     try {
-        // Save to file
+        console.log('💾 Saving data to file...', members.length, 'members');
         const response = await fetch('/api/members/save-all', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(members)
         });
         if (response.ok) {
-            // Also save to localStorage as backup
-            localStorage.setItem('gymMembers', JSON.stringify(members));
-            console.log('✅ Data saved to file and localStorage');
+            const result = await response.json();
+            console.log('✅ Data saved to file successfully:', result);
+            return true;
+        } else {
+            console.log('⚠️ Failed to save data:', response.status);
+            return false;
         }
     } catch (error) {
-        console.error('❌ Error saving to file, saving to localStorage only:', error);
-        localStorage.setItem('gymMembers', JSON.stringify(members));
+        console.error('❌ Error saving data:', error);
+        return false;
     }
 }
         // ============================================
