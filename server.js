@@ -14,7 +14,7 @@ app.use(express.static('public'));
 // Data file path
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
-// ✅ IMPORTANT: Sirf tabhi create karein jab file exist nahi karti
+// ✅ SAHI - Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
