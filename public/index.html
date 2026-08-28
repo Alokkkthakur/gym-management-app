@@ -1859,41 +1859,36 @@
         // LOAD DATA FROM FILE - WITH FALLBACK
         // ============================================
         async function loadMembersFromFile() {
-            try {
-                console.log('📂 Loading data from file...');
-                const response = await fetch('/api/members');
-                if (response.ok) {
-                    members = await response.json();
-                    console.log('✅ Data loaded from file:', members.length, 'members');
-                    // Update backup
-                    localStorage.setItem('gymMembersBackup', JSON.stringify(members));
-                } else {
-                    console.log('⚠️ Failed to load from file, trying backup...');
-                    // Fallback to backup
-                    const backup = localStorage.getItem('gymMembersBackup');
-                    if (backup) {
-                        members = JSON.parse(backup);
-                        console.log('✅ Data loaded from backup:', members.length, 'members');
-                        // Try to restore to file
-                        await saveMembersToFile();
-                    } else {
-                        members = [];
-                        console.log('⚠️ No backup found, starting fresh');
-                    }
-                }
-            } catch (error) {
-                console.error('❌ Failed to load data:', error);
-                // Fallback to backup
-                const backup = localStorage.getItem('gymMembersBackup');
-                if (backup) {
-                    members = JSON.parse(backup);
-                    console.log('✅ Data loaded from backup:', members.length, 'members');
-                } else {
-                    members = [];
-                }
+    try {
+        console.log('📂 Loading data from file...');
+        const response = await fetch('/api/members');
+        if (response.ok) {
+            members = await response.json();
+            console.log('✅ Data loaded from file:', members.length, 'members');
+            localStorage.setItem('gymMembersBackup', JSON.stringify(members));
+        } else {
+            console.log('⚠️ Failed to load from file, trying backup...');
+            const backup = localStorage.getItem('gymMembersBackup');
+            if (backup) {
+                members = JSON.parse(backup);
+                console.log('✅ Data loaded from backup:', members.length, 'members');
+                await saveMembersToFile();
+            } else {
+                members = [];
             }
-            loadMembers();
         }
+    } catch (error) {
+        console.error('❌ Failed to load data:', error);
+        const backup = localStorage.getItem('gymMembersBackup');
+        if (backup) {
+            members = JSON.parse(backup);
+            console.log('✅ Data loaded from backup:', members.length, 'members');
+        } else {
+            members = [];
+        }
+    }
+    loadMembers();
+}
 
         // ============================================
         // SAVE DATA TO FILE - WITH ERROR HANDLING

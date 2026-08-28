@@ -14,12 +14,11 @@ app.use(express.static('public'));
 // Data file path
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
-// Ensure data directory exists
+// ✅ IMPORTANT: Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
-// ✅ IMPORTANT: Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
 }
@@ -28,7 +27,6 @@ console.log('📁 Data file path:', DATA_FILE);
 
 // ===== API ROUTES =====
 
-// GET - Load all members
 app.get('/api/members', (req, res) => {
     try {
         const data = fs.readFileSync(DATA_FILE, 'utf8');
@@ -40,7 +38,6 @@ app.get('/api/members', (req, res) => {
     }
 });
 
-// POST - Save all data (bulk save) - YEH ROUTE IMPORTANT HAI!
 app.post('/api/members/save-all', (req, res) => {
     try {
         const members = req.body;
@@ -56,7 +53,6 @@ app.post('/api/members/save-all', (req, res) => {
     }
 });
 
-// POST - Add new member
 app.post('/api/members', (req, res) => {
     try {
         const members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -74,7 +70,6 @@ app.post('/api/members', (req, res) => {
     }
 });
 
-// PUT - Update member
 app.put('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -91,7 +86,6 @@ app.put('/api/members/:id', (req, res) => {
     }
 });
 
-// DELETE - Remove member
 app.delete('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -104,7 +98,6 @@ app.delete('/api/members/:id', (req, res) => {
     }
 });
 
-// GET - Download backup
 app.get('/api/backup', (req, res) => {
     res.download(DATA_FILE, 'members_backup.json');
 });
