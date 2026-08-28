@@ -52,7 +52,7 @@ app.post('/api/members/save-all', (req, res) => {
         res.json({ success: true, message: 'All data saved successfully', count: members.length });
     } catch (error) {
         console.error('❌ Error saving data:', error);
-        res.status(500).json({ error: 'Failed to save data' });
+        res.status(500).json({ error: 'Failed to save data: ' + error.message });
     }
 });
 
