@@ -1893,14 +1893,16 @@
         // ============================================
         // SAVE DATA TO FILE - WITH ERROR HANDLING
         // ============================================
-        async function saveMembersToFile() {
+    async function saveMembersToFile() {
     try {
         console.log('💾 Saving data to file...', members.length, 'members');
+        
         const response = await fetch('/api/members/save-all', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(members)
         });
+        
         if (response.ok) {
             const result = await response.json();
             console.log('✅ Data saved to file successfully:', result);
@@ -1917,17 +1919,6 @@
         return false;
     }
 }
-
-        // ============================================
-        // 1. SET DEFAULT DATES
-        // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('startDate').value = today;
-            document.getElementById('endDate').value = today;
-            document.getElementById('paymentDate').value = today;
-            loadMembersFromFile();
-        });
 
         // ============================================
         // 2. ADD MEMBER
@@ -2434,78 +2425,83 @@
         // ============================================
         // 10. RENEW
         // ============================================
-        async function renewMember(memberId) {
-            const member = members.find(m => m._id === memberId);
-            if (!member) {
-                alert('❌ Member not found!');
+       async function renewMember(memberId) {
+    const member = members.find(m => m._id === memberId);
+    if (!member) {
+        alert('❌ Member not found!');
+        return;
+    }
+
+    // Step 1: New End Date
+    const newEndDate = prompt('📅 Enter new end date (YYYY-MM-DD):', member.endDate);
+    if (!newEndDate) return;
+    if (isNaN(new Date(newEndDate).getTime())) {
+        alert('❌ Invalid date format! Please use YYYY-MM-DD');
+        return;
+    }
+
+    // Step 2: New Total Fees
+    const newFees = prompt('💰 Enter new total fees (₹):', member.totalFees);
+    if (!newFees) return;
+    if (isNaN(parseInt(newFees)) || parseInt(newFees) <= 0) {
+        alert('❌ Please enter a valid amount!');
+        return;
+    }
+
+    // Step 3: Amount Paid
+    const amountPaid = prompt('💳 Enter amount paid (₹):', member.totalFees);
+    if (amountPaid === null) return;
+    if (isNaN(parseInt(amountPaid)) || parseInt(amountPaid) < 0) {
+        alert('❌ Please enter a valid amount!');
+        return;
+    }
+
+    // Step 4: Advance Option
+    const advanceOption = confirm('🔮 Do you want to pay for next month in advance?');
+    let advanceAmount = 0;
+    let paidMonths = 1;
+    let nextPaymentDate = new Date(newEndDate);
+    
+    if (advanceOption) {
+        const advance = prompt('💰 Enter advance amount for next month (₹):', member.totalFees);
+        if (advance !== null) {
+            if (isNaN(parseInt(advance)) || parseInt(advance) < 0) {
+                alert('❌ Please enter a valid advance amount!');
                 return;
             }
-
-            const newEndDate = prompt('📅 Enter new end date (YYYY-MM-DD):', member.endDate);
-            if (!newEndDate) return;
-            if (isNaN(new Date(newEndDate).getTime())) {
-                alert('❌ Invalid date format! Please use YYYY-MM-DD');
-                return;
-            }
-
-            const newFees = prompt('💰 Enter new total fees (₹):', member.totalFees);
-            if (!newFees) return;
-            if (isNaN(parseInt(newFees)) || parseInt(newFees) <= 0) {
-                alert('❌ Please enter a valid amount!');
-                return;
-            }
-
-            const amountPaid = prompt('💳 Enter amount paid (₹):', member.totalFees);
-            if (amountPaid === null) return;
-            if (isNaN(parseInt(amountPaid)) || parseInt(amountPaid) < 0) {
-                alert('❌ Please enter a valid amount!');
-                return;
-            }
-
-            const advanceOption = confirm('🔮 Do you want to pay for next month in advance?');
-            let advanceAmount = 0;
-            let paidMonths = 1;
-            let nextPaymentDate = new Date(newEndDate);
-            
-            if (advanceOption) {
-                const advance = prompt('💰 Enter advance amount for next month (₹):', member.totalFees);
-                if (advance !== null) {
-                    if (isNaN(parseInt(advance)) || parseInt(advance) < 0) {
-                        alert('❌ Please enter a valid advance amount!');
-                        return;
-                    }
-                    advanceAmount = parseInt(advance) || 0;
-                    paidMonths = 2;
-                    nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
-                }
-            }
-
-            const totalFees = parseInt(newFees);
-            const paid = parseInt(amountPaid) || 0;
-            const remainingDues = totalFees - paid;
-
-            member.endDate = newEndDate;
-            member.totalFees = totalFees;
-            member.amountPaid = paid;
-            member.remainingDues = remainingDues;
-            member.admissionDate = new Date().toISOString().split('T')[0];
-            member.paymentDate = new Date().toISOString().split('T')[0];
-            member.paidMonths = paidMonths;
-            member.advancePayment = (member.advancePayment || 0) + advanceAmount;
-            member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
-
-            if (remainingDues === 0) member.paymentStatus = 'Paid';
-            else if (paid > 0) member.paymentStatus = 'Partial';
-            else member.paymentStatus = 'Pending';
-
-            await saveMembersToFile();
-
-            let advanceText = advanceAmount > 0 ? `\n🔮 Advance Paid: ₹${advanceAmount} (Next Month)` : '';
-            alert(`✅ Renewed Successfully!\n\n📅 New End Date: ${newEndDate}\n💰 Total Fees: ₹${totalFees}\n💳 Amount Paid: ₹${paid}\n📊 Remaining Due: ₹${remainingDues}${advanceText}`);
-
-            loadMembers();
+            advanceAmount = parseInt(advance) || 0;
+            paidMonths = 2;
+            nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
         }
+    }
 
+    const totalFees = parseInt(newFees);
+    const paid = parseInt(amountPaid) || 0;
+    const remainingDues = totalFees - paid;
+
+    // ✅ Update member data
+    member.endDate = newEndDate;
+    member.totalFees = totalFees;
+    member.amountPaid = paid;
+    member.remainingDues = remainingDues;
+    member.admissionDate = new Date().toISOString().split('T')[0];
+    member.paymentDate = new Date().toISOString().split('T')[0];
+    member.paidMonths = paidMonths;
+    member.advancePayment = (member.advancePayment || 0) + advanceAmount;
+    member.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
+
+    if (remainingDues === 0) member.paymentStatus = 'Paid';
+    else if (paid > 0) member.paymentStatus = 'Partial';
+    else member.paymentStatus = 'Pending';
+
+    // ✅ ✅ ✅ IMPORTANT: Data save karein
+    await saveMembersToFile();
+
+    let advanceText = advanceAmount > 0 ? `\n🔮 Advance Paid: ₹${advanceAmount} (Next Month)` : '';
+    alert(`✅ Renewed Successfully!\n\n📅 New End Date: ${newEndDate}\n💰 Total Fees: ₹${totalFees}\n💳 Amount Paid: ₹${paid}\n📊 Remaining Due: ₹${remainingDues}${advanceText}`);
+
+    loadMembers();
+}
         // ============================================
         // 11. EXPIRY REMINDER FUNCTIONS
         // ============================================
