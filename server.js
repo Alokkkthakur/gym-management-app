@@ -12,10 +12,12 @@ app.use(express.static('public'));
 
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
+// Ensure directory exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
+// Create file if not exists
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
 }
@@ -24,6 +26,7 @@ console.log('📁 Data file path:', DATA_FILE);
 
 // ===== API ROUTES =====
 
+// GET - Load all members
 app.get('/api/members', (req, res) => {
     try {
         const data = fs.readFileSync(DATA_FILE, 'utf8');
@@ -33,7 +36,7 @@ app.get('/api/members', (req, res) => {
     }
 });
 
-// ✅ POST - Add member (APPEND)
+// ✅ POST - Add new member (APPEND)
 app.post('/api/members', (req, res) => {
     try {
         const members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -52,7 +55,22 @@ app.post('/api/members', (req, res) => {
     }
 });
 
-// ✅ PUT - Update member
+// ✅ POST - Save all data (BULK SAVE)
+app.post('/api/members/save-all', (req, res) => {
+    try {
+        const members = req.body;
+        if (!Array.isArray(members)) {
+            return res.status(400).json({ error: 'Invalid data format' });
+        }
+        fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
+        console.log('✅ Data saved to file:', members.length, 'members');
+        res.json({ success: true, count: members.length });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to save data' });
+    }
+});
+
+// PUT - Update member
 app.put('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -66,7 +84,7 @@ app.put('/api/members/:id', (req, res) => {
     }
 });
 
-// ✅ DELETE - Remove member
+// DELETE - Remove member
 app.delete('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -75,22 +93,6 @@ app.delete('/api/members/:id', (req, res) => {
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: 'Failed to delete' });
-    }
-});
-
-// ✅ POST - Save all data (bulk save) - YEH ROUTE IMPORTANT HAI!
-app.post('/api/members/save-all', (req, res) => {
-    try {
-        const members = req.body;
-        if (!Array.isArray(members)) {
-            return res.status(400).json({ error: 'Invalid data format' });
-        }
-        fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
-        console.log('✅ Data saved to file:', members.length, 'members');
-        res.json({ success: true, message: 'All data saved successfully', count: members.length });
-    } catch (error) {
-        console.error('❌ Error saving data:', error);
-        res.status(500).json({ error: 'Failed to save data: ' + error.message });
     }
 });
 
