@@ -4,87 +4,68 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 
-// Data file path
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
-// Ensure data directory exists
+// ✅ Ensure directory exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
-// ✅ Sirf tabhi create karein jab file exist nahi karti
-if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
-}
+// ✅ ALWAYS create fresh empty file on server start
+fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+console.log('✅ Fresh data file created');
 
 console.log('📁 Data file path:', DATA_FILE);
 
 // ===== API ROUTES =====
 
-// GET - Load all members
 app.get('/api/members', (req, res) => {
     try {
         const data = fs.readFileSync(DATA_FILE, 'utf8');
-        const members = JSON.parse(data);
-        res.json(members);
+        res.json(JSON.parse(data));
     } catch (error) {
-        console.error('❌ Error reading data:', error);
         res.status(500).json({ error: 'Failed to read data' });
     }
 });
 
-// ✅ POST - Add new member (APPEND - OVERWRITE NAHI KAREGA)
+// ✅ POST - Add member (APPEND)
 app.post('/api/members', (req, res) => {
     try {
-        // Existing members load karein
         const members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-        
-        // Naya member create karein
         const newMember = {
             ...req.body,
             _id: Date.now().toString(),
             createdAt: new Date().toISOString()
         };
-        
-        // ✅ Append - Purane members + Naya member
         members.push(newMember);
-        
-        // File me save karein
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         console.log('✅ Member added:', newMember.name, 'Total:', members.length);
-        
         res.json({ success: true, member: newMember });
     } catch (error) {
-        console.error('❌ Error saving data:', error);
+        console.error('❌ Error:', error);
         res.status(500).json({ error: 'Failed to save data' });
     }
 });
 
-// PUT - Update member
 app.put('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
         const index = members.findIndex(m => m._id === req.params.id);
-        if (index === -1) {
-            return res.status(404).json({ error: 'Member not found' });
-        }
+        if (index === -1) return res.status(404).json({ error: 'Member not found' });
         members[index] = { ...members[index], ...req.body };
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
-        res.json({ success: true, member: members[index] });
+        res.json({ success: true });
     } catch (error) {
-        console.error('❌ Error updating data:', error);
-        res.status(500).json({ error: 'Failed to update data' });
+        res.status(500).json({ error: 'Failed to update' });
     }
 });
 
-// DELETE - Remove member
 app.delete('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -92,17 +73,10 @@ app.delete('/api/members/:id', (req, res) => {
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         res.json({ success: true });
     } catch (error) {
-        console.error('❌ Error deleting data:', error);
-        res.status(500).json({ error: 'Failed to delete data' });
+        res.status(500).json({ error: 'Failed to delete' });
     }
 });
 
-// GET - Download backup
-app.get('/api/backup', (req, res) => {
-    res.download(DATA_FILE, 'members_backup.json');
-});
-
-// Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
     console.log(`📁 Data saved at: ${DATA_FILE}`);
