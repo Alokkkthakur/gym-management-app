@@ -476,6 +476,21 @@
         window.onload = function() {
             if (sessionStorage.getItem('viraj_logged_in') === 'true') {
                 showDashboard();
+                let inactivityTimer;
+const inactivityLimit = 2 * 60 * 1000; // 2 Minutes
+
+function resetInactivityTimer() {
+    if (sessionStorage.getItem('viraj_logged_in') === 'true') {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+            handleLogout();
+        }, inactivityLimit);
+    }
+}
+
+['mousemove', 'keypress', 'click', 'scroll', 'touchstart'].forEach(eventName => {
+    document.addEventListener(eventName, resetInactivityTimer);
+});
             }
             const jDate = document.getElementById('joiningDate');
             if (jDate) jDate.valueAsDate = new Date();
