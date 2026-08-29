@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viraj Fitness Pro - Advanced Gym Management</title>
+    <title>Viraj Fitness - Advanced Gym Management</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +18,7 @@
                     <i class="fa-solid fa-dumbbell text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-wide text-white">VIRAJ FITNESS <span class="text-indigo-400">PRO</span></h1>
+                    <h1 class="text-xl font-extrabold tracking-wide text-white">VIRAJ <span class="text-indigo-400">FITNESS</span></h1>
                     <p class="text-xs text-slate-400">Complete Member, Billing & Renewal System</p>
                 </div>
             </div>
@@ -660,7 +660,7 @@
             const m = members.find(item => item.id === id);
             if (!m) return;
             const status = getExpiryStatus(m.expiryDate).status;
-            const msg = `Hi ${m.name}, your Viraj Fitness Pro membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with our special discounted offer and continue your fitness journey! 💪🔥`;
+            const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with our special discounted offer and continue your fitness journey!`;
             window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -879,7 +879,7 @@
                 container.innerHTML = `<p class="text-center text-xs text-slate-500 py-4">No pending dues found.</p>`;
             } else {
                 dueMembers.forEach(m => {
-                    const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness Pro. Please clear it at your earliest convenience. Thank you!`;
+                    const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness. Please clear it at your earliest convenience. Thank you!`;
                     const waUrl = `https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`;
                     const div = document.createElement('div');
                     div.className = 'bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs';
@@ -903,14 +903,14 @@
         function sendBulkReminder() {
             const dueMembers = members.filter(m => m.balanceDue > 0);
             dueMembers.forEach(m => {
-                const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness Pro. Please clear it at your earliest convenience.`;
+                const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness. Please clear it at your earliest convenience.`;
                 window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
             });
         }
 
         function copyReminderList() {
             const dueMembers = members.filter(m => m.balanceDue > 0);
-            let text = "Viraj Fitness Pro - Pending Dues:\n";
+            let text = "Viraj Fitness - Pending Dues:\n";
             dueMembers.forEach(m => {
                 text += `- ${m.name} (${m.phone}): ₹${m.balanceDue}\n`;
             });
@@ -930,7 +930,7 @@
             } else {
                 expiringMembers.forEach(m => {
                     const status = getExpiryStatus(m.expiryDate).status;
-                    const msg = `Hi ${m.name}, your Viraj Fitness Pro membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today and get an exclusive special discount offer on your monthly/quarterly plan! 💪🔥`;
+                    const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today and get an exclusive special discount offer on your monthly/quarterly plan!`;
                     const waUrl = `https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`;
                     const div = document.createElement('div');
                     div.className = 'bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs';
@@ -955,14 +955,14 @@
         function sendExpiryRemindersWithOffer() {
             const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
             expiringMembers.forEach(m => {
-                const msg = `Hi ${m.name}, your Viraj Fitness Pro membership has expired. Renew now with our special discounted offer and continue your fitness journey! 💪🔥`;
+                const msg = `Hi ${m.name}, your Viraj Fitness membership has expired. Renew now with our special discounted offer and continue your fitness journey!`;
                 window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
             });
         }
 
         function copyExpiryList() {
             const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
-            let text = "Viraj Fitness Pro - Expiry Offers List:\n";
+            let text = "Viraj Fitness - Expiry Offers List:\n";
             expiringMembers.forEach(m => {
                 text += `- ${m.name} (${m.phone}): Expiry ${m.expiryDate}\n`;
             });
