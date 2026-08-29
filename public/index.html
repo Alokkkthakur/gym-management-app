@@ -10,226 +10,254 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
-    <!-- Top Navbar -->
-    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-dumbbell text-lg"></i>
+    <!-- LOGIN SCREEN OVERLAY -->
+    <div id="loginScreen" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm p-8 rounded-2xl shadow-2xl space-y-6 text-center">
+            <div class="flex justify-center">
+                <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-3.5 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-dumbbell text-2xl"></i>
                 </div>
+            </div>
+            <div>
+                <h2 class="text-xl font-extrabold text-white tracking-wide">VIRAJ <span class="text-indigo-400">FITNESS</span></h2>
+                <p class="text-xs text-slate-400 mt-1">Enter password to access dashboard</p>
+            </div>
+            <form onsubmit="handleLogin(event)" class="space-y-4 text-left">
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-wide text-white">VIRAJ <span class="text-indigo-400">FITNESS</span></h1>
-                    <p class="text-xs text-slate-400">Complete Member, Billing & Renewal System</p>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter admin password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                 </div>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="openFinanceModal()" class="bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-400 px-3 py-2 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-pie"></i> Finance Dashboard
+                <div id="loginError" class="text-xs text-rose-400 hidden">Incorrect password. Try again!</div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock-open"></i> Login
                 </button>
-                <button onclick="loadMembers()" class="bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 transition flex items-center gap-1.5 border border-slate-700">
-                    <i class="fa-solid fa-rotate"></i> Refresh
-                </button>
-            </div>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        
-        <!-- Stats Summary Cards (Clickable to Filter) -->
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-            <div onclick="setFilter('all')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="flex items-center justify-between text-indigo-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Members</span>
-                    <i class="fa-solid fa-users text-sm"></i>
-                </div>
-                <h3 id="stat-total" class="text-xl font-bold text-white">0</h3>
-            </div>
-            <div onclick="setFilter('due')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-rose-500/50 transition">
-                <div class="flex items-center justify-between text-rose-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Due Members</span>
-                    <i class="fa-solid fa-wallet text-sm"></i>
-                </div>
-                <h3 id="stat-dues" class="text-xl font-bold text-rose-400">₹0</h3>
-            </div>
-            <div onclick="setFilter('partial')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-amber-500/50 transition">
-                <div class="flex items-center justify-between text-amber-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partial Payment</span>
-                    <i class="fa-solid fa-coins text-sm"></i>
-                </div>
-                <h3 id="stat-partial" class="text-xl font-bold text-amber-400">0</h3>
-            </div>
-            <div onclick="setFilter('expired')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-red-500/50 transition">
-                <div class="flex items-center justify-between text-red-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Expired Members</span>
-                    <i class="fa-solid fa-triangle-exclamation text-sm"></i>
-                </div>
-                <h3 id="stat-expired" class="text-xl font-bold text-red-400">0</h3>
-            </div>
-            <div onclick="setFilter('cardio')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="flex items-center justify-between text-indigo-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">With Cardio</span>
-                    <i class="fa-solid fa-heart-pulse text-sm"></i>
-                </div>
-                <h3 id="stat-cardio" class="text-xl font-bold text-indigo-400">0</h3>
-            </div>
-            <div onclick="setFilter('advance')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-blue-500/50 transition">
-                <div class="flex items-center justify-between text-blue-400 mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Advance Payment</span>
-                    <i class="fa-solid fa-shield-halved text-sm"></i>
-                </div>
-                <h3 id="stat-advance" class="text-xl font-bold text-blue-400">0</h3>
-            </div>
-        </div>
-
-        <!-- Quick Alert Bar (Reminders & Offers) -->
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-                <span class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-bolt"></i> Action Hub</span>
-                <span class="text-xs text-slate-400">WhatsApp Reminders & Renewal Offers:</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="openReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
-                    <i class="fa-brands fa-whatsapp text-emerald-400"></i> Payment Reminders
-                </button>
-                <button onclick="openExpiryReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
-                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Offers
-                </button>
-            </div>
-        </div>
-
-        <!-- Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- Left: Add Member Form -->
-            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl h-fit">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-user-plus text-indigo-400"></i> New Admission
-                    </h2>
-                </div>
-                <form id="memberForm" class="space-y-3.5" onsubmit="addMember(event)">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Full Name</label>
-                        <input type="text" id="name" required placeholder="e.g. Rahul Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+    <!-- MAIN APP CONTENT (Hidden until logged in) -->
+    <div id="appContent" class="hidden">
+        <!-- Top Navbar -->
+        <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-dumbbell text-lg"></i>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Phone Number</label>
-                        <input type="tel" id="phone" required placeholder="10-digit mobile number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        <h1 class="text-xl font-extrabold tracking-wide text-white">VIRAJ <span class="text-indigo-400">FITNESS</span></h1>
+                        <p class="text-xs text-slate-400">Complete Member, Billing & Renewal System</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Plan</label>
-                            <select id="plan" onchange="updateExpiryDate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                <option value="Half-monthly">Half-monthly (15D)</option>
-                                <option value="Monthly">Monthly (1M)</option>
-                                <option value="Quarterly">Quarterly (3M)</option>
-                                <option value="Half-Yearly">Half-Yearly (6M)</option>
-                                <option value="Yearly">Yearly (1Y)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Cardio</label>
-                            <select id="cardio" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                <option value="no">Without Cardio</option>
-                                <option value="yes">With Cardio</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Total Fee (₹)</label>
-                            <input type="number" id="totalFee" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Amount Paid (₹)</label>
-                            <input type="number" id="amountPaid" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Balance Due (₹)</label>
-                            <input type="number" id="balanceDue" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-rose-400 font-bold focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Payment Method</label>
-                            <select id="paymentMethod" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                <option value="Cash">Cash</option>
-                                <option value="Online">Online / UPI</option>
-                                <option value="Card">Card</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Joining Date</label>
-                            <input type="date" id="joiningDate" onchange="updateExpiryDate()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Expiry Date</label>
-                            <input type="date" id="expiryDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 mt-2 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check"></i> Register Member
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openFinanceModal()" class="bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-400 px-3 py-2 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-pie"></i> Finance Dashboard
                     </button>
-                </form>
-            </section>
+                    <button onclick="loadMembers()" class="bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 transition flex items-center gap-1.5 border border-slate-700">
+                        <i class="fa-solid fa-rotate"></i> Refresh
+                    </button>
+                    <button onclick="handleLogout()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 px-3 py-2 rounded-xl text-xs font-medium transition border border-rose-500/30 flex items-center gap-1.5" title="Lock Screen">
+                        <i class="fa-solid fa-lock"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
 
-            <!-- Right: Directory & All Filters -->
-            <section class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col">
-                <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-                    <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-address-book text-indigo-400"></i> Member Directory
-                    </h2>
-                    <div class="w-full sm:w-72 relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                            <i class="fa-solid fa-search text-xs"></i>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Search name or phone..." oninput="filterMembers()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+        <!-- Main Container -->
+        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+            
+            <!-- Stats Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                <div onclick="setFilter('all')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
+                    <div class="flex items-center justify-between text-indigo-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Members</span>
+                        <i class="fa-solid fa-users text-sm"></i>
                     </div>
+                    <h3 id="stat-total" class="text-xl font-bold text-white">0</h3>
                 </div>
-
-                <!-- Complete Filter Chips Row (Requested Filters) -->
-                <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-2 text-xs scrollbar-none">
-                    <button onclick="setFilter('all')" id="chip-all" class="filter-chip bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">All filter</button>
-                    <button onclick="setFilter('due')" id="chip-due" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Due filter</button>
-                    <button onclick="setFilter('partial')" id="chip-partial" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Partial filter</button>
-                    <button onclick="setFilter('expired')" id="chip-expired" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Expired filter</button>
-                    <button onclick="setFilter('paid')" id="chip-paid" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Paid filter</button>
-                    <button onclick="setFilter('cardio')" id="chip-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Cardio filter</button>
-                    <button onclick="setFilter('no-cardio')" id="chip-no-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">No Cardio filter</button>
-                    <button onclick="setFilter('advance')" id="chip-advance" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Advance filter</button>
+                <div onclick="setFilter('due')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-rose-500/50 transition">
+                    <div class="flex items-center justify-between text-rose-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Due Members</span>
+                        <i class="fa-solid fa-wallet text-sm"></i>
+                    </div>
+                    <h3 id="stat-dues" class="text-xl font-bold text-rose-400">₹0</h3>
                 </div>
-
-                <!-- Table Container -->
-                <div class="overflow-x-auto flex-grow rounded-xl border border-slate-800">
-                    <table class="w-full text-left text-sm text-slate-300">
-                        <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                            <tr>
-                                <th class="p-3.5">Member Details</th>
-                                <th class="p-3.5">Plan & Workout</th>
-                                <th class="p-3.5">Fees & Status</th>
-                                <th class="p-3.5">Renew / Expiry</th>
-                                <th class="p-3.5 text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="membersTableBody" class="divide-y divide-slate-800/60">
-                            <!-- Dynamically loaded -->
-                        </tbody>
-                    </table>
+                <div onclick="setFilter('partial')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-amber-500/50 transition">
+                    <div class="flex items-center justify-between text-amber-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partial Payment</span>
+                        <i class="fa-solid fa-coins text-sm"></i>
+                    </div>
+                    <h3 id="stat-partial" class="text-xl font-bold text-amber-400">0</h3>
                 </div>
-            </section>
-        </div>
-    </main>
+                <div onclick="setFilter('expired')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-red-500/50 transition">
+                    <div class="flex items-center justify-between text-red-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Expired Members</span>
+                        <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                    </div>
+                    <h3 id="stat-expired" class="text-xl font-bold text-red-400">0</h3>
+                </div>
+                <div onclick="setFilter('cardio')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
+                    <div class="flex items-center justify-between text-indigo-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">With Cardio</span>
+                        <i class="fa-solid fa-heart-pulse text-sm"></i>
+                    </div>
+                    <h3 id="stat-cardio" class="text-xl font-bold text-indigo-400">0</h3>
+                </div>
+                <div onclick="setFilter('advance')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-blue-500/50 transition">
+                    <div class="flex items-center justify-between text-blue-400 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Advance Payment</span>
+                        <i class="fa-solid fa-shield-halved text-sm"></i>
+                    </div>
+                    <h3 id="stat-advance" class="text-xl font-bold text-blue-400">0</h3>
+                </div>
+            </div>
 
-    <!-- RENEW MEMBERSHIP MODAL -->
+            <!-- Quick Alert Bar -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-bolt"></i> Action Hub</span>
+                    <span class="text-xs text-slate-400">WhatsApp Reminders & Renewal Offers:</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="openReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Payment Reminders
+                    </button>
+                    <button onclick="openExpiryReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Offers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left: Add Member Form -->
+                <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl h-fit">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus text-indigo-400"></i> New Admission
+                        </h2>
+                    </div>
+                    <form id="memberForm" class="space-y-3.5" onsubmit="addMember(event)">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Full Name</label>
+                            <input type="text" id="name" required placeholder="e.g. Rahul Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="10-digit mobile number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Plan</label>
+                                <select id="plan" onchange="updateExpiryDate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                                    <option value="Monthly">Monthly (1M)</option>
+                                    <option value="Quarterly">Quarterly (3M)</option>
+                                    <option value="Half-Yearly">Half-Yearly (6M)</option>
+                                    <option value="Yearly">Yearly (1Y)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Cardio</label>
+                                <select id="cardio" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                                    <option value="no">Without Cardio</option>
+                                    <option value="yes">With Cardio</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Total Fee (₹)</label>
+                                <input type="number" id="totalFee" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Amount Paid (₹)</label>
+                                <input type="number" id="amountPaid" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Balance Due (₹)</label>
+                                <input type="number" id="balanceDue" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-rose-400 font-bold focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Payment Method</label>
+                                <select id="paymentMethod" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Online">Online / UPI</option>
+                                    <option value="Card">Card</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Joining Date</label>
+                                <input type="date" id="joiningDate" onchange="updateExpiryDate()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Expiry Date</label>
+                                <input type="date" id="expiryDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 mt-2 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-check"></i> Register Member
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Right: Directory & All Filters -->
+                <section class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-address-book text-indigo-400"></i> Member Directory
+                        </h2>
+                        <div class="w-full sm:w-72 relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                <i class="fa-solid fa-search text-xs"></i>
+                            </span>
+                            <input type="text" id="searchInput" placeholder="Search name or phone..." oninput="filterMembers()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-2 text-xs scrollbar-none">
+                        <button onclick="setFilter('all')" id="chip-all" class="filter-chip bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">All filter</button>
+                        <button onclick="setFilter('due')" id="chip-due" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Due filter</button>
+                        <button onclick="setFilter('partial')" id="chip-partial" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Partial filter</button>
+                        <button onclick="setFilter('expired')" id="chip-expired" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Expired filter</button>
+                        <button onclick="setFilter('paid')" id="chip-paid" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Paid filter</button>
+                        <button onclick="setFilter('cardio')" id="chip-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Cardio filter</button>
+                        <button onclick="setFilter('no-cardio')" id="chip-no-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">No Cardio filter</button>
+                        <button onclick="setFilter('advance')" id="chip-advance" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Advance filter</button>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto flex-grow rounded-xl border border-slate-800">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                <tr>
+                                    <th class="p-3.5">Member Details</th>
+                                    <th class="p-3.5">Plan & Workout</th>
+                                    <th class="p-3.5">Fees & Status</th>
+                                    <th class="p-3.5">Renew / Expiry</th>
+                                    <th class="p-3.5 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="membersTableBody" class="divide-y divide-slate-800/60">
+                                <!-- Dynamically loaded -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
     <div id="renewModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-rotate-right text-indigo-400"></i> Renew Membership
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-rotate-right text-indigo-400"></i> Renew Membership</h3>
                 <button onclick="closeRenewModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="renewMemberId">
@@ -263,13 +291,10 @@
         </div>
     </div>
 
-    <!-- PAYMENT MODAL -->
     <div id="paymentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-indian-rupee-sign text-emerald-400"></i> Add Payment
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-indian-rupee-sign text-emerald-400"></i> Add Payment</h3>
                 <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="payMemberId">
@@ -302,13 +327,10 @@
         </div>
     </div>
 
-    <!-- EDIT MEMBER MODAL -->
     <div id="editModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-user-pen text-indigo-400"></i> Edit Member
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-pen text-indigo-400"></i> Edit Member</h3>
                 <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="editMemberId">
@@ -345,17 +367,12 @@
         </div>
     </div>
 
-    <!-- FINANCE DASHBOARD MODAL -->
     <div id="financeModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl p-6 rounded-2xl shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> Finance Dashboard
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-chart-pie text-emerald-400"></i> Finance Dashboard</h3>
                 <button onclick="closeFinanceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            
-            <!-- Month Selector -->
             <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 uppercase">Select Month</label>
@@ -366,8 +383,6 @@
                     <div id="finTotalMembers" class="text-sm font-bold text-white">0</div>
                 </div>
             </div>
-
-            <!-- Finance Summary Cards -->
             <div class="grid grid-cols-3 gap-3">
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
                     <div class="text-[11px] text-slate-400 font-medium">Income</div>
@@ -382,20 +397,14 @@
                     <div id="finProfit" class="text-xl font-bold text-indigo-400 mt-1">₹0</div>
                 </div>
             </div>
-
-            <!-- Add Expense Section -->
             <div class="space-y-3 pt-2">
-                <h4 class="text-sm font-semibold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-indigo-400"></i> Add Gym Expense
-                </h4>
+                <h4 class="text-sm font-semibold text-white flex items-center gap-2"><i class="fa-solid fa-receipt text-indigo-400"></i> Add Gym Expense</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <input type="text" id="expTitle" placeholder="Expense Title (e.g. Electricity)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     <input type="number" id="expAmount" placeholder="Amount (₹)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     <button onclick="addExpense()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30">Add Expense</button>
                 </div>
             </div>
-
-            <!-- Expense List Table -->
             <div class="overflow-x-auto rounded-xl border border-slate-800">
                 <table class="w-full text-left text-xs text-slate-300">
                     <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
@@ -414,13 +423,10 @@
         </div>
     </div>
 
-    <!-- PAYMENT REMINDERS MODAL -->
     <div id="reminderModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-lg p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-emerald-400"></i> Pending Dues WhatsApp Reminders
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400"></i> Pending Dues WhatsApp Reminders</h3>
                 <button onclick="closeReminderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="flex justify-between items-center">
@@ -430,24 +436,16 @@
                     <button onclick="sendBulkReminder()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition shadow-lg shadow-emerald-600/30"><i class="fa-brands fa-whatsapp"></i> Open All Chats</button>
                 </div>
             </div>
-            <div id="reminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1">
-                <!-- Dynamically populated -->
-            </div>
+            <div id="reminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
         </div>
     </div>
 
-    <!-- EXPIRY ALERTS & RENEWAL OFFERS MODAL -->
     <div id="expiryReminderModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-lg p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Special Renewal Offers
-                </h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Special Renewal Offers</h3>
                 <button onclick="closeExpiryReminderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <p class="text-xs text-slate-400">
-                Send WhatsApp messages with special discount offers to members whose plans are expiring soon or have already expired to encourage immediate renewals!
-            </p>
             <div class="flex justify-between items-center">
                 <div class="text-xs text-slate-400">Expiring/Expired Count: <span id="expiryReminderCount" class="text-amber-400 font-bold">0</span></div>
                 <div class="flex gap-2">
@@ -455,31 +453,74 @@
                     <button onclick="sendExpiryRemindersWithOffer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition shadow-lg shadow-emerald-600/30"><i class="fa-brands fa-whatsapp"></i> Open All Offer Chats</button>
                 </div>
             </div>
-            <div id="expiryReminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1">
-                <!-- Dynamically populated -->
-            </div>
+            <div id="expiryReminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
         </div>
     </div>
 
     <!-- JavaScript Application Logic -->
     <script>
-        let members = JSON.parse(localStorage.getItem('viraj_members')) || [];
-        let expenses = JSON.parse(localStorage.getItem('viraj_expenses')) || [];
-        let currentFilter = 'all';
+        let members = [];
+        let expenses = [];
+        try {
+            members = JSON.parse(localStorage.getItem('viraj_members')) || [];
+            expenses = JSON.parse(localStorage.getItem('viraj_expenses')) || [];
+        } catch (e) {
+            members = [];
+            expenses = [];
+        }
 
-        // Initialize App on Load
+        let currentFilter = 'all';
+        const ADMIN_PASS = 'viraj@5227'; // Apna password yahan change kar sakte hain
+
         window.onload = function() {
-            document.getElementById('joiningDate').valueAsDate = new Date();
+            if (sessionStorage.getItem('viraj_logged_in') === 'true') {
+                showDashboard();
+            }
+            const jDate = document.getElementById('joiningDate');
+            if (jDate) jDate.valueAsDate = new Date();
             updateExpiryDate();
             
-            // Set current month in finance selector
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            document.getElementById('financeMonth').value = `${year}-${month}`;
-            
-            loadMembers();
+            const finMonth = document.getElementById('financeMonth');
+            if (finMonth) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                finMonth.value = `${year}-${month}`;
+            }
         };
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('loginPassword').value;
+            if (pass === ADMIN_PASS) {
+                sessionStorage.setItem('viraj_logged_in', 'true');
+                showDashboard();
+            } else {
+                const errDiv = document.getElementById('loginError');
+                if (errDiv) errDiv.classList.remove('hidden');
+            }
+        }
+
+        function showDashboard() {
+            const loginScreen = document.getElementById('loginScreen');
+            const appContent = document.getElementById('appContent');
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (appContent) appContent.classList.remove('hidden');
+            loadMembers();
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('viraj_logged_in');
+            const appContent = document.getElementById('appContent');
+            const loginScreen = document.getElementById('loginScreen');
+            const loginPass = document.getElementById('loginPassword');
+            const loginErr = document.getElementById('loginError');
+
+            if (appContent) appContent.classList.add('hidden');
+            if (loginPass) loginPass.value = '';
+            if (loginErr) loginErr.classList.add('hidden');
+            if (loginScreen) loginScreen.classList.remove('hidden');
+        }
 
         function saveFinanceData() {
             localStorage.setItem('viraj_expenses', JSON.stringify(expenses));
@@ -494,21 +535,24 @@
             const total = parseFloat(document.getElementById('totalFee').value) || 0;
             const paid = parseFloat(document.getElementById('amountPaid').value) || 0;
             const due = Math.max(0, total - paid);
-            document.getElementById('balanceDue').value = due;
+            const balanceDue = document.getElementById('balanceDue');
+            if (balanceDue) balanceDue.value = due;
         }
 
         function updateExpiryDate() {
-            const plan = document.getElementById('plan').value;
+            const planEl = document.getElementById('plan');
             const joiningDateVal = document.getElementById('joiningDate').value;
-            if (!joiningDateVal) return;
+            const expiryDateEl = document.getElementById('expiryDate');
+            if (!planEl || !joiningDateVal || !expiryDateEl) return;
 
+            const plan = planEl.value;
             let date = new Date(joiningDateVal);
             if (plan === 'Monthly') date.setMonth(date.getMonth() + 1);
             else if (plan === 'Quarterly') date.setMonth(date.getMonth() + 3);
             else if (plan === 'Half-Yearly') date.setMonth(date.getMonth() + 6);
             else if (plan === 'Yearly') date.setFullYear(date.getFullYear() + 1);
 
-            document.getElementById('expiryDate').value = date.toISOString().split('T')[0];
+            expiryDateEl.value = date.toISOString().split('T')[0];
         }
 
         function addMember(e) {
@@ -572,9 +616,7 @@
             if (!member) return;
 
             let baseDate = new Date(member.expiryDate);
-            if (baseDate < new Date()) {
-                baseDate = new Date();
-            }
+            if (baseDate < new Date()) baseDate = new Date();
 
             if (plan === 'Monthly') baseDate.setMonth(baseDate.getMonth() + 1);
             else if (plan === 'Quarterly') baseDate.setMonth(baseDate.getMonth() + 3);
@@ -656,23 +698,24 @@
             return m.amountPaid > m.totalFee;
         }
 
-        // Direct WhatsApp Offer for Expired/Expiring Member
         function sendSingleOfferWhatsApp(id) {
             const m = members.find(item => item.id === id);
             if (!m) return;
             const status = getExpiryStatus(m.expiryDate).status;
-            const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with our special discounted offer and continue your fitness journey!`;
+            const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with our special discounted offer!`;
             window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function loadMembers() {
             const tbody = document.getElementById('membersTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
+            const searchInput = document.getElementById('searchInput');
+            const search = searchInput ? searchInput.value.toLowerCase() : '';
+
             let filtered = members.filter(m => {
-                const search = document.getElementById('searchInput').value.toLowerCase();
-                const matchesSearch = m.name.toLowerCase().includes(search) || m.phone.includes(search);
-                
+                const matchesSearch = (m.name || '').toLowerCase().includes(search) || (m.phone || '').includes(search);
                 if (!matchesSearch) return false;
 
                 const expInfo = getExpiryStatus(m.expiryDate);
@@ -686,20 +729,12 @@
                 return true;
             });
 
-            // Calculate Stats for Top Cards
-            let totalMembers = members.length;
-            let totalDues = members.reduce((acc, m) => acc + m.balanceDue, 0);
-            let partialCount = members.filter(m => m.balanceDue > 0 && m.amountPaid > 0).length;
-            let expiredCount = members.filter(m => getExpiryStatus(m.expiryDate).status === 'Expired').length;
-            let cardioCount = members.filter(m => m.cardio === 'yes').length;
-            let advanceCount = members.filter(m => isAdvancePayment(m)).length;
-
-            document.getElementById('stat-total').textContent = totalMembers;
-            document.getElementById('stat-dues').textContent = '₹' + totalDues;
-            document.getElementById('stat-partial').textContent = partialCount;
-            document.getElementById('stat-expired').textContent = expiredCount;
-            document.getElementById('stat-cardio').textContent = cardioCount;
-            document.getElementById('stat-advance').textContent = advanceCount;
+            document.getElementById('stat-total').textContent = members.length;
+            document.getElementById('stat-dues').textContent = '₹' + members.reduce((acc, m) => acc + (m.balanceDue || 0), 0);
+            document.getElementById('stat-partial').textContent = members.filter(m => (m.balanceDue || 0) > 0 && (m.amountPaid || 0) > 0).length;
+            document.getElementById('stat-expired').textContent = members.filter(m => getExpiryStatus(m.expiryDate).status === 'Expired').length;
+            document.getElementById('stat-cardio').textContent = members.filter(m => m.cardio === 'yes').length;
+            document.getElementById('stat-advance').textContent = members.filter(m => isAdvancePayment(m)).length;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No members found matching filter criteria.</td></tr>`;
@@ -757,7 +792,6 @@
             loadMembers();
         }
 
-        // EDIT MODAL LOGIC
         function openEditModal(id) {
             const m = members.find(item => item.id === id);
             if (!m) return;
@@ -785,7 +819,6 @@
             closeEditModal();
         }
 
-        // FINANCE DASHBOARD LOGIC
         function openFinanceModal() {
             refreshFinanceData();
             document.getElementById('financeModal').classList.remove('hidden');
@@ -805,9 +838,7 @@
             members.forEach(m => {
                 if (m.paymentsHistory) {
                     m.paymentsHistory.forEach(p => {
-                        if (p.date && p.date.startsWith(monthVal)) {
-                            income += p.amount;
-                        }
+                        if (p.date && p.date.startsWith(monthVal)) income += p.amount;
                     });
                 }
             });
@@ -869,7 +900,6 @@
             refreshFinanceData();
         }
 
-        // PAYMENT REMINDERS MODAL
         function openReminderModal() {
             const dueMembers = members.filter(m => m.balanceDue > 0);
             document.getElementById('reminderCount').textContent = dueMembers.length;
@@ -889,7 +919,7 @@
                             <div class="font-semibold text-white">${m.name} (${m.phone})</div>
                             <div class="text-rose-400">Due: ₹${m.balanceDue}</div>
                         </div>
-                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/30 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Remind</a>
+                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/35 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Remind</a>
                     `;
                     container.appendChild(div);
                 });
@@ -902,24 +932,21 @@
         }
 
         function sendBulkReminder() {
-            const dueMembers = members.filter(m => m.balanceDue > 0);
-            dueMembers.forEach(m => {
+            members.filter(m => m.balanceDue > 0).forEach(m => {
                 const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness. Please clear it at your earliest convenience.`;
                 window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
             });
         }
 
         function copyReminderList() {
-            const dueMembers = members.filter(m => m.balanceDue > 0);
             let text = "Viraj Fitness - Pending Dues:\n";
-            dueMembers.forEach(m => {
+            members.filter(m => m.balanceDue > 0).forEach(m => {
                 text += `- ${m.name} (${m.phone}): ₹${m.balanceDue}\n`;
             });
             navigator.clipboard.writeText(text);
             alert('Due list copied to clipboard!');
         }
 
-        // EXPIRY ALERTS & SPECIAL RENEWAL OFFERS MODAL
         function openExpiryReminderModal() {
             const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
             document.getElementById('expiryReminderCount').textContent = expiringMembers.length;
@@ -931,7 +958,7 @@
             } else {
                 expiringMembers.forEach(m => {
                     const status = getExpiryStatus(m.expiryDate).status;
-                    const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today and get an exclusive special discount offer on your monthly/quarterly plan!`;
+                    const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with an exclusive special discount offer!`;
                     const waUrl = `https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`;
                     const div = document.createElement('div');
                     div.className = 'bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs';
@@ -939,9 +966,8 @@
                         <div>
                             <div class="font-semibold text-white">${m.name} (${m.phone})</div>
                             <div class="text-amber-400">Expiry: ${m.expiryDate} (${status})</div>
-                            <div class="text-[10px] text-indigo-400 mt-0.5">Offer Ready: Special Discount</div>
                         </div>
-                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/30 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Send Offer</a>
+                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/35 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Send Offer</a>
                     `;
                     container.appendChild(div);
                 });
@@ -954,21 +980,19 @@
         }
 
         function sendExpiryRemindersWithOffer() {
-            const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
-            expiringMembers.forEach(m => {
-                const msg = `Hi ${m.name}, your Viraj Fitness membership has expired. Renew now with our special discounted offer and continue your fitness journey!`;
+            members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active').forEach(m => {
+                const msg = `Hi ${m.name}, your Viraj Fitness membership has expired. Renew now with our special discounted offer!`;
                 window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
             });
         }
 
         function copyExpiryList() {
-            const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
             let text = "Viraj Fitness - Expiry Offers List:\n";
-            expiringMembers.forEach(m => {
+            members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active').forEach(m => {
                 text += `- ${m.name} (${m.phone}): Expiry ${m.expiryDate}\n`;
             });
             navigator.clipboard.writeText(text);
-            alert('Expiry list with offer info copied to clipboard!');
+            alert('Expiry list copied to clipboard!');
         }
     </script>
 </body>
