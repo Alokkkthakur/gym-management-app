@@ -1894,35 +1894,29 @@
         // SAVE DATA TO FILE - WITH ERROR HANDLING
         // ============================================
         async function saveMembersToFile() {
-            try {
-                console.log('💾 Saving data to file...', members.length, 'members');
-                
-                const response = await fetch('/api/members/save-all', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(members)
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Data saved to file successfully:', result);
-                    // Also save to localStorage as backup
-                    localStorage.setItem('gymMembersBackup', JSON.stringify(members));
-                    return true;
-                } else {
-                    const error = await response.text();
-                    console.log('⚠️ Failed to save data:', response.status, error);
-                    // Fallback to localStorage
-                    localStorage.setItem('gymMembersBackup', JSON.stringify(members));
-                    return false;
-                }
-            } catch (error) {
-                console.error('❌ Error saving data:', error);
-                // Fallback to localStorage
-                localStorage.setItem('gymMembersBackup', JSON.stringify(members));
-                return false;
-            }
+    try {
+        console.log('💾 Saving data to file...', members.length, 'members');
+        const response = await fetch('/api/members/save-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(members)
+        });
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Data saved to file successfully:', result);
+            localStorage.setItem('gymMembersBackup', JSON.stringify(members));
+            return true;
+        } else {
+            console.log('⚠️ Failed to save data');
+            localStorage.setItem('gymMembersBackup', JSON.stringify(members));
+            return false;
         }
+    } catch (error) {
+        console.error('❌ Error saving data:', error);
+        localStorage.setItem('gymMembersBackup', JSON.stringify(members));
+        return false;
+    }
+}
 
         // ============================================
         // 1. SET DEFAULT DATES
