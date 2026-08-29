@@ -1,20 +1,17 @@
 [
   {
-    "name": "Test Member",
-    "phone": "9999999999",
-    "plan": "Monthly",
-    "totalFees": 500,
-    "amountPaid": 500,
-    "remainingDues": 0,
-    "paymentStatus": "Paid",
-    "admissionDate": "2026-08-27",
-    "endDate": "2026-09-27",
-    "paymentDate": "2026-08-27",
-    "cardio": "With Cardio",
-    "_id": "1787848608777",
-    "createdAt": "2026-08-27T16:36:48.777Z",
-    "paidMonths": 1,
-    "advancePayment": 0,
-    "nextPaymentDate": "2026-09-27"
+    "name": "Alok Kumar",
+    "phone": "9798469523",
+    "plan": "1",
+    "totalFee": 800,
+    "amountPaid": 797,
+    "balanceDue": 3,
+    "joiningDate": "2026-08-29",
+    "expiryDate": "2026-09-29",
+    "paymentMethod": "Cash",
+    "cardio": "no",
+    "paymentStatus": "Partial",
+    "_id": "1788013277199",
+    "createdAt": "2026-08-29T14:21:17.200Z"
   }
 ]
