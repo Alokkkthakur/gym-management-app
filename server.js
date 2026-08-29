@@ -6,16 +6,20 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 
+// Data file path
 const DATA_FILE = path.join(__dirname, 'data', 'members.json');
 
+// Ensure data directory exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
+// ✅ FIX: Sirf tabhi create karein jab file exist nahi karti
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
 }
@@ -24,17 +28,19 @@ console.log('📁 Data file path:', DATA_FILE);
 
 // ===== API ROUTES =====
 
-// GET - Load members
+// GET - Load all members
 app.get('/api/members', (req, res) => {
     try {
         const data = fs.readFileSync(DATA_FILE, 'utf8');
-        res.json(JSON.parse(data));
+        const members = JSON.parse(data);
+        res.json(members);
     } catch (error) {
+        console.error('❌ Error reading data:', error);
         res.status(500).json({ error: 'Failed to read data' });
     }
 });
 
-// ✅ FIX: Save-all should REPLACE the file (used for backup restore)
+// POST - Save all data (bulk save)
 app.post('/api/members/save-all', (req, res) => {
     try {
         const members = req.body;
@@ -43,13 +49,14 @@ app.post('/api/members/save-all', (req, res) => {
         }
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         console.log('✅ Data saved to file:', members.length, 'members');
-        res.json({ success: true, count: members.length });
+        res.json({ success: true, message: 'All data saved successfully', count: members.length });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to save data' });
+        console.error('❌ Error saving data:', error);
+        res.status(500).json({ error: 'Failed to save data: ' + error.message });
     }
 });
 
-// ✅ FIX: POST - Add new member (APPEND, not overwrite)
+// POST - Add new member (APPEND)
 app.post('/api/members', (req, res) => {
     try {
         const members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -62,23 +69,29 @@ app.post('/api/members', (req, res) => {
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         res.json({ success: true, member: newMember });
     } catch (error) {
+        console.error('❌ Error saving data:', error);
         res.status(500).json({ error: 'Failed to save data' });
     }
 });
 
+// PUT - Update member
 app.put('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
         const index = members.findIndex(m => m._id === req.params.id);
-        if (index === -1) return res.status(404).json({ error: 'Member not found' });
+        if (index === -1) {
+            return res.status(404).json({ error: 'Member not found' });
+        }
         members[index] = { ...members[index], ...req.body };
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         res.json({ success: true, member: members[index] });
     } catch (error) {
+        console.error('❌ Error updating data:', error);
         res.status(500).json({ error: 'Failed to update data' });
     }
 });
 
+// DELETE - Remove member
 app.delete('/api/members/:id', (req, res) => {
     try {
         let members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -86,14 +99,17 @@ app.delete('/api/members/:id', (req, res) => {
         fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
         res.json({ success: true });
     } catch (error) {
+        console.error('❌ Error deleting data:', error);
         res.status(500).json({ error: 'Failed to delete data' });
     }
 });
 
+// GET - Download backup
 app.get('/api/backup', (req, res) => {
     res.download(DATA_FILE, 'members_backup.json');
 });
 
+// Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
     console.log(`📁 Data saved at: ${DATA_FILE}`);
