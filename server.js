@@ -17,9 +17,13 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
-// ✅ ALWAYS create fresh empty file on server start
-fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
-console.log('✅ Fresh data file created');
+// ✅ FIX: Sirf tabhi create karein jab file exist nahi karti
+if (!fs.existsSync(DATA_FILE)) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+    console.log('✅ New data file created');
+} else {
+    console.log('✅ Existing data file loaded');
+}
 
 console.log('📁 Data file path:', DATA_FILE);
 
@@ -34,7 +38,6 @@ app.get('/api/members', (req, res) => {
     }
 });
 
-// ✅ POST - Add member (APPEND)
 app.post('/api/members', (req, res) => {
     try {
         const members = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -74,6 +77,22 @@ app.delete('/api/members/:id', (req, res) => {
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: 'Failed to delete' });
+    }
+});
+
+// ✅ POST - Save all data (bulk save)
+app.post('/api/members/save-all', (req, res) => {
+    try {
+        const members = req.body;
+        if (!Array.isArray(members)) {
+            return res.status(400).json({ error: 'Invalid data format' });
+        }
+        fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2));
+        console.log('✅ Data saved to file:', members.length, 'members');
+        res.json({ success: true, message: 'All data saved successfully', count: members.length });
+    } catch (error) {
+        console.error('❌ Error saving data:', error);
+        res.status(500).json({ error: 'Failed to save data: ' + error.message });
     }
 });
 
