@@ -1932,39 +1932,49 @@
         // ============================================
         // 2. ADD MEMBER
         // ============================================
-        document.getElementById('addMemberForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    document.getElementById('addMemberForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const cardioValue = document.querySelector('input[name="cardio"]:checked').value;
+    const paymentDate = document.getElementById('paymentDate').value || document.getElementById('startDate').value;
+    
+    const formData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        plan: document.getElementById('plan').value,
+        totalFees: parseInt(document.getElementById('totalFees').value),
+        amountPaid: parseInt(document.getElementById('amountPaid').value) || 0,
+        admissionDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        paymentDate: paymentDate,
+        cardio: cardioValue,
+        paidMonths: 1,
+        advancePayment: 0,
+        nextPaymentDate: document.getElementById('endDate').value
+    };
+    
+    formData.remainingDues = formData.totalFees - formData.amountPaid;
+    
+    if (formData.remainingDues === 0) formData.paymentStatus = 'Paid';
+    else if (formData.amountPaid > 0) formData.paymentStatus = 'Partial';
+    else formData.paymentStatus = 'Pending';
+    
+    try {
+        // ✅ APPEND - POST request
+        const response = await fetch('/api/members', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Member added:', result.member.name);
             
-            const cardioValue = document.querySelector('input[name="cardio"]:checked').value;
-            const paymentDate = document.getElementById('paymentDate').value || document.getElementById('startDate').value;
-            
-            const formData = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                plan: document.getElementById('plan').value,
-                totalFees: parseInt(document.getElementById('totalFees').value),
-                amountPaid: parseInt(document.getElementById('amountPaid').value) || 0,
-                admissionDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value,
-                paymentDate: paymentDate,
-                cardio: cardioValue,
-                _id: Date.now().toString(),
-                createdAt: new Date().toISOString(),
-                paidMonths: 1,
-                advancePayment: 0,
-                nextPaymentDate: document.getElementById('endDate').value
-            };
-            
-            formData.remainingDues = formData.totalFees - formData.amountPaid;
-            
-            if (formData.remainingDues === 0) formData.paymentStatus = 'Paid';
-            else if (formData.amountPaid > 0) formData.paymentStatus = 'Partial';
-            else formData.paymentStatus = 'Pending';
-            
-            members.push(formData);
-            
-            // ✅ IMPORTANT: Data save karein
-            await saveMembersToFile();
+            // Reload members
+            const loadResponse = await fetch('/api/members');
+            members = await loadResponse.json();
+            localStorage.setItem('gymMembersBackup', JSON.stringify(members));
             
             document.getElementById('addResult').innerHTML = 
                 `<div class="success">✅ Member registered successfully! (${formData.cardio})</div>`;
@@ -1975,8 +1985,16 @@
             document.getElementById('paymentDate').value = today;
             document.querySelector('input[name="cardio"][value="With Cardio"]').checked = true;
             loadMembers();
-        });
-
+        } else {
+            document.getElementById('addResult').innerHTML = 
+                `<div class="error">❌ Failed to register member!</div>`;
+        }
+    } catch (error) {
+        console.error('❌ Error:', error);
+        document.getElementById('addResult').innerHTML = 
+            `<div class="error">❌ Error saving member!</div>`;
+    }
+});
         // ============================================
         // 3. CHECK EXPIRY STATUS
         // ============================================
