@@ -25,9 +25,10 @@ app.get('/api/members', async (req, res) => {
     try {
         const members = await Member.find().sort({ createdAt: -1 });
         res.json(members);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch members' });
-    }
+    } catch (err) {
+    console.error("Save Member Error:", err); // Yeh line terminal par exact error print kar degi
+    res.status(500).json({ error: "Failed to save member" });
+}
 });
 
 // POST - Add new member
