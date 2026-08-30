@@ -597,6 +597,7 @@ function saveMembersToFile() {
                     method: document.getElementById('paymentMethod').value,
                     note: 'Initial Admission Fee'
                 }]
+                
             };
 
             members.push(newMember);
@@ -604,7 +605,22 @@ function saveMembersToFile() {
             document.getElementById('memberForm').reset();
             document.getElementById('joiningDate').valueAsDate = new Date();
             updateExpiryDate();
-        }
+            fetch('http://localhost:3000/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newMember)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Saved to DB:', data);
+        return fetch('http://localhost:3000/api/members');
+    })
+    .then(res => res.json())
+    .then(membersData => {
+        members = membersData;
+        loadMembers();
+    })
+    .catch(err => console.error('Error:', err));
 
         function deleteMember(id) {
             if (confirm('Are you sure you want to delete this member?')) {
