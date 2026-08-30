@@ -461,91 +461,97 @@
     <!-- JavaScript Application Logic -->
     <script>
         let members = [];
-        let expenses = [];
-        try {
-            members = JSON.parse(localStorage.getItem('viraj_members')) || [];
-            expenses = JSON.parse(localStorage.getItem('viraj_expenses')) || [];
-        } catch (e) {
-            members = [];
-            expenses = [];
-        }
+let expenses = [];
+
+async function loadDataFromBackend() {
+    try {
+        const resMembers = await fetch('http://localhost:3000/api/members');
+        members = await resMembers.json();
+        
+        // Agar expenses ke liye bhi backend API banayi hai toh yahan fetch karein
+    } catch (e) {
+        members = [];
+        expenses = [];
+    }
+}
+loadDataFromBackend();
 
         let currentFilter = 'all';
         const ADMIN_PASS = 'viraj@5227'; // Apna password yahan change kar sakte hain
 
         window.onload = function() {
-            if (sessionStorage.getItem('viraj_logged_in') === 'true') {
-                showDashboard();
-                let inactivityTimer;
-const inactivityLimit = 2 * 60 * 1000; // 2 Minutes
+    // sessionStorage ki jagah localStorage use karein
+    if (localStorage.getItem('viraj_logged_in') === 'true') {
+        showDashboard();
+    }
+    const jDate = document.getElementById('joiningDate');
+    if (jDate) jDate.valueAsDate = new Date();
+    updateExpiryDate();
+    
+    const finMonth = document.getElementById('financeMonth');
+    if (finMonth) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        finMonth.value = `${year}-${month}`;
+    }
+};
 
-function resetInactivityTimer() {
-    if (sessionStorage.getItem('viraj_logged_in') === 'true') {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(() => {
-            handleLogout();
-        }, inactivityLimit);
+function showDashboard() {
+    const loginScreen = document.getElementById('loginScreen');
+    const appContent = document.getElementById('appContent');
+    
+    if (loginScreen) loginScreen.classList.add('hidden');
+    if (appContent) appContent.classList.remove('hidden');
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const pass = document.getElementById('loginPassword').value;
+    if (pass === ADMIN_PASS) {
+        localStorage.setItem('viraj_logged_in', 'true');
+        showDashboard();
+        // Server se data load karein
+        if (typeof loadDataFromBackend === 'function') {
+            loadDataFromBackend();
+        }
+    } else {
+        const errDiv = document.getElementById('loginError');
+        if (errDiv) errDiv.classList.remove('hidden');
     }
 }
 
-['mousemove', 'keypress', 'click', 'scroll', 'touchstart'].forEach(eventName => {
-    document.addEventListener(eventName, resetInactivityTimer);
-});
-            }
-            const jDate = document.getElementById('joiningDate');
-            if (jDate) jDate.valueAsDate = new Date();
-            updateExpiryDate();
-            
-            const finMonth = document.getElementById('financeMonth');
-            if (finMonth) {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                finMonth.value = `${year}-${month}`;
-            }
-        };
+function handleLogout() {
+    // sessionStorage ki jagah localStorage clear karein
+    localStorage.removeItem('viraj_logged_in');
+    const appContent = document.getElementById('appContent');
+    const loginScreen = document.getElementById('loginScreen');
+    const loginPass = document.getElementById('loginPassword');
+    const loginErr = document.getElementById('loginError');
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('loginPassword').value;
-            if (pass === ADMIN_PASS) {
-                sessionStorage.setItem('viraj_logged_in', 'true');
-                showDashboard();
-            } else {
-                const errDiv = document.getElementById('loginError');
-                if (errDiv) errDiv.classList.remove('hidden');
-            }
-        }
-
-        function showDashboard() {
-            const loginScreen = document.getElementById('loginScreen');
-            const appContent = document.getElementById('appContent');
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (appContent) appContent.classList.remove('hidden');
-            loadMembers();
-        }
-
-        function handleLogout() {
-            sessionStorage.removeItem('viraj_logged_in');
-            const appContent = document.getElementById('appContent');
-            const loginScreen = document.getElementById('loginScreen');
-            const loginPass = document.getElementById('loginPassword');
-            const loginErr = document.getElementById('loginError');
-
-            if (appContent) appContent.classList.add('hidden');
-            if (loginPass) loginPass.value = '';
-            if (loginErr) loginErr.classList.add('hidden');
-            if (loginScreen) loginScreen.classList.remove('hidden');
-        }
+    if (appContent) appContent.classList.add('hidden');
+    if (loginPass) loginPass.value = '';
+    if (loginErr) loginErr.classList.add('hidden');
+    if (loginScreen) loginScreen.classList.remove('hidden');
+}
 
         function saveFinanceData() {
-            localStorage.setItem('viraj_expenses', JSON.stringify(expenses));
-        }
+    // Agar expenses ko database par bhejna hai toh fetch request lagayein
+}
 
-        function saveMembersToFile() {
-            localStorage.setItem('viraj_members', JSON.stringify(members));
-            loadMembers();
-        }
+function saveMembersToFile() {
+    // Naya member database mein save karne ke liye fetch API use karein
+    fetch('http://localhost:3000/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(members[members.length - 1]) // ya naya object
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Saved to DB:', data);
+        loadDataFromBackend();
+    });
+}
 
         function calculateBalance() {
             const total = parseFloat(document.getElementById('totalFee').value) || 0;
