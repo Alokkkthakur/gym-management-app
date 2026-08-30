@@ -3,955 +3,3220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viraj Fitness - Advanced Gym Management</title>
-    <!-- Tailwind CSS -->
+
+    <title>Viraj Fitness - Gym Management</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        body {
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        .input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 10px 13px;
+            color: #fff;
+            outline: none;
+        }
+
+        .input:focus {
+            border-color: #6366f1;
+        }
+
+        .chip {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 7px 12px;
+            border-radius: 9px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .modal {
+            background: rgba(0, 0, 0, 0.82);
+        }
+
+        .card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 18px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
-    <!-- LOGIN SCREEN OVERLAY -->
-    <div id="loginScreen" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm p-8 rounded-2xl shadow-2xl space-y-6 text-center">
-            <div class="flex justify-center">
-                <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-3.5 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-dumbbell text-2xl"></i>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
+
+<div
+    id="loginScreen"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 p-4"
+>
+
+    <div class="card w-full max-w-sm p-8 text-center">
+
+        <div
+            class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600"
+        >
+            <i class="fa-solid fa-dumbbell text-2xl"></i>
+        </div>
+
+        <h1 class="text-2xl font-black">
+            VIRAJ <span class="text-indigo-400">FITNESS</span>
+        </h1>
+
+        <p class="mt-1 text-xs text-slate-400">
+            Gym Management System
+        </p>
+
+        <form
+            onsubmit="login(event)"
+            class="mt-6 space-y-3"
+        >
+
+            <input
+                id="password"
+                type="password"
+                required
+                placeholder="Admin password"
+                class="input"
+            >
+
+            <p
+                id="loginError"
+                class="hidden text-xs text-rose-400"
+            >
+                Incorrect password.
+            </p>
+
+            <button
+                type="submit"
+                class="w-full rounded-xl bg-indigo-600 py-3 font-semibold hover:bg-indigo-500"
+            >
+                Login
+            </button>
+
+        </form>
+
+        <p class="mt-4 text-[11px] text-slate-500">
+            Default password: admin123
+        </p>
+
+    </div>
+</div>
+
+
+<!-- =====================================================
+     MAIN APP
+===================================================== -->
+
+<div id="app" class="hidden">
+
+    <!-- HEADER -->
+
+    <header
+        class="sticky top-0 z-40 border-b border-slate-800 bg-slate-900/95 backdrop-blur"
+    >
+
+        <div
+            class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3"
+        >
+
+            <div class="flex items-center gap-3">
+
+                <div class="rounded-xl bg-indigo-600 p-3">
+                    <i class="fa-solid fa-dumbbell"></i>
                 </div>
-            </div>
-            <div>
-                <h2 class="text-xl font-extrabold text-white tracking-wide">VIRAJ <span class="text-indigo-400">FITNESS</span></h2>
-                <p class="text-xs text-slate-400 mt-1">Enter password to access dashboard</p>
-            </div>
-            <form onsubmit="handleLogin(event)" class="space-y-4 text-left">
+
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="Enter admin password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+
+                    <h1 class="font-black tracking-wide">
+                        VIRAJ <span class="text-indigo-400">FITNESS</span>
+                    </h1>
+
+                    <p class="text-[11px] text-slate-400">
+                        Members • Fees • Attendance • Finance
+                    </p>
+
                 </div>
-                <div id="loginError" class="text-xs text-rose-400 hidden">Incorrect password. Try again!</div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-lock-open"></i> Login
+
+            </div>
+
+
+            <div class="flex flex-wrap gap-2">
+
+                <button
+                    onclick="openFinance()"
+                    class="rounded-xl bg-emerald-600/20 px-3 py-2 text-xs text-emerald-400"
+                >
+                    <i class="fa-solid fa-chart-pie"></i>
+                    Finance
                 </button>
-            </form>
+
+                <button
+                    onclick="openAttendance()"
+                    class="rounded-xl bg-indigo-600/20 px-3 py-2 text-xs text-indigo-300"
+                >
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Attendance
+                </button>
+
+                <button
+                    onclick="load()"
+                    class="rounded-xl bg-slate-800 px-3 py-2 text-xs"
+                >
+                    <i class="fa-solid fa-rotate"></i>
+                    Refresh
+                </button>
+
+                <button
+                    onclick="logout()"
+                    class="rounded-xl bg-rose-600/20 px-3 py-2 text-xs text-rose-400"
+                >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+
+            </div>
+
         </div>
-    </div>
 
-    <!-- MAIN APP CONTENT (Hidden until logged in) -->
-    <div id="appContent" class="hidden">
-        <!-- Top Navbar -->
-        <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-md">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
-                        <i class="fa-solid fa-dumbbell text-lg"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-extrabold tracking-wide text-white">VIRAJ <span class="text-indigo-400">FITNESS</span></h1>
-                        <p class="text-xs text-slate-400">Complete Member, Billing & Renewal System</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="openFinanceModal()" class="bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-400 px-3 py-2 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-chart-pie"></i> Finance Dashboard
-                    </button>
-                    <button onclick="loadMembers()" class="bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 transition flex items-center gap-1.5 border border-slate-700">
-                        <i class="fa-solid fa-rotate"></i> Refresh
-                    </button>
-                    <button onclick="handleLogout()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 px-3 py-2 rounded-xl text-xs font-medium transition border border-rose-500/30 flex items-center gap-1.5" title="Lock Screen">
-                        <i class="fa-solid fa-lock"></i> Logout
-                    </button>
-                </div>
-            </div>
-        </header>
+    </header>
 
-        <!-- Main Container -->
-        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-            
-            <!-- Stats Summary Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-                <div onclick="setFilter('all')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
-                    <div class="flex items-center justify-between text-indigo-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Members</span>
-                        <i class="fa-solid fa-users text-sm"></i>
-                    </div>
-                    <h3 id="stat-total" class="text-xl font-bold text-white">0</h3>
-                </div>
-                <div onclick="setFilter('due')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-rose-500/50 transition">
-                    <div class="flex items-center justify-between text-rose-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Due Members</span>
-                        <i class="fa-solid fa-wallet text-sm"></i>
-                    </div>
-                    <h3 id="stat-dues" class="text-xl font-bold text-rose-400">₹0</h3>
-                </div>
-                <div onclick="setFilter('partial')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-amber-500/50 transition">
-                    <div class="flex items-center justify-between text-amber-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partial Payment</span>
-                        <i class="fa-solid fa-coins text-sm"></i>
-                    </div>
-                    <h3 id="stat-partial" class="text-xl font-bold text-amber-400">0</h3>
-                </div>
-                <div onclick="setFilter('expired')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-red-500/50 transition">
-                    <div class="flex items-center justify-between text-red-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Expired Members</span>
-                        <i class="fa-solid fa-triangle-exclamation text-sm"></i>
-                    </div>
-                    <h3 id="stat-expired" class="text-xl font-bold text-red-400">0</h3>
-                </div>
-                <div onclick="setFilter('cardio')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 transition">
-                    <div class="flex items-center justify-between text-indigo-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">With Cardio</span>
-                        <i class="fa-solid fa-heart-pulse text-sm"></i>
-                    </div>
-                    <h3 id="stat-cardio" class="text-xl font-bold text-indigo-400">0</h3>
-                </div>
-                <div onclick="setFilter('advance')" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer hover:border-blue-500/50 transition">
-                    <div class="flex items-center justify-between text-blue-400 mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Advance Payment</span>
-                        <i class="fa-solid fa-shield-halved text-sm"></i>
-                    </div>
-                    <h3 id="stat-advance" class="text-xl font-bold text-blue-400">0</h3>
-                </div>
+
+    <!-- MAIN -->
+
+    <main
+        class="mx-auto max-w-7xl space-y-5 px-4 py-5"
+    >
+
+        <!-- =================================================
+             STATISTICS
+        ================================================= -->
+
+        <section
+            class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
+        >
+
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    TOTAL
+                </p>
+
+                <b
+                    id="sTotal"
+                    class="text-2xl"
+                >
+                    0
+                </b>
             </div>
 
-            <!-- Quick Alert Bar -->
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-2">
-                    <span class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-bolt"></i> Action Hub</span>
-                    <span class="text-xs text-slate-400">WhatsApp Reminders & Renewal Offers:</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="openReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
-                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Payment Reminders
-                    </button>
-                    <button onclick="openExpiryReminderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 font-medium">
-                        <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Offers
-                    </button>
-                </div>
+
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    DUE
+                </p>
+
+                <b
+                    id="sDue"
+                    class="text-2xl text-rose-400"
+                >
+                    ₹0
+                </b>
             </div>
 
-            <!-- Content Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Left: Add Member Form -->
-                <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl h-fit">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-user-plus text-indigo-400"></i> New Admission
-                        </h2>
-                    </div>
-                    <form id="memberForm" class="space-y-3.5" onsubmit="addMember(event)">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Full Name</label>
-                            <input type="text" id="name" required placeholder="e.g. Rahul Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Phone Number</label>
-                            <input type="tel" id="phone" required placeholder="10-digit mobile number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Plan</label>
-                                <select id="plan" onchange="updateExpiryDate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                    <option value="Monthly">Monthly (1M)</option>
-                                    <option value="Quarterly">Quarterly (3M)</option>
-                                    <option value="Half-Yearly">Half-Yearly (6M)</option>
-                                    <option value="Yearly">Yearly (1Y)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Cardio</label>
-                                <select id="cardio" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                    <option value="no">Without Cardio</option>
-                                    <option value="yes">With Cardio</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Total Fee (₹)</label>
-                                <input type="number" id="totalFee" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Amount Paid (₹)</label>
-                                <input type="number" id="amountPaid" required placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition" oninput="calculateBalance()">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Balance Due (₹)</label>
-                                <input type="number" id="balanceDue" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-rose-400 font-bold focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Payment Method</label>
-                                <select id="paymentMethod" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                                    <option value="Cash">Cash</option>
-                                    <option value="Online">Online / UPI</option>
-                                    <option value="Card">Card</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Joining Date</label>
-                                <input type="date" id="joiningDate" onchange="updateExpiryDate()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Expiry Date</label>
-                                <input type="date" id="expiryDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 mt-2 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-check"></i> Register Member
-                        </button>
-                    </form>
-                </section>
 
-                <!-- Right: Directory & All Filters -->
-                <section class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-                        <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-address-book text-indigo-400"></i> Member Directory
-                        </h2>
-                        <div class="w-full sm:w-72 relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                                <i class="fa-solid fa-search text-xs"></i>
-                            </span>
-                            <input type="text" id="searchInput" placeholder="Search name or phone..." oninput="filterMembers()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                        </div>
-                    </div>
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    EXPIRED
+                </p>
 
-                    <!-- Filter Chips -->
-                    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-2 text-xs scrollbar-none">
-                        <button onclick="setFilter('all')" id="chip-all" class="filter-chip bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">All filter</button>
-                        <button onclick="setFilter('due')" id="chip-due" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Due filter</button>
-                        <button onclick="setFilter('partial')" id="chip-partial" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Partial filter</button>
-                        <button onclick="setFilter('expired')" id="chip-expired" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Expired filter</button>
-                        <button onclick="setFilter('paid')" id="chip-paid" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Paid filter</button>
-                        <button onclick="setFilter('cardio')" id="chip-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Cardio filter</button>
-                        <button onclick="setFilter('no-cardio')" id="chip-no-cardio" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">No Cardio filter</button>
-                        <button onclick="setFilter('advance')" id="chip-advance" class="filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Advance filter</button>
-                    </div>
-
-                    <!-- Table -->
-                    <div class="overflow-x-auto flex-grow rounded-xl border border-slate-800">
-                        <table class="w-full text-left text-sm text-slate-300">
-                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3.5">Member Details</th>
-                                    <th class="p-3.5">Plan & Workout</th>
-                                    <th class="p-3.5">Fees & Status</th>
-                                    <th class="p-3.5">Renew / Expiry</th>
-                                    <th class="p-3.5 text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="membersTableBody" class="divide-y divide-slate-800/60">
-                                <!-- Dynamically loaded -->
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                <b
+                    id="sExpired"
+                    class="text-2xl text-red-400"
+                >
+                    0
+                </b>
             </div>
-        </main>
-    </div>
 
-    <!-- Modals -->
-    <div id="renewModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-rotate-right text-indigo-400"></i> Renew Membership</h3>
-                <button onclick="closeRenewModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    EXPIRING
+                </p>
+
+                <b
+                    id="sExpiring"
+                    class="text-2xl text-amber-400"
+                >
+                    0
+                </b>
             </div>
-            <input type="hidden" id="renewMemberId">
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
-                <div class="text-slate-400">Member: <span id="renewMemberName" class="text-white font-semibold"></span></div>
-                <div class="text-slate-400">Current Expiry: <span id="renewMemberCurrentExpiry" class="text-amber-400 font-semibold"></span></div>
+
+
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    CARDIO
+                </p>
+
+                <b
+                    id="sCardio"
+                    class="text-2xl text-indigo-400"
+                >
+                    0
+                </b>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Select New Plan</label>
-                <select id="renewPlan" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    <option value="Half-Monthly">Half-Monthly (15D)</option>
-                    <option value="Monthly">Monthly (1M)</option>
-                    <option value="Quarterly">Quarterly (3M)</option>
-                    <option value="Half-Yearly">Half-Yearly (6M)</option>
-                    <option value="Yearly">Yearly (1Y)</option>
+
+
+            <div class="card p-4">
+                <p class="text-[10px] text-slate-400">
+                    TODAY PRESENT
+                </p>
+
+                <b
+                    id="sPresent"
+                    class="text-2xl text-emerald-400"
+                >
+                    0
+                </b>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NEW ADMISSION
+        ================================================= -->
+
+        <section class="card p-5">
+
+            <div
+                class="mb-4 flex items-center justify-between"
+            >
+
+                <h2 class="font-bold">
+                    <i class="fa-solid fa-user-plus text-indigo-400"></i>
+                    New Admission
+                </h2>
+
+                <span class="text-xs text-slate-500">
+                    Complete member profile
+                </span>
+
+            </div>
+
+
+            <form
+                id="memberForm"
+                onsubmit="addMember(event)"
+                class="grid grid-cols-1 gap-3 md:grid-cols-4"
+            >
+
+                <!-- NAME -->
+
+                <input
+                    id="name"
+                    required
+                    placeholder="Full Name"
+                    class="input"
+                >
+
+
+                <!-- PHONE -->
+
+                <input
+                    id="phone"
+                    required
+                    placeholder="Phone Number"
+                    class="input"
+                >
+
+
+                <!-- ADDRESS -->
+
+                <input
+                    id="address"
+                    placeholder="Address"
+                    class="input md:col-span-2"
+                >
+
+
+                <!-- PLAN -->
+
+                <select
+                    id="plan"
+                    onchange="updateExpiry()"
+                    class="input"
+                >
+
+                    <option>Monthly</option>
+                    <option>Quarterly</option>
+                    <option>Half-Yearly</option>
+                    <option>Yearly</option>
+
                 </select>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Renewal Fee (₹)</label>
-                    <input type="number" id="renewFee" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Amount Paid (₹)</label>
-                    <input type="number" id="renewPaid" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="closeRenewModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Cancel</button>
-                <button onclick="submitRenewal()" class="w-1/2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-indigo-600/30">Confirm Renewal</button>
-            </div>
-        </div>
-    </div>
 
-    <div id="paymentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-indian-rupee-sign text-emerald-400"></i> Add Payment</h3>
-                <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <input type="hidden" id="payMemberId">
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
-                <div class="text-slate-400">Member: <span id="payMemberName" class="text-white font-semibold"></span></div>
-                <div class="text-slate-400">Current Due: <span id="payMemberDue" class="text-rose-400 font-semibold"></span></div>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Amount to Pay (₹)</label>
-                <input type="number" id="payAmount" placeholder="Enter amount" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Payment Method</label>
-                    <select id="payMethod" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        <option value="Cash">Cash</option>
-                        <option value="Online">Online / UPI</option>
-                        <option value="Card">Card</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Note (Optional)</label>
-                    <input type="text" id="payNote" placeholder="e.g. Month fee" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="closePaymentModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Cancel</button>
-                <button onclick="processPayment()" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-emerald-600/30">Save Payment</button>
-            </div>
-        </div>
-    </div>
 
-    <div id="editModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-pen text-indigo-400"></i> Edit Member</h3>
-                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <input type="hidden" id="editMemberId">
-            <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Full Name</label>
-                <input type="text" id="editName" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Phone Number</label>
-                <input type="tel" id="editPhone" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Plan</label>
-                    <select id="editPlan" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        <option value="Monthly">Monthly</option>
-                        <option value="Quarterly">Quarterly</option>
-                        <option value="Half-Yearly">Half-Yearly</option>
-                        <option value="Yearly">Yearly</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Cardio</label>
-                    <select id="editCardio" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        <option value="no">Without Cardio</option>
-                        <option value="yes">With Cardio</option>
-                    </select>
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="closeEditModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-xl transition text-sm">Cancel</button>
-                <button onclick="saveEditMember()" class="w-1/2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-indigo-600/30">Update Member</button>
-            </div>
-        </div>
-    </div>
+                <!-- CARDIO -->
 
-    <div id="financeModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl p-6 rounded-2xl shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-chart-pie text-emerald-400"></i> Finance Dashboard</h3>
-                <button onclick="closeFinanceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <select
+                    id="cardio"
+                    class="input"
+                >
+
+                    <option value="no">
+                        Without Cardio
+                    </option>
+
+                    <option value="yes">
+                        With Cardio
+                    </option>
+
+                </select>
+
+
+                <!-- TOTAL FEE -->
+
+                <input
+                    id="totalFee"
+                    type="number"
+                    min="0"
+                    required
+                    placeholder="Total Fee"
+                    oninput="calcDue()"
+                    class="input"
+                >
+
+
+                <!-- AMOUNT PAID -->
+
+                <input
+                    id="amountPaid"
+                    type="number"
+                    min="0"
+                    required
+                    placeholder="Amount Paid"
+                    oninput="calcDue()"
+                    class="input"
+                >
+
+
+                <!-- BALANCE -->
+
+                <input
+                    id="balanceDue"
+                    readonly
+                    placeholder="Balance Due"
+                    class="input text-rose-400"
+                >
+
+
+                <!-- PAYMENT METHOD -->
+
+                <select
+                    id="paymentMethod"
+                    class="input"
+                >
+
+                    <option>Cash</option>
+                    <option>Online / UPI</option>
+                    <option>Card</option>
+
+                </select>
+
+
+                <!-- JOINING DATE -->
+
+                <input
+                    id="joiningDate"
+                    type="date"
+                    required
+                    onchange="updateExpiry()"
+                    class="input"
+                >
+
+
+                <!-- EXPIRY DATE -->
+
+                <input
+                    id="expiryDate"
+                    type="date"
+                    required
+                    class="input"
+                >
+
+
+                <!-- REGISTER -->
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-indigo-600 py-3 font-semibold hover:bg-indigo-500 md:col-span-4"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+                    Register Member
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             MEMBER DIRECTORY
+        ================================================= -->
+
+        <section class="card p-5">
+
+            <div
+                class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+            >
+
+                <h2 class="font-bold">
+                    <i class="fa-solid fa-users text-indigo-400"></i>
+                    Member Directory
+                </h2>
+
+                <input
+                    id="search"
+                    oninput="render()"
+                    placeholder="Search name or phone..."
+                    class="input md:w-80"
+                >
+
             </div>
-            <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 uppercase">Select Month</label>
-                    <input type="month" id="financeMonth" onchange="refreshFinanceData()" class="bg-transparent text-white font-bold text-sm focus:outline-none mt-0.5">
-                </div>
-                <div class="text-right">
-                    <div class="text-xs text-slate-400">Active Members</div>
-                    <div id="finTotalMembers" class="text-sm font-bold text-white">0</div>
-                </div>
+
+
+            <!-- FILTERS -->
+
+            <div
+                class="mb-4 flex gap-2 overflow-x-auto"
+            >
+
+                <button
+                    class="chip active"
+                    id="f-all"
+                    onclick="setFilter('all')"
+                >
+                    All
+                </button>
+
+                <button
+                    class="chip"
+                    id="f-due"
+                    onclick="setFilter('due')"
+                >
+                    Due
+                </button>
+
+                <button
+                    class="chip"
+                    id="f-expired"
+                    onclick="setFilter('expired')"
+                >
+                    Expired
+                </button>
+
+                <button
+                    class="chip"
+                    id="f-expiring"
+                    onclick="setFilter('expiring')"
+                >
+                    Expiring
+                </button>
+
+                <button
+                    class="chip"
+                    id="f-cardio"
+                    onclick="setFilter('cardio')"
+                >
+                    Cardio
+                </button>
+
+                <button
+                    class="chip"
+                    id="f-paid"
+                    onclick="setFilter('paid')"
+                >
+                    Paid
+                </button>
+
             </div>
-            <div class="grid grid-cols-3 gap-3">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <div class="text-[11px] text-slate-400 font-medium">Income</div>
-                    <div id="finIncome" class="text-xl font-bold text-emerald-400 mt-1">₹0</div>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <div class="text-[11px] text-slate-400 font-medium">Expenses</div>
-                    <div id="finExpense" class="text-xl font-bold text-rose-400 mt-1">₹0</div>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <div class="text-[11px] text-slate-400 font-medium">Net Profit</div>
-                    <div id="finProfit" class="text-xl font-bold text-indigo-400 mt-1">₹0</div>
-                </div>
-            </div>
-            <div class="space-y-3 pt-2">
-                <h4 class="text-sm font-semibold text-white flex items-center gap-2"><i class="fa-solid fa-receipt text-indigo-400"></i> Add Gym Expense</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input type="text" id="expTitle" placeholder="Expense Title (e.g. Electricity)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    <input type="number" id="expAmount" placeholder="Amount (₹)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    <button onclick="addExpense()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30">Add Expense</button>
-                </div>
-            </div>
-            <div class="overflow-x-auto rounded-xl border border-slate-800">
-                <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+
+
+            <!-- TABLE -->
+
+            <div class="overflow-x-auto">
+
+                <table
+                    class="w-full min-w-[950px] text-left text-sm"
+                >
+
+                    <thead
+                        class="border-b border-slate-800 text-xs text-slate-400"
+                    >
+
                         <tr>
-                            <th class="p-3">Title</th>
-                            <th class="p-3">Date</th>
-                            <th class="p-3">Amount</th>
-                            <th class="p-3 text-center">Action</th>
+
+                            <th class="p-3">
+                                Member
+                            </th>
+
+                            <th class="p-3">
+                                Plan
+                            </th>
+
+                            <th class="p-3">
+                                Fees
+                            </th>
+
+                            <th class="p-3">
+                                Expiry
+                            </th>
+
+                            <th class="p-3">
+                                Status
+                            </th>
+
+                            <th class="p-3 text-center">
+                                Actions
+                            </th>
+
                         </tr>
+
                     </thead>
-                    <tbody id="expenseTableBody" class="divide-y divide-slate-800/60">
-                        <tr><td colspan="4" class="p-4 text-center text-slate-500">No expenses recorded for this month.</td></tr>
-                    </tbody>
+
+                    <tbody id="tbody"></tbody>
+
                 </table>
+
             </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     MEMBER DETAILS MODAL
+===================================================== -->
+
+<div
+    id="detailModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="card max-h-[90vh] w-full max-w-3xl overflow-y-auto p-6"
+    >
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+                Member Details
+            </h3>
+
+            <button onclick="closeModal('detailModal')">
+                ✕
+            </button>
+
         </div>
+
+        <div id="detailBody"></div>
+
     </div>
 
-    <div id="reminderModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400"></i> Pending Dues WhatsApp Reminders</h3>
-                <button onclick="closeReminderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="flex justify-between items-center">
-                <div class="text-xs text-slate-400">Members with Pending Balance: <span id="reminderCount" class="text-rose-400 font-bold">0</span></div>
-                <div class="flex gap-2">
-                    <button onclick="copyReminderList()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-slate-700"><i class="fa-regular fa-copy"></i> Copy List</button>
-                    <button onclick="sendBulkReminder()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition shadow-lg shadow-emerald-600/30"><i class="fa-brands fa-whatsapp"></i> Open All Chats</button>
-                </div>
-            </div>
-            <div id="reminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+</div>
+
+
+<!-- =====================================================
+     PAYMENT MODAL
+===================================================== -->
+
+<div
+    id="paymentModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div class="card w-full max-w-md p-6">
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+                Add Payment
+            </h3>
+
+            <button onclick="closeModal('paymentModal')">
+                ✕
+            </button>
+
         </div>
+
+
+        <input
+            id="payId"
+            type="hidden"
+        >
+
+
+        <p
+            id="payMember"
+            class="mb-4 text-sm text-indigo-300"
+        ></p>
+
+
+        <input
+            id="payAmount"
+            type="number"
+            min="1"
+            placeholder="Payment amount"
+            class="input mb-3"
+        >
+
+
+        <select
+            id="payMethod"
+            class="input mb-3"
+        >
+
+            <option>Cash</option>
+            <option>Online / UPI</option>
+            <option>Card</option>
+
+        </select>
+
+
+        <input
+            id="payNote"
+            placeholder="Payment note"
+            class="input mb-4"
+        >
+
+
+        <button
+            onclick="savePayment()"
+            class="w-full rounded-xl bg-emerald-600 py-3 font-semibold"
+        >
+            Save Payment
+        </button>
+
     </div>
 
-    <div id="expiryReminderModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg p-6 rounded-2xl shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Expiry Alerts & Special Renewal Offers</h3>
-                <button onclick="closeExpiryReminderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="flex justify-between items-center">
-                <div class="text-xs text-slate-400">Expiring/Expired Count: <span id="expiryReminderCount" class="text-amber-400 font-bold">0</span></div>
-                <div class="flex gap-2">
-                    <button onclick="copyExpiryList()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium transition border border-slate-700"><i class="fa-regular fa-copy"></i> Copy List</button>
-                    <button onclick="sendExpiryRemindersWithOffer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition shadow-lg shadow-emerald-600/30"><i class="fa-brands fa-whatsapp"></i> Open All Offer Chats</button>
-                </div>
-            </div>
-            <div id="expiryReminderListContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+</div>
+
+
+<!-- =====================================================
+     RENEW MODAL
+===================================================== -->
+
+<div
+    id="renewModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div class="card w-full max-w-md p-6">
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+                Renew Membership
+            </h3>
+
+            <button onclick="closeModal('renewModal')">
+                ✕
+            </button>
+
         </div>
+
+
+        <input
+            id="renewId"
+            type="hidden"
+        >
+
+
+        <p
+            id="renewName"
+            class="mb-3 text-sm text-indigo-300"
+        ></p>
+
+
+        <select
+            id="renewPlan"
+            class="input mb-3"
+        >
+
+            <option>Half-Monthly</option>
+            <option>Monthly</option>
+            <option>Quarterly</option>
+            <option>Half-Yearly</option>
+            <option>Yearly</option>
+
+        </select>
+
+
+        <input
+            id="renewFee"
+            type="number"
+            min="0"
+            placeholder="Renewal Fee"
+            class="input mb-3"
+        >
+
+
+        <input
+            id="renewPaid"
+            type="number"
+            min="0"
+            placeholder="Amount Paid"
+            class="input mb-3"
+        >
+
+
+        <select
+            id="renewMethod"
+            class="input mb-4"
+        >
+
+            <option>Cash</option>
+            <option>Online / UPI</option>
+            <option>Card</option>
+
+        </select>
+
+
+        <button
+            onclick="renew()"
+            class="w-full rounded-xl bg-indigo-600 py-3 font-semibold"
+        >
+            Confirm Renewal
+        </button>
+
     </div>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        let members = [];
-let currentFilter = 'all'; // Yeh line add karni hai
+</div>
 
-// Fetch initial members on page load
-window.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3000/api/members')
-        .then(res => res.json())
-        .then(data => {
-            members = data;
-            if (typeof loadMembers === 'function') loadMembers();
-        })
-        .catch(err => console.error('Error fetching members:', err));
-        
-    const joiningDateElem = document.getElementById('joiningDate');
-    if (joiningDateElem) {
-        joiningDateElem.valueAsDate = new Date();
+
+<!-- =====================================================
+     EDIT MEMBER MODAL
+===================================================== -->
+
+<div
+    id="editModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div class="card w-full max-w-md p-6">
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+                Edit Member
+            </h3>
+
+            <button onclick="closeModal('editModal')">
+                ✕
+            </button>
+
+        </div>
+
+
+        <input
+            id="editId"
+            type="hidden"
+        >
+
+
+        <input
+            id="editName"
+            placeholder="Full Name"
+            class="input mb-3"
+        >
+
+
+        <input
+            id="editPhone"
+            placeholder="Phone"
+            class="input mb-3"
+        >
+
+
+        <input
+            id="editAddress"
+            placeholder="Address"
+            class="input mb-3"
+        >
+
+
+        <select
+            id="editPlan"
+            class="input mb-3"
+        >
+
+            <option>Monthly</option>
+            <option>Quarterly</option>
+            <option>Half-Yearly</option>
+            <option>Yearly</option>
+
+        </select>
+
+
+        <select
+            id="editCardio"
+            class="input mb-4"
+        >
+
+            <option value="no">
+                Without Cardio
+            </option>
+
+            <option value="yes">
+                With Cardio
+            </option>
+
+        </select>
+
+
+        <button
+            onclick="saveEdit()"
+            class="w-full rounded-xl bg-indigo-600 py-3 font-semibold"
+        >
+            Update Member
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FINANCE MODAL
+===================================================== -->
+
+<div
+    id="financeModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="card max-h-[90vh] w-full max-w-3xl overflow-y-auto p-6"
+    >
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+
+                <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+
+                Finance Dashboard
+
+            </h3>
+
+            <button onclick="closeModal('financeModal')">
+                ✕
+            </button>
+
+        </div>
+
+
+        <input
+            id="financeMonth"
+            type="month"
+            onchange="financeRender()"
+            class="input mb-4"
+        >
+
+
+        <div
+            class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3"
+        >
+
+            <div class="rounded-xl bg-slate-950 p-4">
+
+                <p class="text-xs text-slate-400">
+                    Income
+                </p>
+
+                <b
+                    id="income"
+                    class="text-xl text-emerald-400"
+                >
+                    ₹0
+                </b>
+
+            </div>
+
+
+            <div class="rounded-xl bg-slate-950 p-4">
+
+                <p class="text-xs text-slate-400">
+                    Expenses
+                </p>
+
+                <b
+                    id="expense"
+                    class="text-xl text-rose-400"
+                >
+                    ₹0
+                </b>
+
+            </div>
+
+
+            <div class="rounded-xl bg-slate-950 p-4">
+
+                <p class="text-xs text-slate-400">
+                    Profit
+                </p>
+
+                <b
+                    id="profit"
+                    class="text-xl text-indigo-400"
+                >
+                    ₹0
+                </b>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="grid grid-cols-1 gap-3 sm:grid-cols-3"
+        >
+
+            <input
+                id="expenseTitle"
+                placeholder="Expense title"
+                class="input"
+            >
+
+
+            <input
+                id="expenseAmount"
+                type="number"
+                placeholder="Amount"
+                class="input"
+            >
+
+
+            <button
+                onclick="addExpense()"
+                class="rounded-xl bg-indigo-600 py-2"
+            >
+                Add Expense
+            </button>
+
+        </div>
+
+
+        <div
+            id="expenseList"
+            class="mt-4 space-y-2"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ATTENDANCE MODAL
+===================================================== -->
+
+<div
+    id="attendanceModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="card max-h-[90vh] w-full max-w-3xl overflow-y-auto p-6"
+    >
+
+        <div
+            class="mb-5 flex justify-between"
+        >
+
+            <h3 class="text-lg font-bold">
+                Daily Attendance
+            </h3>
+
+            <button onclick="closeModal('attendanceModal')">
+                ✕
+            </button>
+
+        </div>
+
+
+        <input
+            id="attendanceDate"
+            type="date"
+            onchange="attendanceRender()"
+            class="input mb-4"
+        >
+
+
+        <div
+            id="attendanceList"
+            class="space-y-2"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const KEY = "virajFitnessMembersV4";
+
+const EXP = "virajFitnessExpensesV4";
+
+const ATT = "virajFitnessAttendanceV4";
+
+const ADMIN_PASSWORD = "admin123";
+
+
+let members =
+    JSON.parse(localStorage.getItem(KEY) || "[]");
+
+let expenses =
+    JSON.parse(localStorage.getItem(EXP) || "[]");
+
+let attendance =
+    JSON.parse(localStorage.getItem(ATT) || "{}");
+
+let filter = "all";
+
+
+const $ = id =>
+    document.getElementById(id);
+
+
+function today() {
+
+    return new Date()
+        .toISOString()
+        .slice(0, 10);
+
+}
+
+
+function money(number) {
+
+    return "₹" +
+        Number(number || 0)
+        .toLocaleString("en-IN");
+
+}
+
+
+function save() {
+
+    localStorage.setItem(
+        KEY,
+        JSON.stringify(members)
+    );
+
+    localStorage.setItem(
+        EXP,
+        JSON.stringify(expenses)
+    );
+
+    localStorage.setItem(
+        ATT,
+        JSON.stringify(attendance)
+    );
+
+}
+
+
+function esc(value) {
+
+    return String(value ?? "")
+        .replace(/[&<>"']/g, x => ({
+
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+
+        }[x]));
+
+}
+
+
+function js(value) {
+
+    return String(value ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login(event) {
+
+    event.preventDefault();
+
+    if ($("password").value === ADMIN_PASSWORD) {
+
+        sessionStorage.setItem(
+            "vfLogin",
+            "1"
+        );
+
+        showApp();
+
+    } else {
+
+        $("loginError")
+            .classList
+            .remove("hidden");
+
     }
-    if (typeof updateExpiryDate === 'function') {
-        updateExpiryDate();
+
+}
+
+
+function logout() {
+
+    sessionStorage.removeItem(
+        "vfLogin"
+    );
+
+    location.reload();
+
+}
+
+
+function showApp() {
+
+    $("loginScreen")
+        .classList
+        .add("hidden");
+
+    $("app")
+        .classList
+        .remove("hidden");
+
+    load();
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        if (
+            sessionStorage.getItem("vfLogin") === "1"
+        ) {
+
+            showApp();
+
+        }
+
+        $("joiningDate").value = today();
+
+        $("attendanceDate").value = today();
+
+        $("financeMonth").value =
+            today().slice(0, 7);
+
+        updateExpiry();
+
+        calcDue();
+
     }
-});
+);
 
-function addMember(e) {
-    e.preventDefault();
-    
-    const getName = document.getElementById('name');
-    const getPhone = document.getElementById('phone');
-    const getPlan = document.getElementById('plan');
-    const getCardio = document.getElementById('cardio');
-    const getTotalFee = document.getElementById('totalFee');
-    const getAmountPaid = document.getElementById('amountPaid');
-    const getBalancedDue = document.getElementById('balancedDue');
-    const getPaymentMethod = document.getElementById('paymentMethod');
-    const getJoiningDate = document.getElementById('joiningDate');
-    const getExpiryDate = document.getElementById('expiryDate');
 
-    const newMember = {
-        id: Date.now().toString(),
-        name: getName ? getName.value : '',
-        phone: getPhone ? getPhone.value : '',
-        plan: getPlan ? getPlan.value : '',
-        cardio: getCardio ? getCardio.value : '',
-        totalFee: getTotalFee ? parseFloat(getTotalFee.value) || 0 : 0,
-        amountPaid: getAmountPaid ? parseFloat(getAmountPaid.value) || 0 : 0,
-        balancedDue: getBalancedDue ? parseFloat(getBalancedDue.value) || 0 : 0,
-        paymentMethod: getPaymentMethod ? getPaymentMethod.value : 'Cash',
-        joiningDate: getJoiningDate ? getJoiningDate.value : '',
-        expiryDate: getExpiryDate ? getExpiryDate.value : '',
-        paymentsHistory: [{
-            date: getJoiningDate ? getJoiningDate.value : '',
-            amount: getAmountPaid ? parseFloat(getAmountPaid.value) || 0 : 0,
-            method: getPaymentMethod ? getPaymentMethod.value : 'Cash',
-            note: 'Initial Admission Fee'
-        }]
+function load() {
+
+    render();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   FEES
+===================================================== */
+
+function calcDue() {
+
+    const total =
+        Number($("totalFee").value || 0);
+
+    const paid =
+        Number($("amountPaid").value || 0);
+
+    $("balanceDue").value =
+        Math.max(
+            0,
+            total - paid
+        );
+
+}
+
+
+/* =====================================================
+   DATE FUNCTIONS
+===================================================== */
+
+function addMonths(date, months) {
+
+    const d =
+        new Date(date + "T00:00:00");
+
+    const day =
+        d.getDate();
+
+    d.setDate(1);
+
+    d.setMonth(
+        d.getMonth() + months
+    );
+
+    d.setDate(
+        Math.min(
+            day,
+            new Date(
+                d.getFullYear(),
+                d.getMonth() + 1,
+                0
+            ).getDate()
+        )
+    );
+
+    return d
+        .toISOString()
+        .slice(0, 10);
+
+}
+
+
+function updateExpiry() {
+
+    const joining =
+        $("joiningDate").value;
+
+    if (!joining) {
+        return;
+    }
+
+    const plan =
+        $("plan").value;
+
+    let months = 1;
+
+    if (plan === "Quarterly") {
+        months = 3;
+    }
+
+    if (plan === "Half-Yearly") {
+        months = 6;
+    }
+
+    if (plan === "Yearly") {
+        months = 12;
+    }
+
+    $("expiryDate").value =
+        addMonths(
+            joining,
+            months
+        );
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function status(member) {
+
+    if (!member.expiryDate) {
+
+        return [
+            "No Expiry",
+            "text-slate-400"
+        ];
+
+    }
+
+    const expiry =
+        new Date(
+            member.expiryDate +
+            "T00:00:00"
+        );
+
+    const current =
+        new Date(
+            today() +
+            "T00:00:00"
+        );
+
+    const days =
+        Math.ceil(
+            (expiry - current) /
+            86400000
+        );
+
+
+    if (days < 0) {
+
+        return [
+            "Expired",
+            "text-red-400"
+        ];
+
+    }
+
+
+    if (days <= 3) {
+
+        return [
+            days === 0
+                ? "Expires Today"
+                : `Expiring in ${days}d`,
+            "text-amber-400"
+        ];
+
+    }
+
+
+    return [
+        "Active",
+        "text-emerald-400"
+    ];
+
+}
+
+
+/* =====================================================
+   ADD MEMBER
+===================================================== */
+
+function addMember(event) {
+
+    event.preventDefault();
+
+    calcDue();
+
+
+    const total =
+        Number($("totalFee").value || 0);
+
+    const paid =
+        Number($("amountPaid").value || 0);
+
+
+    if (paid > total) {
+
+        alert(
+            "Amount paid cannot exceed total fee."
+        );
+
+        return;
+
+    }
+
+
+    const joiningDate =
+        $("joiningDate").value;
+
+
+    const memberData = {
+
+        id:
+            Date.now().toString(),
+
+        name:
+            $("name").value.trim(),
+
+        phone:
+            $("phone").value.trim(),
+
+        address:
+            $("address").value.trim(),
+
+        plan:
+            $("plan").value,
+
+        cardio:
+            $("cardio").value,
+
+        totalFee:
+            total,
+
+        amountPaid:
+            paid,
+
+        balanceDue:
+            total - paid,
+
+        joiningDate:
+            joiningDate,
+
+        expiryDate:
+            $("expiryDate").value,
+
+        paymentsHistory:
+            paid > 0
+                ? [
+                    {
+                        date: joiningDate,
+                        amount: paid,
+                        method:
+                            $("paymentMethod").value,
+                        note:
+                            "Initial Admission"
+                    }
+                ]
+                : []
+
     };
 
-    const form = document.getElementById('memberForm');
-    if (form) form.reset();
-    
-    if (getJoiningDate) getJoiningDate.valueAsDate = new Date();
-    if (typeof updateExpiryDate === 'function') updateExpiryDate();
 
-    fetch('http://localhost:3000/api/members', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newMember)
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log('Saved to DB:', data);
-        return fetch('http://localhost:3000/api/members');
-    })
-    .then(res => res.json())
-    .then(membersData => {
-        members = membersData;
-        if (typeof loadMembers === 'function') loadMembers();
-    })
-    .catch(err => console.error('Error:', err));
+    members.push(memberData);
+
+    save();
+
+    $("memberForm").reset();
+
+    $("joiningDate").value =
+        today();
+
+    updateExpiry();
+
+    calcDue();
+
+    render();
+
+    updateStats();
+
+
+    alert(
+        "Member registered successfully!"
+    );
+
 }
 
-function deleteMember(id) {
-    if (confirm('Are you sure you want to delete this member?')) {
-        members = members.filter(m => m.id !== id);
-        if (typeof saveMembersToFile === 'function') saveMembersToFile();
-        if (typeof loadMembers === 'function') loadMembers();
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function setFilter(value) {
+
+    filter = value;
+
+
+    document
+        .querySelectorAll(".chip")
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    $("f-" + value)
+        ?.classList
+        .add("active");
+
+
+    render();
+
+}
+
+
+/* =====================================================
+   RENDER MEMBERS
+===================================================== */
+
+function render() {
+
+    const search =
+        (
+            $("search")?.value || ""
+        )
+        .toLowerCase();
+
+
+    let list =
+        members.filter(member =>
+
+            String(member.name)
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            String(member.phone)
+                .includes(search)
+
+        );
+
+
+    list =
+        list.filter(member => {
+
+            if (filter === "due") {
+
+                return Number(
+                    member.balanceDue || 0
+                ) > 0;
+
+            }
+
+
+            if (filter === "expired") {
+
+                return (
+                    status(member)[0] ===
+                    "Expired"
+                );
+
+            }
+
+
+            if (filter === "expiring") {
+
+                return (
+                    status(member)[0]
+                        .startsWith("Expiring")
+
+                    ||
+
+                    status(member)[0] ===
+                    "Expires Today"
+                );
+
+            }
+
+
+            if (filter === "cardio") {
+
+                return member.cardio === "yes";
+
+            }
+
+
+            if (filter === "paid") {
+
+                return Number(
+                    member.balanceDue || 0
+                ) === 0;
+
+            }
+
+
+            return true;
+
+        });
+
+
+    $("tbody").innerHTML =
+        list.length
+
+        ? list.map(member => {
+
+            const currentStatus =
+                status(member);
+
+            const due =
+                Number(
+                    member.balanceDue || 0
+                );
+
+
+            return `
+
+                <tr class="border-b border-slate-800">
+
+                    <td class="p-3">
+
+                        <div>
+
+                            <b>
+                                ${esc(member.name)}
+                            </b>
+
+                            <div class="text-xs text-slate-400">
+                                ${esc(member.phone)}
+                            </div>
+
+                            <div class="text-xs text-slate-500">
+                                ${esc(member.address || "No address")}
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td class="p-3">
+
+                        ${esc(member.plan)}
+
+                        <div class="text-xs text-slate-400">
+
+                            ${
+                                member.cardio === "yes"
+                                    ? "With Cardio"
+                                    : "Without Cardio"
+                            }
+
+                        </div>
+
+                    </td>
+
+
+                    <td class="p-3">
+
+                        <div>
+                            Paid
+                            ${money(member.amountPaid)}
+                            /
+                            ${money(member.totalFee)}
+                        </div>
+
+                        <div
+                            class="${
+                                due
+                                    ? "text-rose-400"
+                                    : "text-emerald-400"
+                            }"
+                        >
+
+                            Due
+                            ${money(due)}
+
+                        </div>
+
+                    </td>
+
+
+                    <td class="p-3">
+
+                        ${esc(member.expiryDate || "-")}
+
+                    </td>
+
+
+                    <td
+                        class="p-3 ${currentStatus[1]}"
+                    >
+
+                        ${currentStatus[0]}
+
+                    </td>
+
+
+                    <td class="p-3">
+
+                        <div
+                            class="flex justify-center gap-1"
+                        >
+
+                            <button
+                                title="Details"
+                                onclick="details('${js(member.id)}')"
+                                class="rounded-lg bg-slate-800 p-2"
+                            >
+                                👁
+                            </button>
+
+
+                            <button
+                                title="Payment"
+                                onclick="openPayment('${js(member.id)}')"
+                                class="rounded-lg bg-emerald-600/20 p-2 text-emerald-400"
+                            >
+                                ₹
+                            </button>
+
+
+                            <button
+                                title="Renew"
+                                onclick="openRenew('${js(member.id)}')"
+                                class="rounded-lg bg-indigo-600/20 p-2 text-indigo-300"
+                            >
+                                ↻
+                            </button>
+
+
+                            <button
+                                title="Edit"
+                                onclick="openEdit('${js(member.id)}')"
+                                class="rounded-lg bg-slate-800 p-2"
+                            >
+                                ✎
+                            </button>
+
+
+                            <button
+                                title="Delete"
+                                onclick="del('${js(member.id)}')"
+                                class="rounded-lg bg-rose-600/20 p-2 text-rose-400"
+                            >
+                                🗑
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("")
+
+        :
+
+        `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="p-8 text-center text-slate-500"
+                >
+                    No members found.
+                </td>
+
+            </tr>
+
+        `;
+
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+function updateStats() {
+
+    $("sTotal").textContent =
+        members.length;
+
+
+    $("sDue").textContent =
+        money(
+            members.reduce(
+                (total, member) =>
+                    total +
+                    Number(
+                        member.balanceDue || 0
+                    ),
+                0
+            )
+        );
+
+
+    $("sExpired").textContent =
+        members.filter(
+            member =>
+                status(member)[0] ===
+                "Expired"
+        ).length;
+
+
+    $("sExpiring").textContent =
+        members.filter(
+            member => {
+
+                const s =
+                    status(member)[0];
+
+                return (
+                    s.startsWith("Expiring") ||
+                    s === "Expires Today"
+                );
+
+            }
+        ).length;
+
+
+    $("sCardio").textContent =
+        members.filter(
+            member =>
+                member.cardio === "yes"
+        ).length;
+
+
+    $("sPresent").textContent =
+        (
+            attendance[today()] || []
+        ).length;
+
+}
+
+
+/* =====================================================
+   GET MEMBER
+===================================================== */
+
+function member(id) {
+
+    return members.find(
+        m =>
+            String(m.id) ===
+            String(id)
+    );
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function openModal(id) {
+
+    $(id)
+        .classList
+        .remove("hidden");
+
+    $(id)
+        .classList
+        .add("flex");
+
+}
+
+
+function closeModal(id) {
+
+    $(id)
+        .classList
+        .add("hidden");
+
+    $(id)
+        .classList
+        .remove("flex");
+
+}
+
+
+/* =====================================================
+   MEMBER DETAILS
+===================================================== */
+
+function details(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
     }
-}
 
-function openRenewModal(id) {
-    const member = members.find(m => m.id === id);
-    if (!member) return;
-    const renewMemberId = document.getElementById('renewMemberId');
-    const renewMemberName = document.getElementById('renewMemberName');
-    const renewMemberCurrentExpiry = document.getElementById('renewMemberCurrentExpiry');
-    
-    if (renewMemberId) renewMemberId.value = id;
-    if (renewMemberName) renewMemberName.textContent = member.name;
-    if (renewMemberCurrentExpiry) renewMemberCurrentExpiry.textContent = member.expiryDate;
-}
 
-        function closeRenewModal() {
-            document.getElementById('renewModal').classList.add('hidden');
-        }
+    const history =
+        (m.paymentsHistory || [])
+            .slice()
+            .reverse();
 
-        function submitRenewal() {
-            const id = document.getElementById('renewMemberId').value;
-            const plan = document.getElementById('renewPlan').value;
-            const fee = parseFloat(document.getElementById('renewFee').value) || 0;
-            const paid = parseFloat(document.getElementById('renewPaid').value) || 0;
 
-            const member = members.find(m => m.id === id);
-            if (!member) return;
+    $("detailBody").innerHTML = `
 
-            let baseDate = new Date(member.expiryDate);
-            if (baseDate < new Date()) baseDate = new Date();
+        <div class="grid gap-5 md:grid-cols-3">
 
-            if (plan === 'Monthly') baseDate.setMonth(baseDate.getMonth() + 1);
-            else if (plan === 'Quarterly') baseDate.setMonth(baseDate.getMonth() + 3);
-            else if (plan === 'Half-Yearly') baseDate.setMonth(baseDate.getMonth() + 6);
-            else if (plan === 'Yearly') baseDate.setFullYear(baseDate.getFullYear() + 1);
+            <div class="md:col-span-1">
 
-            member.plan = plan;
-            member.totalFee += fee;
-            member.amountPaid += paid;
-            member.balanceDue = Math.max(0, member.totalFee - member.amountPaid);
-            member.expiryDate = baseDate.toISOString().split('T')[0];
+                <div
+                    class="rounded-2xl bg-indigo-600/10 p-5"
+                >
 
-            if (!member.paymentsHistory) member.paymentsHistory = [];
-            member.paymentsHistory.push({
-                date: new Date().toISOString().split('T')[0],
-                amount: paid,
-                method: 'Cash',
-                note: `Renewal - ${plan}`
-            });
+                    <h4
+                        class="text-xl font-bold"
+                    >
+                        ${esc(m.name)}
+                    </h4>
 
-            saveMembersToFile();
-            closeRenewModal();
-        }
+                    <p
+                        class="mt-1 text-sm text-slate-400"
+                    >
+                        ${esc(m.phone)}
+                    </p>
 
-        function openPaymentModal(id) {
-            const member = members.find(m => m.id === id);
-            if (!member) return;
-            document.getElementById('payMemberId').value = id;
-            document.getElementById('payMemberName').textContent = member.name;
-            document.getElementById('payMemberDue').textContent = '₹' + member.balanceDue;
-            document.getElementById('payAmount').value = '';
-            document.getElementById('payNote').value = '';
-            document.getElementById('paymentModal').classList.remove('hidden');
-        }
+                    <p
+                        class="mt-3 text-xs text-slate-500"
+                    >
+                        ${esc(
+                            m.address ||
+                            "No address"
+                        )}
+                    </p>
 
-        function closePaymentModal() {
-            document.getElementById('paymentModal').classList.add('hidden');
-        }
+                </div>
 
-        function processPayment() {
-            const id = document.getElementById('payMemberId').value;
-            const amount = parseFloat(document.getElementById('payAmount').value) || 0;
-            const method = document.getElementById('payMethod').value;
-            const note = document.getElementById('payNote').value || 'Dues Payment';
+            </div>
 
-            const member = members.find(m => m.id === id);
-            if (!member || amount <= 0) return;
 
-            member.amountPaid += amount;
-            member.balanceDue = Math.max(0, member.totalFee - member.amountPaid);
+            <div
+                class="md:col-span-2 grid grid-cols-2 gap-3 text-sm"
+            >
 
-            if (!member.paymentsHistory) member.paymentsHistory = [];
-            member.paymentsHistory.push({
-                date: new Date().toISOString().split('T')[0],
-                amount: amount,
-                method: method,
-                note: note
-            });
+                ${info("Plan", m.plan)}
 
-            saveMembersToFile();
-            closePaymentModal();
-        }
+                ${info(
+                    "Cardio",
+                    m.cardio === "yes"
+                        ? "Yes"
+                        : "No"
+                )}
 
-        function getExpiryStatus(expiryDateStr) {
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const exp = new Date(expiryDateStr);
-            exp.setHours(0,0,0,0);
+                ${info(
+                    "Joining",
+                    m.joiningDate
+                )}
 
-            const diffTime = exp - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                ${info(
+                    "Expiry",
+                    m.expiryDate
+                )}
 
-            if (diffDays < 0) return { status: 'Expired', class: 'bg-red-500/10 text-red-400 border-red-500/20' };
-            if (diffDays <= 3) return { status: `Expiring in ${diffDays}d`, class: 'bg-amber-500/10 text-amber-400 border-amber-500/20' };
-            return { status: 'Active', class: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
-        }
+                ${info(
+                    "Total Fee",
+                    money(m.totalFee)
+                )}
 
-        function isAdvancePayment(m) {
-            return m.amountPaid > m.totalFee;
-        }
+                ${info(
+                    "Paid",
+                    money(m.amountPaid)
+                )}
 
-        function sendSingleOfferWhatsApp(id) {
-            const m = members.find(item => item.id === id);
-            if (!m) return;
-            const status = getExpiryStatus(m.expiryDate).status;
-            const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with our special discounted offer!`;
-            window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
+                ${info(
+                    "Due",
+                    money(m.balanceDue)
+                )}
 
-        function loadMembers() {
-            const tbody = document.getElementById('membersTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
+                ${info(
+                    "Status",
+                    status(m)[0]
+                )}
 
-            const searchInput = document.getElementById('searchInput');
-            const search = searchInput ? searchInput.value.toLowerCase() : '';
+            </div>
 
-            let filtered = members.filter(m => {
-                const matchesSearch = (m.name || '').toLowerCase().includes(search) || (m.phone || '').includes(search);
-                if (!matchesSearch) return false;
+        </div>
 
-                const expInfo = getExpiryStatus(m.expiryDate);
-                if (currentFilter === 'due') return m.balanceDue > 0;
-                if (currentFilter === 'partial') return m.balanceDue > 0 && m.amountPaid > 0;
-                if (currentFilter === 'expired') return expInfo.status === 'Expired';
-                if (currentFilter === 'paid') return m.balanceDue === 0;
-                if (currentFilter === 'cardio') return m.cardio === 'yes';
-                if (currentFilter === 'no-cardio') return m.cardio === 'no';
-                if (currentFilter === 'advance') return isAdvancePayment(m);
-                return true;
-            });
 
-            document.getElementById('stat-total').textContent = members.length;
-            document.getElementById('stat-dues').textContent = '₹' + members.reduce((acc, m) => acc + (m.balanceDue || 0), 0);
-            document.getElementById('stat-partial').textContent = members.filter(m => (m.balanceDue || 0) > 0 && (m.amountPaid || 0) > 0).length;
-            document.getElementById('stat-expired').textContent = members.filter(m => getExpiryStatus(m.expiryDate).status === 'Expired').length;
-            document.getElementById('stat-cardio').textContent = members.filter(m => m.cardio === 'yes').length;
-            document.getElementById('stat-advance').textContent = members.filter(m => isAdvancePayment(m)).length;
+        <div class="mt-6">
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No members found matching filter criteria.</td></tr>`;
-                return;
+            <h4 class="mb-2 font-semibold">
+                Payment History
+            </h4>
+
+
+            ${
+                history.length
+
+                ?
+
+                `
+
+                    <div class="space-y-2">
+
+                        ${history.map(
+                            payment => `
+
+                                <div
+                                    class="flex justify-between rounded-xl bg-slate-950 p-3 text-sm"
+                                >
+
+                                    <span>
+
+                                        ${esc(payment.date)}
+                                        •
+                                        ${esc(payment.method)}
+
+                                        <small
+                                            class="block text-slate-500"
+                                        >
+                                            ${esc(
+                                                payment.note || ""
+                                            )}
+                                        </small>
+
+                                    </span>
+
+
+                                    <b
+                                        class="text-emerald-400"
+                                    >
+                                        ${money(
+                                            payment.amount
+                                        )}
+                                    </b>
+
+                                </div>
+
+                            `
+                        ).join("")}
+
+                    </div>
+
+                `
+
+                :
+
+                `
+
+                    <p class="text-sm text-slate-500">
+                        No payment history.
+                    </p>
+
+                `
             }
 
-            filtered.forEach(m => {
-                const expInfo = getExpiryStatus(m.expiryDate);
-                const isExpiredOrExpiring = expInfo.status !== 'Active';
-                
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-900/50 transition';
-                tr.innerHTML = `
-                    <td class="p-3.5">
-                        <div class="font-semibold text-white">${m.name}</div>
-                        <div class="text-xs text-slate-400"><i class="fa-solid fa-phone text-[10px] mr-1"></i>${m.phone}</div>
-                    </td>
-                    <td class="p-3.5">
-                        <div class="text-slate-200 font-medium">${m.plan}</div>
-                        <div class="text-[11px] text-slate-400">${m.cardio === 'yes' ? 'With Cardio' : 'Without Cardio'}</div>
-                    </td>
-                    <td class="p-3.5">
-                        <div class="text-xs font-semibold text-white">Paid: ₹${m.amountPaid} / ₹${m.totalFee}</div>
-                        <div class="text-[11px] ${m.balanceDue > 0 ? 'text-rose-400 font-bold' : 'text-emerald-400'}">Due: ₹${m.balanceDue}</div>
-                    </td>
-                    <td class="p-3.5">
-                        <div class="text-xs text-slate-300 font-medium">${m.expiryDate}</div>
-                        <span class="inline-block px-2 py-0.5 mt-1 text-[10px] rounded border font-medium ${expInfo.class}">${expInfo.status}</span>
-                    </td>
-                    <td class="p-3.5 text-center">
-                        <div class="flex items-center justify-center gap-1.5">
-                            ${isExpiredOrExpiring ? `<button onclick="sendSingleOfferWhatsApp('${m.id}')" title="Send Offer WhatsApp" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 p-2 rounded-lg transition"><i class="fa-brands fa-whatsapp text-xs"></i></button>` : ''}
-                            <button onclick="openPaymentModal('${m.id}')" title="Add Payment" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 p-2 rounded-lg transition"><i class="fa-solid fa-indian-rupee-sign text-xs"></i></button>
-                            <button onclick="openRenewModal('${m.id}')" title="Renew Plan" class="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400 p-2 rounded-lg transition"><i class="fa-solid fa-rotate-right text-xs"></i></button>
-                            <button onclick="openEditModal('${m.id}')" title="Edit" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="deleteMember('${m.id}')" title="Delete" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 p-2 rounded-lg transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+        </div>
+
+
+        <div
+            class="mt-5 flex flex-wrap gap-2"
+        >
+
+            <button
+                onclick="receipt('${js(m.id)}')"
+                class="rounded-xl bg-slate-800 px-4 py-2 text-sm"
+            >
+                🧾 Receipt
+            </button>
+
+
+            <button
+                onclick="openPayment('${js(m.id)}')"
+                class="rounded-xl bg-emerald-600 px-4 py-2 text-sm"
+            >
+                Add Payment
+            </button>
+
+
+            <button
+                onclick="openRenew('${js(m.id)}')"
+                class="rounded-xl bg-indigo-600 px-4 py-2 text-sm"
+            >
+                Renew
+            </button>
+
+        </div>
+
+    `;
+
+
+    openModal("detailModal");
+
+}
+
+
+function info(title, value) {
+
+    return `
+
+        <div
+            class="rounded-xl bg-slate-950 p-3"
+        >
+
+            <span
+                class="block text-[10px] text-slate-500"
+            >
+                ${esc(title)}
+            </span>
+
+            <b>
+                ${esc(value)}
+            </b>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+function openPayment(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
+    }
+
+
+    $("payId").value =
+        id;
+
+    $("payMember").textContent =
+        `${m.name} • Current due ${money(m.balanceDue)}`;
+
+    $("payAmount").value =
+        "";
+
+    $("payNote").value =
+        "";
+
+
+    openModal(
+        "paymentModal"
+    );
+
+}
+
+
+function savePayment() {
+
+    const m =
+        member(
+            $("payId").value
+        );
+
+
+    const amount =
+        Number(
+            $("payAmount").value || 0
+        );
+
+
+    if (!m || amount <= 0) {
+
+        alert(
+            "Enter valid amount."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        amount >
+        Number(m.balanceDue || 0)
+    ) {
+
+        alert(
+            "Payment cannot exceed current due."
+        );
+
+        return;
+
+    }
+
+
+    m.amountPaid =
+        Number(
+            m.amountPaid || 0
+        ) +
+        amount;
+
+
+    m.balanceDue =
+        Math.max(
+            0,
+            Number(
+                m.totalFee || 0
+            ) -
+            m.amountPaid
+        );
+
+
+    m.paymentsHistory =
+        m.paymentsHistory || [];
+
+
+    m.paymentsHistory.push({
+
+        date:
+            today(),
+
+        amount:
+            amount,
+
+        method:
+            $("payMethod").value,
+
+        note:
+            $("payNote").value ||
+            "Dues Payment"
+
+    });
+
+
+    save();
+
+    closeModal(
+        "paymentModal"
+    );
+
+    render();
+
+    updateStats();
+
+
+    alert(
+        "Payment saved."
+    );
+
+}
+
+
+/* =====================================================
+   RENEWAL
+===================================================== */
+
+function openRenew(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
+    }
+
+
+    $("renewId").value =
+        id;
+
+    $("renewName").textContent =
+        `${m.name} • Current expiry ${m.expiryDate || "-"}`;
+
+    $("renewFee").value =
+        "";
+
+    $("renewPaid").value =
+        "";
+
+
+    openModal(
+        "renewModal"
+    );
+
+}
+
+
+function renew() {
+
+    const m =
+        member(
+            $("renewId").value
+        );
+
+
+    const fee =
+        Number(
+            $("renewFee").value || 0
+        );
+
+
+    const paid =
+        Number(
+            $("renewPaid").value || 0
+        );
+
+
+    const plan =
+        $("renewPlan").value;
+
+
+    if (!m || fee <= 0) {
+
+        alert(
+            "Enter renewal fee."
+        );
+
+        return;
+
+    }
+
+
+    if (paid > fee) {
+
+        alert(
+            "Paid amount cannot exceed renewal fee."
+        );
+
+        return;
+
+    }
+
+
+    const currentExpiry =
+        m.expiryDate &&
+        new Date(m.expiryDate) >=
+        new Date(today())
+            ? m.expiryDate
+            : today();
+
+
+    let newExpiry;
+
+
+    if (plan === "Half-Monthly") {
+
+        const date =
+            new Date(
+                currentExpiry +
+                "T00:00:00"
+            );
+
+        date.setDate(
+            date.getDate() + 15
+        );
+
+        newExpiry =
+            date
+                .toISOString()
+                .slice(0, 10);
+
+    } else {
+
+        let months = 1;
+
+        if (plan === "Quarterly") {
+            months = 3;
         }
 
-        function setFilter(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-chip').forEach(btn => {
-                btn.className = 'filter-chip bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition';
-            });
-            const activeChip = document.getElementById(`chip-${type}`);
-            if (activeChip) activeChip.className = 'filter-chip bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition';
-            loadMembers();
+        if (plan === "Half-Yearly") {
+            months = 6;
         }
 
-        function filterMembers() {
-            loadMembers();
+        if (plan === "Yearly") {
+            months = 12;
         }
 
-        function openEditModal(id) {
-            const m = members.find(item => item.id === id);
-            if (!m) return;
-            document.getElementById('editMemberId').value = m.id;
-            document.getElementById('editName').value = m.name;
-            document.getElementById('editPhone').value = m.phone;
-            document.getElementById('editPlan').value = m.plan;
-            document.getElementById('editCardio').value = m.cardio;
-            document.getElementById('editModal').classList.remove('hidden');
-        }
+        newExpiry =
+            addMonths(
+                currentExpiry,
+                months
+            );
 
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
+    }
 
-        function saveEditMember() {
-            const id = document.getElementById('editMemberId').value;
-            const m = members.find(item => item.id === id);
-            if (!m) return;
-            m.name = document.getElementById('editName').value;
-            m.phone = document.getElementById('editPhone').value;
-            m.plan = document.getElementById('editPlan').value;
-            m.cardio = document.getElementById('editCardio').value;
-            saveMembersToFile();
-            closeEditModal();
-        }
 
-        function openFinanceModal() {
-            refreshFinanceData();
-            document.getElementById('financeModal').classList.remove('hidden');
-        }
+    m.plan =
+        plan;
 
-        function closeFinanceModal() {
-            document.getElementById('financeModal').classList.add('hidden');
-        }
+    m.expiryDate =
+        newExpiry;
 
-        function refreshFinanceData() {
-            const monthVal = document.getElementById('financeMonth').value;
-            if (!monthVal) return;
 
-            document.getElementById('finTotalMembers').textContent = members.length;
+    m.totalFee =
+        Number(m.totalFee || 0) +
+        fee;
 
-            let income = 0;
-            members.forEach(m => {
-                if (m.paymentsHistory) {
-                    m.paymentsHistory.forEach(p => {
-                        if (p.date && p.date.startsWith(monthVal)) income += p.amount;
-                    });
+
+    m.amountPaid =
+        Number(m.amountPaid || 0) +
+        paid;
+
+
+    m.balanceDue =
+        Math.max(
+            0,
+            m.totalFee -
+            m.amountPaid
+        );
+
+
+    if (paid > 0) {
+
+        m.paymentsHistory =
+            m.paymentsHistory || [];
+
+
+        m.paymentsHistory.push({
+
+            date:
+                today(),
+
+            amount:
+                paid,
+
+            method:
+                $("renewMethod").value,
+
+            note:
+                "Renewal - " +
+                plan
+
+        });
+
+    }
+
+
+    save();
+
+    closeModal(
+        "renewModal"
+    );
+
+    render();
+
+    updateStats();
+
+
+    alert(
+        "Membership renewed successfully."
+    );
+
+}
+
+
+/* =====================================================
+   EDIT MEMBER
+===================================================== */
+
+function openEdit(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
+    }
+
+
+    $("editId").value =
+        id;
+
+    $("editName").value =
+        m.name || "";
+
+    $("editPhone").value =
+        m.phone || "";
+
+    $("editAddress").value =
+        m.address || "";
+
+    $("editPlan").value =
+        m.plan || "Monthly";
+
+    $("editCardio").value =
+        m.cardio || "no";
+
+
+    openModal(
+        "editModal"
+    );
+
+}
+
+
+function saveEdit() {
+
+    const m =
+        member(
+            $("editId").value
+        );
+
+
+    if (!m) {
+        return;
+    }
+
+
+    m.name =
+        $("editName")
+            .value
+            .trim();
+
+
+    m.phone =
+        $("editPhone")
+            .value
+            .trim();
+
+
+    m.address =
+        $("editAddress")
+            .value
+            .trim();
+
+
+    m.plan =
+        $("editPlan").value;
+
+
+    m.cardio =
+        $("editCardio").value;
+
+
+    save();
+
+    closeModal(
+        "editModal"
+    );
+
+    render();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function del(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
+    }
+
+
+    if (
+        confirm(
+            `Delete ${m.name}?`
+        )
+    ) {
+
+        members =
+            members.filter(
+                item =>
+                    String(item.id) !==
+                    String(id)
+            );
+
+
+        save();
+
+        render();
+
+        updateStats();
+
+    }
+
+}
+
+
+/* =====================================================
+   RECEIPT
+===================================================== */
+
+function receipt(id) {
+
+    const m =
+        member(id);
+
+    if (!m) {
+        return;
+    }
+
+
+    const history =
+        m.paymentsHistory || [];
+
+
+    const lastPayment =
+        history.length
+            ? history[history.length - 1]
+            : null;
+
+
+    const receiptWindow =
+        window.open(
+            "",
+            "_blank",
+            "width=700,height=800"
+        );
+
+
+    if (!receiptWindow) {
+
+        alert(
+            "Please allow pop-ups to print receipt."
+        );
+
+        return;
+
+    }
+
+
+    receiptWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>
+                Viraj Fitness Receipt
+            </title>
+
+            <style>
+
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 35px;
+                    color: #111;
                 }
-            });
 
-            const monthExpenses = expenses.filter(e => e.date && e.date.startsWith(monthVal));
-            let totalExpense = monthExpenses.reduce((acc, e) => acc + e.amount, 0);
+                h1 {
+                    color: #4f46e5;
+                }
 
-            document.getElementById('finIncome').textContent = '₹' + income;
-            document.getElementById('finExpense').textContent = '₹' + totalExpense;
-            document.getElementById('finProfit').textContent = '₹' + (income - totalExpense);
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
 
-            const expBody = document.getElementById('expenseTableBody');
-            expBody.innerHTML = '';
-            if (monthExpenses.length === 0) {
-                expBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No expenses recorded for this month.</td></tr>`;
-                return;
-            }
+                td {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+                }
 
-            monthExpenses.forEach((e) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-3 text-white font-medium">${e.title}</td>
-                    <td class="p-3 text-slate-400">${e.date}</td>
-                    <td class="p-3 text-rose-400 font-bold">₹${e.amount}</td>
-                    <td class="p-3 text-center">
-                        <button onclick="deleteExpense('${e.id}')" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                .amount {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+
+            </style>
+
+        </head>
+
+
+        <body>
+
+            <h1>
+                VIRAJ FITNESS
+            </h1>
+
+            <p>
+                Payment Receipt
+            </p>
+
+            <hr>
+
+
+            <table>
+
+                <tr>
+                    <td>Member</td>
+                    <td>
+                        ${esc(m.name)}
                     </td>
+                </tr>
+
+
+                <tr>
+                    <td>Phone</td>
+                    <td>
+                        ${esc(m.phone)}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Plan</td>
+                    <td>
+                        ${esc(m.plan)}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Payment Date</td>
+                    <td>
+                        ${lastPayment?.date || today()}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Payment Method</td>
+                    <td>
+                        ${esc(
+                            lastPayment?.method || "-"
+                        )}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Amount Paid</td>
+                    <td class="amount">
+                        ${money(
+                            lastPayment?.amount || 0
+                        )}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Balance Due</td>
+                    <td>
+                        ${money(m.balanceDue)}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Expiry</td>
+                    <td>
+                        ${esc(m.expiryDate)}
+                    </td>
+                </tr>
+
+            </table>
+
+
+            <p style="margin-top:40px">
+                Thank you for choosing Viraj Fitness.
+            </p>
+
+
+            <script>
+                window.print();
+            <\/script>
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    receiptWindow.document.close();
+
+}
+
+
+/* =====================================================
+   FINANCE
+===================================================== */
+
+function openFinance() {
+
+    financeRender();
+
+    openModal(
+        "financeModal"
+    );
+
+}
+
+
+function financeRender() {
+
+    const month =
+        $("financeMonth").value;
+
+
+    let income = 0;
+
+
+    members.forEach(member => {
+
+        (
+            member.paymentsHistory ||
+            []
+        ).forEach(payment => {
+
+            if (
+                String(payment.date || "")
+                    .startsWith(month)
+            ) {
+
+                income +=
+                    Number(
+                        payment.amount || 0
+                    );
+
+            }
+
+        });
+
+    });
+
+
+    const monthExpenses =
+        expenses.filter(
+            expense =>
+                String(expense.date)
+                    .startsWith(month)
+        );
+
+
+    const totalExpense =
+        monthExpenses.reduce(
+            (sum, expense) =>
+                sum +
+                Number(
+                    expense.amount || 0
+                ),
+            0
+        );
+
+
+    $("income").textContent =
+        money(income);
+
+
+    $("expense").textContent =
+        money(totalExpense);
+
+
+    $("profit").textContent =
+        money(
+            income -
+            totalExpense
+        );
+
+
+    $("expenseList").innerHTML =
+        monthExpenses.length
+
+        ?
+
+        monthExpenses
+            .map(expense => `
+
+                <div
+                    class="flex justify-between rounded-xl bg-slate-950 p-3 text-sm"
+                >
+
+                    <span>
+
+                        ${esc(expense.title)}
+
+                        <small
+                            class="block text-slate-500"
+                        >
+                            ${esc(expense.date)}
+                        </small>
+
+                    </span>
+
+
+                    <span>
+
+                        ${money(expense.amount)}
+
+                        <button
+                            onclick="removeExpense('${js(expense.id)}')"
+                            class="ml-3 text-rose-400"
+                        >
+                            🗑
+                        </button>
+
+                    </span>
+
+                </div>
+
+            `)
+            .join("")
+
+        :
+
+        `
+
+            <p class="text-sm text-slate-500">
+                No expenses.
+            </p>
+
+        `;
+
+}
+
+
+function addExpense() {
+
+    const title =
+        $("expenseTitle")
+            .value
+            .trim();
+
+
+    const amount =
+        Number(
+            $("expenseAmount").value || 0
+        );
+
+
+    if (!title || amount <= 0) {
+
+        alert(
+            "Enter valid expense."
+        );
+
+        return;
+
+    }
+
+
+    const selectedMonth =
+        $("financeMonth").value ||
+        today().slice(0, 7);
+
+
+    expenses.push({
+
+        id:
+            Date.now().toString(),
+
+        title:
+            title,
+
+        amount:
+            amount,
+
+        date:
+            selectedMonth +
+            "-01"
+
+    });
+
+
+    save();
+
+
+    $("expenseTitle").value =
+        "";
+
+    $("expenseAmount").value =
+        "";
+
+
+    financeRender();
+
+}
+
+
+function removeExpense(id) {
+
+    expenses =
+        expenses.filter(
+            expense =>
+                String(expense.id) !==
+                String(id)
+        );
+
+
+    save();
+
+    financeRender();
+
+}
+
+
+/* =====================================================
+   ATTENDANCE
+===================================================== */
+
+function openAttendance() {
+
+    $("attendanceDate").value =
+        today();
+
+    attendanceRender();
+
+    openModal(
+        "attendanceModal"
+    );
+
+}
+
+
+function attendanceRender() {
+
+    const date =
+        $("attendanceDate").value ||
+        today();
+
+
+    const presentMembers =
+        attendance[date] || [];
+
+
+    $("attendanceList").innerHTML =
+
+        members.length
+
+        ?
+
+        members
+            .map(member => {
+
+                const isPresent =
+                    presentMembers.includes(
+                        String(member.id)
+                    );
+
+
+                return `
+
+                    <div
+                        class="flex items-center justify-between rounded-xl bg-slate-950 p-3"
+                    >
+
+                        <div>
+
+                            <b>
+                                ${esc(member.name)}
+                            </b>
+
+                            <small
+                                class="block text-slate-500"
+                            >
+                                ${esc(member.phone)}
+                            </small>
+
+                        </div>
+
+
+                        <button
+                            onclick="toggleAttendance('${js(member.id)}')"
+                            class="rounded-xl px-4 py-2 text-xs ${
+                                isPresent
+                                    ? "bg-emerald-600 text-white"
+                                    : "bg-slate-800 text-slate-300"
+                            }"
+                        >
+
+                            ${
+                                isPresent
+                                    ? "✓ Present"
+                                    : "Mark Present"
+                            }
+
+                        </button>
+
+                    </div>
+
                 `;
-                expBody.appendChild(tr);
-            });
-        }
 
-        function addExpense() {
-            const title = document.getElementById('expTitle').value;
-            const amount = parseFloat(document.getElementById('expAmount').value) || 0;
-            const monthVal = document.getElementById('financeMonth').value;
+            })
+            .join("")
 
-            if (!title || amount <= 0 || !monthVal) {
-                alert('Please enter valid expense title and amount.');
-                return;
-            }
+        :
 
-            expenses.push({
-                id: Date.now().toString(),
-                title: title,
-                amount: amount,
-                date: `${monthVal}-01`
-            });
+        `
 
-            saveFinanceData();
-            document.getElementById('expTitle').value = '';
-            document.getElementById('expAmount').value = '';
-            refreshFinanceData();
-        }
+            <p class="text-sm text-slate-500">
+                No members.
+            </p>
 
-        function deleteExpense(id) {
-            expenses = expenses.filter(e => e.id !== id);
-            saveFinanceData();
-            refreshFinanceData();
-        }
+        `;
 
-        function openReminderModal() {
-            const dueMembers = members.filter(m => m.balanceDue > 0);
-            document.getElementById('reminderCount').textContent = dueMembers.length;
-            const container = document.getElementById('reminderListContainer');
-            container.innerHTML = '';
+}
 
-            if (dueMembers.length === 0) {
-                container.innerHTML = `<p class="text-center text-xs text-slate-500 py-4">No pending dues found.</p>`;
-            } else {
-                dueMembers.forEach(m => {
-                    const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness. Please clear it at your earliest convenience. Thank you!`;
-                    const waUrl = `https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`;
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs';
-                    div.innerHTML = `
-                        <div>
-                            <div class="font-semibold text-white">${m.name} (${m.phone})</div>
-                            <div class="text-rose-400">Due: ₹${m.balanceDue}</div>
-                        </div>
-                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/35 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Remind</a>
-                    `;
-                    container.appendChild(div);
-                });
-            }
-            document.getElementById('reminderModal').classList.remove('hidden');
-        }
 
-        function closeReminderModal() {
-            document.getElementById('reminderModal').classList.add('hidden');
-        }
+function toggleAttendance(id) {
 
-        function sendBulkReminder() {
-            members.filter(m => m.balanceDue > 0).forEach(m => {
-                const msg = `Hi ${m.name}, your gym fee balance of ₹${m.balanceDue} is pending at Viraj Fitness. Please clear it at your earliest convenience.`;
-                window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
-            });
-        }
+    const date =
+        $("attendanceDate").value;
 
-        function copyReminderList() {
-            let text = "Viraj Fitness - Pending Dues:\n";
-            members.filter(m => m.balanceDue > 0).forEach(m => {
-                text += `- ${m.name} (${m.phone}): ₹${m.balanceDue}\n`;
-            });
-            navigator.clipboard.writeText(text);
-            alert('Due list copied to clipboard!');
-        }
 
-        function openExpiryReminderModal() {
-            const expiringMembers = members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active');
-            document.getElementById('expiryReminderCount').textContent = expiringMembers.length;
-            const container = document.getElementById('expiryReminderListContainer');
-            container.innerHTML = '';
+    let list =
+        attendance[date] || [];
 
-            if (expiringMembers.length === 0) {
-                container.innerHTML = `<p class="text-center text-xs text-slate-500 py-4">No expiring or expired members.</p>`;
-            } else {
-                expiringMembers.forEach(m => {
-                    const status = getExpiryStatus(m.expiryDate).status;
-                    const msg = `Hi ${m.name}, your Viraj Fitness membership has ${status.toLowerCase()} (Expiry: ${m.expiryDate}). Renew today with an exclusive special discount offer!`;
-                    const waUrl = `https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`;
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs';
-                    div.innerHTML = `
-                        <div>
-                            <div class="font-semibold text-white">${m.name} (${m.phone})</div>
-                            <div class="text-amber-400">Expiry: ${m.expiryDate} (${status})</div>
-                        </div>
-                        <a href="${waUrl}" target="_blank" class="bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/35 flex items-center gap-1 transition"><i class="fa-brands fa-whatsapp"></i> Send Offer</a>
-                    `;
-                    container.appendChild(div);
-                });
-            }
-            document.getElementById('expiryReminderModal').classList.remove('hidden');
-        }
 
-        function closeExpiryReminderModal() {
-            document.getElementById('expiryReminderModal').classList.add('hidden');
-        }
+    if (
+        list.includes(
+            String(id)
+        )
+    ) {
 
-        function sendExpiryRemindersWithOffer() {
-            members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active').forEach(m => {
-                const msg = `Hi ${m.name}, your Viraj Fitness membership has expired. Renew now with our special discounted offer!`;
-                window.open(`https://wa.me/91${m.phone}?text=${encodeURIComponent(msg)}`, '_blank');
-            });
-        }
+        list =
+            list.filter(
+                item =>
+                    item !==
+                    String(id)
+            );
 
-        function copyExpiryList() {
-            let text = "Viraj Fitness - Expiry Offers List:\n";
-            members.filter(m => getExpiryStatus(m.expiryDate).status !== 'Active').forEach(m => {
-                text += `- ${m.name} (${m.phone}): Expiry ${m.expiryDate}\n`;
-            });
-            navigator.clipboard.writeText(text);
-            alert('Expiry list copied to clipboard!');
-        }
-    </script>
+    } else {
+
+        list.push(
+            String(id)
+        );
+
+    }
+
+
+    attendance[date] =
+        list;
+
+
+    save();
+
+    attendanceRender();
+
+    updateStats();
+
+}
+
+</script>
+
 </body>
 </html>
