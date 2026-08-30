@@ -578,34 +578,33 @@ function saveMembersToFile() {
         }
 
         function addMember(e) {
-            e.preventDefault();
-            const newMember = {
-                id: Date.now().toString(),
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                plan: document.getElementById('plan').value,
-                cardio: document.getElementById('cardio').value,
-                totalFee: parseFloat(document.getElementById('totalFee').value) || 0,
-                amountPaid: parseFloat(document.getElementById('amountPaid').value) || 0,
-                balanceDue: parseFloat(document.getElementById('balanceDue').value) || 0,
-                paymentMethod: document.getElementById('paymentMethod').value,
-                joiningDate: document.getElementById('joiningDate').value,
-                expiryDate: document.getElementById('expiryDate').value,
-                paymentsHistory: [{
-                    date: document.getElementById('joiningDate').value,
-                    amount: parseFloat(document.getElementById('amountPaid').value) || 0,
-                    method: document.getElementById('paymentMethod').value,
-                    note: 'Initial Admission Fee'
-                }]
-                
-            };
-        }
-            members.push(newMember);
-            saveMembersToFile();
-            document.getElementById('memberForm').reset();
-            document.getElementById('joiningDate').valueAsDate = new Date();
-            updateExpiryDate();
-            fetch('http://localhost:3000/api/members', {
+    e.preventDefault();
+    
+    const newMember = {
+        id: Date.now().toString(),
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        plan: document.getElementById('plan').value,
+        cardio: document.getElementById('cardio').value,
+        totalFee: parseFloat(document.getElementById('totalFee').value) || 0,
+        amountPaid: parseFloat(document.getElementById('amountPaid').value) || 0,
+        balancedDue: parseFloat(document.getElementById('balancedDue').value) || 0,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        joiningDate: document.getElementById('joiningDate').value,
+        expiryDate: document.getElementById('expiryDate').value,
+        paymentsHistory: [{
+            date: document.getElementById('joiningDate').value,
+            amount: parseFloat(document.getElementById('amountPaid').value) || 0,
+            method: document.getElementById('paymentMethod').value,
+            note: 'Initial Admission Fee'
+        }]
+    };
+
+    document.getElementById('memberForm').reset();
+    document.getElementById('joiningDate').valueAsDate = new Date();
+    if (typeof updateExpiryDate === 'function') updateExpiryDate();
+
+    fetch('http://localhost:3000/api/members', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMember)
@@ -621,7 +620,7 @@ function saveMembersToFile() {
         loadMembers();
     })
     .catch(err => console.error('Error:', err));
-
+}
         function deleteMember(id) {
             if (confirm('Are you sure you want to delete this member?')) {
                 members = members.filter(m => m.id !== id);
