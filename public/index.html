@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Viraj Fitness - Gym Management</title>
 
@@ -14,6 +20,7 @@
     >
 
     <style>
+
         body {
             font-family: Inter, system-ui, sans-serif;
         }
@@ -24,7 +31,7 @@
             border: 1px solid #1e293b;
             border-radius: 12px;
             padding: 10px 13px;
-            color: #fff;
+            color: white;
             outline: none;
         }
 
@@ -43,7 +50,7 @@
 
         .chip.active {
             background: #4f46e5;
-            color: #fff;
+            color: white;
         }
 
         .modal {
@@ -65,13 +72,25 @@
             background: #334155;
             border-radius: 10px;
         }
+
+        .action-btn {
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
     </style>
+
 </head>
+
 
 <body class="bg-slate-950 text-slate-100 min-h-screen">
 
+
 <!-- =====================================================
-     LOGIN SCREEN
+     LOGIN
 ===================================================== -->
 
 <div
@@ -84,16 +103,24 @@
         <div
             class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600"
         >
+
             <i class="fa-solid fa-dumbbell text-2xl"></i>
+
         </div>
 
         <h1 class="text-2xl font-black">
-            VIRAJ <span class="text-indigo-400">FITNESS</span>
+
+            VIRAJ
+            <span class="text-indigo-400">
+                FITNESS
+            </span>
+
         </h1>
 
         <p class="mt-1 text-xs text-slate-400">
             Gym Management System
         </p>
+
 
         <form
             onsubmit="login(event)"
@@ -119,7 +146,9 @@
                 type="submit"
                 class="w-full rounded-xl bg-indigo-600 py-3 font-semibold hover:bg-indigo-500"
             >
+
                 Login
+
             </button>
 
         </form>
@@ -129,7 +158,9 @@
         </p>
 
     </div>
+
 </div>
+
 
 
 <!-- =====================================================
@@ -137,6 +168,7 @@
 ===================================================== -->
 
 <div id="app" class="hidden">
+
 
     <!-- HEADER -->
 
@@ -151,13 +183,21 @@
             <div class="flex items-center gap-3">
 
                 <div class="rounded-xl bg-indigo-600 p-3">
+
                     <i class="fa-solid fa-dumbbell"></i>
+
                 </div>
+
 
                 <div>
 
                     <h1 class="font-black tracking-wide">
-                        VIRAJ <span class="text-indigo-400">FITNESS</span>
+
+                        VIRAJ
+                        <span class="text-indigo-400">
+                            FITNESS
+                        </span>
+
                     </h1>
 
                     <p class="text-[11px] text-slate-400">
@@ -175,31 +215,42 @@
                     onclick="openFinance()"
                     class="rounded-xl bg-emerald-600/20 px-3 py-2 text-xs text-emerald-400"
                 >
+
                     <i class="fa-solid fa-chart-pie"></i>
                     Finance
+
                 </button>
+
 
                 <button
                     onclick="openAttendance()"
                     class="rounded-xl bg-indigo-600/20 px-3 py-2 text-xs text-indigo-300"
                 >
+
                     <i class="fa-solid fa-calendar-check"></i>
                     Attendance
+
                 </button>
+
 
                 <button
                     onclick="load()"
                     class="rounded-xl bg-slate-800 px-3 py-2 text-xs"
                 >
+
                     <i class="fa-solid fa-rotate"></i>
                     Refresh
+
                 </button>
+
 
                 <button
                     onclick="logout()"
                     class="rounded-xl bg-rose-600/20 px-3 py-2 text-xs text-rose-400"
                 >
+
                     <i class="fa-solid fa-right-from-bracket"></i>
+
                 </button>
 
             </div>
@@ -209,14 +260,16 @@
     </header>
 
 
+
     <!-- MAIN -->
 
     <main
         class="mx-auto max-w-7xl space-y-5 px-4 py-5"
     >
 
+
         <!-- =================================================
-             STATISTICS
+             STATS
         ================================================= -->
 
         <section
@@ -224,6 +277,7 @@
         >
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     TOTAL
                 </p>
@@ -234,10 +288,12 @@
                 >
                     0
                 </b>
+
             </div>
 
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     DUE
                 </p>
@@ -248,10 +304,12 @@
                 >
                     ₹0
                 </b>
+
             </div>
 
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     EXPIRED
                 </p>
@@ -262,10 +320,12 @@
                 >
                     0
                 </b>
+
             </div>
 
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     EXPIRING
                 </p>
@@ -276,10 +336,12 @@
                 >
                     0
                 </b>
+
             </div>
 
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     CARDIO
                 </p>
@@ -290,10 +352,12 @@
                 >
                     0
                 </b>
+
             </div>
 
 
             <div class="card p-4">
+
                 <p class="text-[10px] text-slate-400">
                     TODAY PRESENT
                 </p>
@@ -304,9 +368,11 @@
                 >
                     0
                 </b>
+
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -320,9 +386,15 @@
             >
 
                 <h2 class="font-bold">
-                    <i class="fa-solid fa-user-plus text-indigo-400"></i>
+
+                    <i
+                        class="fa-solid fa-user-plus text-indigo-400"
+                    ></i>
+
                     New Admission
+
                 </h2>
+
 
                 <span class="text-xs text-slate-500">
                     Complete member profile
@@ -336,6 +408,7 @@
                 onsubmit="addMember(event)"
                 class="grid grid-cols-1 gap-3 md:grid-cols-4"
             >
+
 
                 <!-- NAME -->
 
@@ -413,7 +486,7 @@
                 >
 
 
-                <!-- AMOUNT PAID -->
+                <!-- PAID -->
 
                 <input
                     id="amountPaid"
@@ -426,7 +499,7 @@
                 >
 
 
-                <!-- BALANCE -->
+                <!-- DUE -->
 
                 <input
                     id="balanceDue"
@@ -436,7 +509,7 @@
                 >
 
 
-                <!-- PAYMENT METHOD -->
+                <!-- PAYMENT -->
 
                 <select
                     id="paymentMethod"
@@ -461,7 +534,7 @@
                 >
 
 
-                <!-- EXPIRY DATE -->
+                <!-- EXPIRY -->
 
                 <input
                     id="expiryDate"
@@ -471,14 +544,13 @@
                 >
 
 
-                <!-- REGISTER -->
-
                 <button
                     type="submit"
                     class="rounded-xl bg-indigo-600 py-3 font-semibold hover:bg-indigo-500 md:col-span-4"
                 >
 
                     <i class="fa-solid fa-check"></i>
+
                     Register Member
 
                 </button>
@@ -486,6 +558,7 @@
             </form>
 
         </section>
+
 
 
         <!-- =================================================
@@ -499,9 +572,15 @@
             >
 
                 <h2 class="font-bold">
-                    <i class="fa-solid fa-users text-indigo-400"></i>
+
+                    <i
+                        class="fa-solid fa-users text-indigo-400"
+                    ></i>
+
                     Member Directory
+
                 </h2>
+
 
                 <input
                     id="search"
@@ -511,6 +590,7 @@
                 >
 
             </div>
+
 
 
             <!-- FILTERS -->
@@ -570,12 +650,13 @@
             </div>
 
 
+
             <!-- TABLE -->
 
             <div class="overflow-x-auto">
 
                 <table
-                    class="w-full min-w-[950px] text-left text-sm"
+                    class="w-full min-w-[1150px] text-left text-sm"
                 >
 
                     <thead
@@ -612,6 +693,7 @@
 
                     </thead>
 
+
                     <tbody id="tbody"></tbody>
 
                 </table>
@@ -625,8 +707,9 @@
 </div>
 
 
+
 <!-- =====================================================
-     MEMBER DETAILS MODAL
+     DETAILS MODAL
 ===================================================== -->
 
 <div
@@ -652,11 +735,13 @@
 
         </div>
 
+
         <div id="detailBody"></div>
 
     </div>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -729,12 +814,15 @@
             onclick="savePayment()"
             class="w-full rounded-xl bg-emerald-600 py-3 font-semibold"
         >
+
             Save Payment
+
         </button>
 
     </div>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -823,7 +911,9 @@
             onclick="renew()"
             class="w-full rounded-xl bg-indigo-600 py-3 font-semibold"
         >
+
             Confirm Renewal
+
         </button>
 
     </div>
@@ -831,8 +921,9 @@
 </div>
 
 
+
 <!-- =====================================================
-     EDIT MEMBER MODAL
+     EDIT MODAL
 ===================================================== -->
 
 <div
@@ -917,12 +1008,15 @@
             onclick="saveEdit()"
             class="w-full rounded-xl bg-indigo-600 py-3 font-semibold"
         >
+
             Update Member
+
         </button>
 
     </div>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -944,7 +1038,9 @@
 
             <h3 class="text-lg font-bold">
 
-                <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+                <i
+                    class="fa-solid fa-chart-pie text-emerald-400"
+                ></i>
 
                 Finance Dashboard
 
@@ -1042,7 +1138,9 @@
                 onclick="addExpense()"
                 class="rounded-xl bg-indigo-600 py-2"
             >
+
                 Add Expense
+
             </button>
 
         </div>
@@ -1056,6 +1154,7 @@
     </div>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -1104,35 +1203,80 @@
 </div>
 
 
+
 <!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
 
 <script>
 
-const KEY = "virajFitnessMembersV4";
 
-const EXP = "virajFitnessExpensesV4";
+/* =====================================================
+   SETTINGS
+===================================================== */
 
-const ATT = "virajFitnessAttendanceV4";
+const KEY =
+    "virajFitnessMembersV5";
 
-const ADMIN_PASSWORD = "admin123";
+const EXP =
+    "virajFitnessExpensesV5";
+
+const ATT =
+    "virajFitnessAttendanceV5";
+
+const ADMIN_PASSWORD =
+    "admin123";
+
+
+/*
+    PLAN EXPIRE OFFER
+
+    Change 10 to whatever discount
+    you want.
+*/
+
+const OFFER_PERCENT = 10;
+
+
+/*
+    How many days before expiry
+    member is considered "expiring".
+*/
+
+const EXPIRING_DAYS = 7;
+
 
 
 let members =
-    JSON.parse(localStorage.getItem(KEY) || "[]");
+    JSON.parse(
+        localStorage.getItem(KEY) || "[]"
+    );
+
 
 let expenses =
-    JSON.parse(localStorage.getItem(EXP) || "[]");
+    JSON.parse(
+        localStorage.getItem(EXP) || "[]"
+    );
+
 
 let attendance =
-    JSON.parse(localStorage.getItem(ATT) || "{}");
+    JSON.parse(
+        localStorage.getItem(ATT) || "{}"
+    );
 
-let filter = "all";
 
+let filter =
+    "all";
+
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
 
 const $ = id =>
     document.getElementById(id);
+
 
 
 function today() {
@@ -1144,13 +1288,15 @@ function today() {
 }
 
 
+
 function money(number) {
 
     return "₹" +
         Number(number || 0)
-        .toLocaleString("en-IN");
+            .toLocaleString("en-IN");
 
 }
+
 
 
 function save() {
@@ -1173,29 +1319,287 @@ function save() {
 }
 
 
+
 function esc(value) {
 
     return String(value ?? "")
-        .replace(/[&<>"']/g, x => ({
+        .replace(
+            /[&<>"']/g,
+            x => ({
 
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
 
-        }[x]));
+            }[x])
+        );
 
 }
+
 
 
 function js(value) {
 
     return String(value ?? "")
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
 
 }
+
+
+
+/* =====================================================
+   PHONE / WHATSAPP
+===================================================== */
+
+function whatsappNumber(phone) {
+
+    let number =
+        String(phone || "")
+            .replace(/\D/g, "");
+
+
+    /*
+        India number support.
+        If user enters:
+        9876543210
+        it becomes:
+        919876543210
+    */
+
+    if (
+        number.length === 10
+    ) {
+
+        number =
+            "91" +
+            number;
+
+    }
+
+
+    if (
+        number.startsWith("0") &&
+        number.length === 11
+    ) {
+
+        number =
+            "91" +
+            number.substring(1);
+
+    }
+
+
+    return number;
+
+}
+
+
+
+function openWhatsApp(phone, message) {
+
+    const number =
+        whatsappNumber(phone);
+
+
+    if (
+        number.length < 12
+    ) {
+
+        alert(
+            "Please enter a valid Indian WhatsApp number."
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        "https://wa.me/" +
+        number +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+
+/* =====================================================
+   WHATSAPP MESSAGES
+===================================================== */
+
+function whatsappGeneral(id) {
+
+    const m =
+        member(id);
+
+    if (!m) return;
+
+
+    const message =
+
+`Hello ${m.name},
+
+Greetings from Viraj Fitness! 💪
+
+Your membership details:
+
+Plan: ${m.plan}
+Expiry Date: ${m.expiryDate || "-"}
+Balance Due: ${money(m.balanceDue)}
+
+Thank you for choosing Viraj Fitness.
+
+Keep Training. Keep Growing. 🔥💪`;
+
+
+    openWhatsApp(
+        m.phone,
+        message
+    );
+
+}
+
+
+
+function whatsappDue(id) {
+
+    const m =
+        member(id);
+
+    if (!m) return;
+
+
+    if (
+        Number(m.balanceDue || 0) <= 0
+    ) {
+
+        alert(
+            "This member has no pending payment."
+        );
+
+        return;
+
+    }
+
+
+    const message =
+
+`Hello ${m.name},
+
+This is a friendly reminder from Viraj Fitness. 💪
+
+Your membership payment is pending.
+
+Total Fee: ${money(m.totalFee)}
+Paid: ${money(m.amountPaid)}
+Pending Amount: ${money(m.balanceDue)}
+
+Please clear your pending amount at your earliest convenience.
+
+Thank you.
+Viraj Fitness 🏋️`;
+
+
+    openWhatsApp(
+        m.phone,
+        message
+    );
+
+}
+
+
+
+function whatsappExpiry(id) {
+
+    const m =
+        member(id);
+
+    if (!m) return;
+
+
+    const message =
+
+`Hello ${m.name},
+
+Greetings from Viraj Fitness! 💪
+
+Your ${m.plan} membership is expiring on:
+
+📅 ${m.expiryDate}
+
+Please renew your membership on time so you can continue your workout without interruption.
+
+For renewal, please contact Viraj Fitness.
+
+Keep Training. Keep Growing. 🔥`;
+
+
+    openWhatsApp(
+        m.phone,
+        message
+    );
+
+}
+
+
+
+function whatsappOffer(id) {
+
+    const m =
+        member(id);
+
+    if (!m) return;
+
+
+    const message =
+
+`🎉 SPECIAL RENEWAL OFFER 🎉
+
+Hello ${m.name},
+
+Your Viraj Fitness membership is expiring soon. 💪
+
+We have a special renewal offer for you! 🔥
+
+🏋️ Current Plan:
+${m.plan}
+
+📅 Expiry Date:
+${m.expiryDate}
+
+🎁 SPECIAL OFFER:
+Get ${OFFER_PERCENT}% OFF on your membership renewal!
+
+Don't miss the offer.
+
+Visit Viraj Fitness and renew your membership today. 💪🔥
+
+Thank you for being a part of Viraj Fitness ❤️`;
+
+
+    openWhatsApp(
+        m.phone,
+        message
+    );
+
+}
+
 
 
 /* =====================================================
@@ -1206,7 +1610,11 @@ function login(event) {
 
     event.preventDefault();
 
-    if ($("password").value === ADMIN_PASSWORD) {
+
+    if (
+        $("password").value ===
+        ADMIN_PASSWORD
+    ) {
 
         sessionStorage.setItem(
             "vfLogin",
@@ -1226,6 +1634,7 @@ function login(event) {
 }
 
 
+
 function logout() {
 
     sessionStorage.removeItem(
@@ -1237,19 +1646,23 @@ function logout() {
 }
 
 
+
 function showApp() {
 
     $("loginScreen")
         .classList
         .add("hidden");
 
+
     $("app")
         .classList
         .remove("hidden");
 
+
     load();
 
 }
+
 
 
 /* =====================================================
@@ -1261,19 +1674,27 @@ window.addEventListener(
     () => {
 
         if (
-            sessionStorage.getItem("vfLogin") === "1"
+            sessionStorage.getItem(
+                "vfLogin"
+            ) === "1"
         ) {
 
             showApp();
 
         }
 
-        $("joiningDate").value = today();
 
-        $("attendanceDate").value = today();
+        $("joiningDate").value =
+            today();
+
+
+        $("attendanceDate").value =
+            today();
+
 
         $("financeMonth").value =
             today().slice(0, 7);
+
 
         updateExpiry();
 
@@ -1281,6 +1702,7 @@ window.addEventListener(
 
     }
 );
+
 
 
 function load() {
@@ -1292,17 +1714,24 @@ function load() {
 }
 
 
+
 /* =====================================================
-   FEES
+   FEE
 ===================================================== */
 
 function calcDue() {
 
     const total =
-        Number($("totalFee").value || 0);
+        Number(
+            $("totalFee").value || 0
+        );
+
 
     const paid =
-        Number($("amountPaid").value || 0);
+        Number(
+            $("amountPaid").value || 0
+        );
+
 
     $("balanceDue").value =
         Math.max(
@@ -1313,23 +1742,35 @@ function calcDue() {
 }
 
 
+
 /* =====================================================
-   DATE FUNCTIONS
+   DATE
 ===================================================== */
 
-function addMonths(date, months) {
+function addMonths(
+    date,
+    months
+) {
 
     const d =
-        new Date(date + "T00:00:00");
+        new Date(
+            date +
+            "T00:00:00"
+        );
+
 
     const day =
         d.getDate();
 
+
     d.setDate(1);
 
+
     d.setMonth(
-        d.getMonth() + months
+        d.getMonth() +
+        months
     );
+
 
     d.setDate(
         Math.min(
@@ -1342,6 +1783,7 @@ function addMonths(date, months) {
         )
     );
 
+
     return d
         .toISOString()
         .slice(0, 10);
@@ -1349,31 +1791,50 @@ function addMonths(date, months) {
 }
 
 
+
 function updateExpiry() {
 
     const joining =
         $("joiningDate").value;
 
-    if (!joining) {
-        return;
-    }
+
+    if (!joining) return;
+
 
     const plan =
         $("plan").value;
 
-    let months = 1;
 
-    if (plan === "Quarterly") {
+    let months =
+        1;
+
+
+    if (
+        plan === "Quarterly"
+    ) {
+
         months = 3;
+
     }
 
-    if (plan === "Half-Yearly") {
+
+    if (
+        plan === "Half-Yearly"
+    ) {
+
         months = 6;
+
     }
 
-    if (plan === "Yearly") {
+
+    if (
+        plan === "Yearly"
+    ) {
+
         months = 12;
+
     }
+
 
     $("expiryDate").value =
         addMonths(
@@ -1384,20 +1845,19 @@ function updateExpiry() {
 }
 
 
+
 /* =====================================================
    STATUS
 ===================================================== */
 
-function status(member) {
+function getDaysLeft(member) {
 
     if (!member.expiryDate) {
 
-        return [
-            "No Expiry",
-            "text-slate-400"
-        ];
+        return null;
 
     }
+
 
     const expiry =
         new Date(
@@ -1405,17 +1865,40 @@ function status(member) {
             "T00:00:00"
         );
 
+
     const current =
         new Date(
             today() +
             "T00:00:00"
         );
 
+
+    return Math.ceil(
+        (
+            expiry -
+            current
+        ) /
+        86400000
+    );
+
+}
+
+
+
+function status(member) {
+
     const days =
-        Math.ceil(
-            (expiry - current) /
-            86400000
-        );
+        getDaysLeft(member);
+
+
+    if (days === null) {
+
+        return [
+            "No Expiry",
+            "text-slate-400"
+        ];
+
+    }
 
 
     if (days < 0) {
@@ -1428,12 +1911,22 @@ function status(member) {
     }
 
 
-    if (days <= 3) {
+    if (days === 0) {
 
         return [
-            days === 0
-                ? "Expires Today"
-                : `Expiring in ${days}d`,
+            "Expires Today",
+            "text-amber-400"
+        ];
+
+    }
+
+
+    if (
+        days <= EXPIRING_DAYS
+    ) {
+
+        return [
+            `Expiring in ${days}d`,
             "text-amber-400"
         ];
 
@@ -1448,6 +1941,7 @@ function status(member) {
 }
 
 
+
 /* =====================================================
    ADD MEMBER
 ===================================================== */
@@ -1456,17 +1950,25 @@ function addMember(event) {
 
     event.preventDefault();
 
+
     calcDue();
 
 
     const total =
-        Number($("totalFee").value || 0);
+        Number(
+            $("totalFee").value || 0
+        );
+
 
     const paid =
-        Number($("amountPaid").value || 0);
+        Number(
+            $("amountPaid").value || 0
+        );
 
 
-    if (paid > total) {
+    if (
+        paid > total
+    ) {
 
         alert(
             "Amount paid cannot exceed total fee."
@@ -1487,13 +1989,19 @@ function addMember(event) {
             Date.now().toString(),
 
         name:
-            $("name").value.trim(),
+            $("name")
+                .value
+                .trim(),
 
         phone:
-            $("phone").value.trim(),
+            $("phone")
+                .value
+                .trim(),
 
         address:
-            $("address").value.trim(),
+            $("address")
+                .value
+                .trim(),
 
         plan:
             $("plan").value,
@@ -1519,28 +2027,44 @@ function addMember(event) {
         paymentsHistory:
             paid > 0
                 ? [
+
                     {
-                        date: joiningDate,
-                        amount: paid,
+
+                        date:
+                            joiningDate,
+
+                        amount:
+                            paid,
+
                         method:
                             $("paymentMethod").value,
+
                         note:
                             "Initial Admission"
+
                     }
+
                 ]
                 : []
 
     };
 
 
-    members.push(memberData);
+    members.push(
+        memberData
+    );
+
 
     save();
 
-    $("memberForm").reset();
+
+    $("memberForm")
+        .reset();
+
 
     $("joiningDate").value =
         today();
+
 
     updateExpiry();
 
@@ -1558,24 +2082,27 @@ function addMember(event) {
 }
 
 
+
 /* =====================================================
    FILTER
 ===================================================== */
 
 function setFilter(value) {
 
-    filter = value;
+    filter =
+        value;
 
 
     document
         .querySelectorAll(".chip")
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.classList.remove(
-                "active"
-            );
+                button.classList
+                    .remove("active");
 
-        });
+            }
+        );
 
 
     $("f-" + value)
@@ -1588,248 +2115,453 @@ function setFilter(value) {
 }
 
 
+
 /* =====================================================
-   RENDER MEMBERS
+   RENDER
 ===================================================== */
 
 function render() {
 
     const search =
         (
-            $("search")?.value || ""
+            $("search")?.value ||
+            ""
         )
         .toLowerCase();
 
 
     let list =
-        members.filter(member =>
+        members.filter(
+            m =>
 
-            String(member.name)
-                .toLowerCase()
-                .includes(search)
+                String(m.name)
+                    .toLowerCase()
+                    .includes(search)
 
-            ||
+                ||
 
-            String(member.phone)
-                .includes(search)
+                String(m.phone)
+                    .includes(search)
 
         );
 
 
     list =
-        list.filter(member => {
+        list.filter(
+            m => {
 
-            if (filter === "due") {
+                if (
+                    filter === "due"
+                ) {
 
-                return Number(
-                    member.balanceDue || 0
-                ) > 0;
+                    return Number(
+                        m.balanceDue || 0
+                    ) > 0;
+
+                }
+
+
+                if (
+                    filter === "expired"
+                ) {
+
+                    return (
+                        status(m)[0] ===
+                        "Expired"
+                    );
+
+                }
+
+
+                if (
+                    filter === "expiring"
+                ) {
+
+                    const days =
+                        getDaysLeft(m);
+
+                    return (
+                        days !== null &&
+                        days >= 0 &&
+                        days <=
+                        EXPIRING_DAYS
+                    );
+
+                }
+
+
+                if (
+                    filter === "cardio"
+                ) {
+
+                    return (
+                        m.cardio ===
+                        "yes"
+                    );
+
+                }
+
+
+                if (
+                    filter === "paid"
+                ) {
+
+                    return Number(
+                        m.balanceDue || 0
+                    ) === 0;
+
+                }
+
+
+                return true;
 
             }
-
-
-            if (filter === "expired") {
-
-                return (
-                    status(member)[0] ===
-                    "Expired"
-                );
-
-            }
-
-
-            if (filter === "expiring") {
-
-                return (
-                    status(member)[0]
-                        .startsWith("Expiring")
-
-                    ||
-
-                    status(member)[0] ===
-                    "Expires Today"
-                );
-
-            }
-
-
-            if (filter === "cardio") {
-
-                return member.cardio === "yes";
-
-            }
-
-
-            if (filter === "paid") {
-
-                return Number(
-                    member.balanceDue || 0
-                ) === 0;
-
-            }
-
-
-            return true;
-
-        });
+        );
 
 
     $("tbody").innerHTML =
+
         list.length
 
-        ? list.map(member => {
+        ?
 
-            const currentStatus =
-                status(member);
+        list.map(
+            m => {
 
-            const due =
-                Number(
-                    member.balanceDue || 0
-                );
+                const s =
+                    status(m);
 
 
-            return `
-
-                <tr class="border-b border-slate-800">
-
-                    <td class="p-3">
-
-                        <div>
-
-                            <b>
-                                ${esc(member.name)}
-                            </b>
-
-                            <div class="text-xs text-slate-400">
-                                ${esc(member.phone)}
-                            </div>
-
-                            <div class="text-xs text-slate-500">
-                                ${esc(member.address || "No address")}
-                            </div>
-
-                        </div>
-
-                    </td>
+                const due =
+                    Number(
+                        m.balanceDue || 0
+                    );
 
 
-                    <td class="p-3">
-
-                        ${esc(member.plan)}
-
-                        <div class="text-xs text-slate-400">
-
-                            ${
-                                member.cardio === "yes"
-                                    ? "With Cardio"
-                                    : "Without Cardio"
-                            }
-
-                        </div>
-
-                    </td>
+                const days =
+                    getDaysLeft(m);
 
 
-                    <td class="p-3">
+                return `
 
-                        <div>
-                            Paid
-                            ${money(member.amountPaid)}
-                            /
-                            ${money(member.totalFee)}
-                        </div>
-
-                        <div
-                            class="${
-                                due
-                                    ? "text-rose-400"
-                                    : "text-emerald-400"
-                            }"
-                        >
-
-                            Due
-                            ${money(due)}
-
-                        </div>
-
-                    </td>
-
-
-                    <td class="p-3">
-
-                        ${esc(member.expiryDate || "-")}
-
-                    </td>
-
-
-                    <td
-                        class="p-3 ${currentStatus[1]}"
+                    <tr
+                        class="border-b border-slate-800"
                     >
 
-                        ${currentStatus[0]}
+                        <td class="p-3">
 
-                    </td>
+                            <div>
+
+                                <b>
+                                    ${esc(m.name)}
+                                </b>
+
+                                <div
+                                    class="text-xs text-slate-400"
+                                >
+                                    ${esc(m.phone)}
+                                </div>
+
+                                <div
+                                    class="text-xs text-slate-500"
+                                >
+                                    ${esc(
+                                        m.address ||
+                                        "No address"
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </td>
 
 
-                    <td class="p-3">
+                        <td class="p-3">
 
-                        <div
-                            class="flex justify-center gap-1"
+                            ${esc(m.plan)}
+
+                            <div
+                                class="text-xs text-slate-400"
+                            >
+
+                                ${
+                                    m.cardio === "yes"
+                                    ? "With Cardio"
+                                    : "Without Cardio"
+                                }
+
+                            </div>
+
+                        </td>
+
+
+                        <td class="p-3">
+
+                            <div>
+
+                                Paid
+                                ${money(
+                                    m.amountPaid
+                                )}
+
+                                /
+
+                                ${money(
+                                    m.totalFee
+                                )}
+
+                            </div>
+
+
+                            <div
+                                class="${
+                                    due
+                                    ? "text-rose-400"
+                                    : "text-emerald-400"
+                                }"
+                            >
+
+                                Due
+                                ${money(due)}
+
+                            </div>
+
+                        </td>
+
+
+                        <td class="p-3">
+
+                            ${esc(
+                                m.expiryDate ||
+                                "-"
+                            )}
+
+                            ${
+                                days !== null
+                                ? `
+                                    <div
+                                        class="text-[10px] text-slate-500"
+                                    >
+                                        ${
+                                            days < 0
+                                            ? Math.abs(days) +
+                                              " days ago"
+                                            : days +
+                                              " days left"
+                                        }
+                                    </div>
+                                `
+                                : ""
+                            }
+
+                        </td>
+
+
+                        <td
+                            class="p-3 ${s[1]}"
                         >
 
-                            <button
-                                title="Details"
-                                onclick="details('${js(member.id)}')"
-                                class="rounded-lg bg-slate-800 p-2"
+                            ${s[0]}
+
+                        </td>
+
+
+                        <td class="p-3">
+
+                            <div
+                                class="flex flex-wrap justify-center gap-1"
                             >
-                                👁
-                            </button>
 
 
-                            <button
-                                title="Payment"
-                                onclick="openPayment('${js(member.id)}')"
-                                class="rounded-lg bg-emerald-600/20 p-2 text-emerald-400"
-                            >
-                                ₹
-                            </button>
+                                <!-- DETAILS -->
+
+                                <button
+                                    title="Details"
+                                    onclick="details('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-slate-800 p-2"
+                                >
+                                    <i
+                                        class="fa-solid fa-eye"
+                                    ></i>
+                                </button>
 
 
-                            <button
-                                title="Renew"
-                                onclick="openRenew('${js(member.id)}')"
-                                class="rounded-lg bg-indigo-600/20 p-2 text-indigo-300"
-                            >
-                                ↻
-                            </button>
+                                <!-- WHATSAPP -->
+
+                                <button
+                                    title="WhatsApp"
+                                    onclick="whatsappGeneral('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-green-600/20 p-2 text-green-400"
+                                >
+                                    <i
+                                        class="fa-brands fa-whatsapp"
+                                    ></i>
+                                </button>
 
 
-                            <button
-                                title="Edit"
-                                onclick="openEdit('${js(member.id)}')"
-                                class="rounded-lg bg-slate-800 p-2"
-                            >
-                                ✎
-                            </button>
+                                <!-- DUE REMINDER -->
+
+                                ${
+                                    due > 0
+
+                                    ?
+
+                                    `
+
+                                        <button
+                                            title="Due Reminder"
+                                            onclick="whatsappDue('${js(m.id)}')"
+                                            class="action-btn rounded-lg bg-rose-600/20 p-2 text-rose-400"
+                                        >
+
+                                            <i
+                                                class="fa-solid fa-money-bill-wave"
+                                            ></i>
+
+                                        </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
 
 
-                            <button
-                                title="Delete"
-                                onclick="del('${js(member.id)}')"
-                                class="rounded-lg bg-rose-600/20 p-2 text-rose-400"
-                            >
-                                🗑
-                            </button>
+                                <!-- EXPIRY REMINDER -->
 
-                        </div>
+                                ${
+                                    days !== null &&
+                                    days >= 0 &&
+                                    days <=
+                                    EXPIRING_DAYS
 
-                    </td>
+                                    ?
 
-                </tr>
+                                    `
 
-            `;
+                                        <button
+                                            title="Expiry Reminder"
+                                            onclick="whatsappExpiry('${js(m.id)}')"
+                                            class="action-btn rounded-lg bg-amber-600/20 p-2 text-amber-400"
+                                        >
 
-        }).join("")
+                                            <i
+                                                class="fa-solid fa-bell"
+                                            ></i>
+
+                                        </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+
+                                <!-- PLAN EXPIRE OFFER -->
+
+                                ${
+                                    days !== null &&
+                                    days >= 0 &&
+                                    days <=
+                                    EXPIRING_DAYS
+
+                                    ?
+
+                                    `
+
+                                        <button
+                                            title="Send ${OFFER_PERCENT}% Expiry Offer"
+                                            onclick="whatsappOffer('${js(m.id)}')"
+                                            class="action-btn rounded-lg bg-purple-600/20 p-2 text-purple-400"
+                                        >
+
+                                            <i
+                                                class="fa-solid fa-gift"
+                                            ></i>
+
+                                        </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+
+                                <!-- PAYMENT -->
+
+                                <button
+                                    title="Payment"
+                                    onclick="openPayment('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-emerald-600/20 p-2 text-emerald-400"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-indian-rupee-sign"
+                                    ></i>
+
+                                </button>
+
+
+                                <!-- RENEW -->
+
+                                <button
+                                    title="Renew"
+                                    onclick="openRenew('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-indigo-600/20 p-2 text-indigo-300"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-rotate"
+                                    ></i>
+
+                                </button>
+
+
+                                <!-- EDIT -->
+
+                                <button
+                                    title="Edit"
+                                    onclick="openEdit('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-slate-800 p-2"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-pen"
+                                    ></i>
+
+                                </button>
+
+
+                                <!-- DELETE -->
+
+                                <button
+                                    title="Delete"
+                                    onclick="del('${js(m.id)}')"
+                                    class="action-btn rounded-lg bg-rose-600/20 p-2 text-rose-400"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-trash"
+                                    ></i>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("")
+
 
         :
 
@@ -1841,7 +2573,9 @@ function render() {
                     colspan="6"
                     class="p-8 text-center text-slate-500"
                 >
+
                     No members found.
+
                 </td>
 
             </tr>
@@ -1851,8 +2585,9 @@ function render() {
 }
 
 
+
 /* =====================================================
-   STATISTICS
+   STATS
 ===================================================== */
 
 function updateStats() {
@@ -1864,11 +2599,16 @@ function updateStats() {
     $("sDue").textContent =
         money(
             members.reduce(
-                (total, member) =>
+                (
+                    total,
+                    m
+                ) =>
+
                     total +
                     Number(
-                        member.balanceDue || 0
+                        m.balanceDue || 0
                     ),
+
                 0
             )
         );
@@ -1876,22 +2616,24 @@ function updateStats() {
 
     $("sExpired").textContent =
         members.filter(
-            member =>
-                status(member)[0] ===
+            m =>
+                status(m)[0] ===
                 "Expired"
         ).length;
 
 
     $("sExpiring").textContent =
         members.filter(
-            member => {
+            m => {
 
-                const s =
-                    status(member)[0];
+                const days =
+                    getDaysLeft(m);
 
                 return (
-                    s.startsWith("Expiring") ||
-                    s === "Expires Today"
+                    days !== null &&
+                    days >= 0 &&
+                    days <=
+                    EXPIRING_DAYS
                 );
 
             }
@@ -1900,21 +2642,23 @@ function updateStats() {
 
     $("sCardio").textContent =
         members.filter(
-            member =>
-                member.cardio === "yes"
+            m =>
+                m.cardio === "yes"
         ).length;
 
 
     $("sPresent").textContent =
         (
-            attendance[today()] || []
+            attendance[today()] ||
+            []
         ).length;
 
 }
 
 
+
 /* =====================================================
-   GET MEMBER
+   FIND MEMBER
 ===================================================== */
 
 function member(id) {
@@ -1928,8 +2672,9 @@ function member(id) {
 }
 
 
+
 /* =====================================================
-   MODAL
+   MODALS
 ===================================================== */
 
 function openModal(id) {
@@ -1938,11 +2683,13 @@ function openModal(id) {
         .classList
         .remove("hidden");
 
+
     $(id)
         .classList
         .add("flex");
 
 }
+
 
 
 function closeModal(id) {
@@ -1951,6 +2698,7 @@ function closeModal(id) {
         .classList
         .add("hidden");
 
+
     $(id)
         .classList
         .remove("flex");
@@ -1958,8 +2706,9 @@ function closeModal(id) {
 }
 
 
+
 /* =====================================================
-   MEMBER DETAILS
+   DETAILS
 ===================================================== */
 
 function details(id) {
@@ -1967,22 +2716,31 @@ function details(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     const history =
-        (m.paymentsHistory || [])
-            .slice()
-            .reverse();
+        (
+            m.paymentsHistory ||
+            []
+        )
+        .slice()
+        .reverse();
+
+
+    const days =
+        getDaysLeft(m);
 
 
     $("detailBody").innerHTML = `
 
-        <div class="grid gap-5 md:grid-cols-3">
+        <div
+            class="grid gap-5 md:grid-cols-3"
+        >
 
-            <div class="md:col-span-1">
+
+            <div>
 
                 <div
                     class="rounded-2xl bg-indigo-600/10 p-5"
@@ -1994,11 +2752,13 @@ function details(id) {
                         ${esc(m.name)}
                     </h4>
 
+
                     <p
                         class="mt-1 text-sm text-slate-400"
                     >
                         ${esc(m.phone)}
                     </p>
+
 
                     <p
                         class="mt-3 text-xs text-slate-500"
@@ -2009,9 +2769,83 @@ function details(id) {
                         )}
                     </p>
 
+
+                    <div
+                        class="mt-4 flex flex-wrap gap-2"
+                    >
+
+                        <button
+                            onclick="whatsappGeneral('${js(m.id)}')"
+                            class="rounded-xl bg-green-600 px-3 py-2 text-xs"
+                        >
+
+                            <i
+                                class="fa-brands fa-whatsapp"
+                            ></i>
+
+                            WhatsApp
+
+                        </button>
+
+
+                        ${
+                            Number(
+                                m.balanceDue || 0
+                            ) > 0
+
+                            ?
+
+                            `
+
+                                <button
+                                    onclick="whatsappDue('${js(m.id)}')"
+                                    class="rounded-xl bg-rose-600 px-3 py-2 text-xs"
+                                >
+
+                                    Due Reminder
+
+                                </button>
+
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        ${
+                            days !== null &&
+                            days >= 0 &&
+                            days <=
+                            EXPIRING_DAYS
+
+                            ?
+
+                            `
+
+                                <button
+                                    onclick="whatsappOffer('${js(m.id)}')"
+                                    class="rounded-xl bg-purple-600 px-3 py-2 text-xs"
+                                >
+
+                                    🎁 ${OFFER_PERCENT}% Offer
+
+                                </button>
+
+                            `
+
+                            :
+
+                            ""
+                        }
+
+                    </div>
+
                 </div>
 
             </div>
+
 
 
             <div
@@ -2023,8 +2857,8 @@ function details(id) {
                 ${info(
                     "Cardio",
                     m.cardio === "yes"
-                        ? "Yes"
-                        : "No"
+                    ? "Yes"
+                    : "No"
                 )}
 
                 ${info(
@@ -2062,6 +2896,7 @@ function details(id) {
         </div>
 
 
+
         <div class="mt-6">
 
             <h4 class="mb-2 font-semibold">
@@ -2079,7 +2914,7 @@ function details(id) {
                     <div class="space-y-2">
 
                         ${history.map(
-                            payment => `
+                            p => `
 
                                 <div
                                     class="flex justify-between rounded-xl bg-slate-950 p-3 text-sm"
@@ -2087,16 +2922,19 @@ function details(id) {
 
                                     <span>
 
-                                        ${esc(payment.date)}
+                                        ${esc(p.date)}
                                         •
-                                        ${esc(payment.method)}
+                                        ${esc(p.method)}
 
                                         <small
                                             class="block text-slate-500"
                                         >
+
                                             ${esc(
-                                                payment.note || ""
+                                                p.note ||
+                                                ""
                                             )}
+
                                         </small>
 
                                     </span>
@@ -2105,9 +2943,11 @@ function details(id) {
                                     <b
                                         class="text-emerald-400"
                                     >
+
                                         ${money(
-                                            payment.amount
+                                            p.amount
                                         )}
+
                                     </b>
 
                                 </div>
@@ -2123,14 +2963,18 @@ function details(id) {
 
                 `
 
-                    <p class="text-sm text-slate-500">
+                    <p
+                        class="text-sm text-slate-500"
+                    >
                         No payment history.
                     </p>
 
                 `
+
             }
 
         </div>
+
 
 
         <div
@@ -2141,7 +2985,9 @@ function details(id) {
                 onclick="receipt('${js(m.id)}')"
                 class="rounded-xl bg-slate-800 px-4 py-2 text-sm"
             >
+
                 🧾 Receipt
+
             </button>
 
 
@@ -2149,7 +2995,9 @@ function details(id) {
                 onclick="openPayment('${js(m.id)}')"
                 class="rounded-xl bg-emerald-600 px-4 py-2 text-sm"
             >
+
                 Add Payment
+
             </button>
 
 
@@ -2157,7 +3005,9 @@ function details(id) {
                 onclick="openRenew('${js(m.id)}')"
                 class="rounded-xl bg-indigo-600 px-4 py-2 text-sm"
             >
+
                 Renew
+
             </button>
 
         </div>
@@ -2165,12 +3015,18 @@ function details(id) {
     `;
 
 
-    openModal("detailModal");
+    openModal(
+        "detailModal"
+    );
 
 }
 
 
-function info(title, value) {
+
+function info(
+    title,
+    value
+) {
 
     return `
 
@@ -2195,6 +3051,7 @@ function info(title, value) {
 }
 
 
+
 /* =====================================================
    PAYMENT
 ===================================================== */
@@ -2204,19 +3061,21 @@ function openPayment(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     $("payId").value =
         id;
 
+
     $("payMember").textContent =
         `${m.name} • Current due ${money(m.balanceDue)}`;
 
+
     $("payAmount").value =
         "";
+
 
     $("payNote").value =
         "";
@@ -2227,6 +3086,7 @@ function openPayment(id) {
     );
 
 }
+
 
 
 function savePayment() {
@@ -2243,7 +3103,10 @@ function savePayment() {
         );
 
 
-    if (!m || amount <= 0) {
+    if (
+        !m ||
+        amount <= 0
+    ) {
 
         alert(
             "Enter valid amount."
@@ -2256,7 +3119,9 @@ function savePayment() {
 
     if (
         amount >
-        Number(m.balanceDue || 0)
+        Number(
+            m.balanceDue || 0
+        )
     ) {
 
         alert(
@@ -2286,7 +3151,8 @@ function savePayment() {
 
 
     m.paymentsHistory =
-        m.paymentsHistory || [];
+        m.paymentsHistory ||
+        [];
 
 
     m.paymentsHistory.push({
@@ -2309,9 +3175,11 @@ function savePayment() {
 
     save();
 
+
     closeModal(
         "paymentModal"
     );
+
 
     render();
 
@@ -2325,8 +3193,9 @@ function savePayment() {
 }
 
 
+
 /* =====================================================
-   RENEWAL
+   RENEW
 ===================================================== */
 
 function openRenew(id) {
@@ -2334,19 +3203,21 @@ function openRenew(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     $("renewId").value =
         id;
 
+
     $("renewName").textContent =
         `${m.name} • Current expiry ${m.expiryDate || "-"}`;
 
+
     $("renewFee").value =
         "";
+
 
     $("renewPaid").value =
         "";
@@ -2357,6 +3228,7 @@ function openRenew(id) {
     );
 
 }
+
 
 
 function renew() {
@@ -2383,7 +3255,10 @@ function renew() {
         $("renewPlan").value;
 
 
-    if (!m || fee <= 0) {
+    if (
+        !m ||
+        fee <= 0
+    ) {
 
         alert(
             "Enter renewal fee."
@@ -2394,7 +3269,9 @@ function renew() {
     }
 
 
-    if (paid > fee) {
+    if (
+        paid > fee
+    ) {
 
         alert(
             "Paid amount cannot exceed renewal fee."
@@ -2405,49 +3282,82 @@ function renew() {
     }
 
 
+    const todayDate =
+        today();
+
+
     const currentExpiry =
         m.expiryDate &&
-        new Date(m.expiryDate) >=
-        new Date(today())
-            ? m.expiryDate
-            : today();
+        m.expiryDate >=
+        todayDate
+
+        ?
+
+        m.expiryDate
+
+        :
+
+        todayDate;
 
 
     let newExpiry;
 
 
-    if (plan === "Half-Monthly") {
+    if (
+        plan === "Half-Monthly"
+    ) {
 
-        const date =
+        const d =
             new Date(
                 currentExpiry +
                 "T00:00:00"
             );
 
-        date.setDate(
-            date.getDate() + 15
+
+        d.setDate(
+            d.getDate() +
+            15
         );
 
+
         newExpiry =
-            date
-                .toISOString()
+            d.toISOString()
                 .slice(0, 10);
 
-    } else {
+    }
 
-        let months = 1;
+    else {
 
-        if (plan === "Quarterly") {
+        let months =
+            1;
+
+
+        if (
+            plan === "Quarterly"
+        ) {
+
             months = 3;
+
         }
 
-        if (plan === "Half-Yearly") {
+
+        if (
+            plan === "Half-Yearly"
+        ) {
+
             months = 6;
+
         }
 
-        if (plan === "Yearly") {
+
+        if (
+            plan === "Yearly"
+        ) {
+
             months = 12;
+
         }
+
 
         newExpiry =
             addMonths(
@@ -2461,17 +3371,22 @@ function renew() {
     m.plan =
         plan;
 
+
     m.expiryDate =
         newExpiry;
 
 
     m.totalFee =
-        Number(m.totalFee || 0) +
+        Number(
+            m.totalFee || 0
+        ) +
         fee;
 
 
     m.amountPaid =
-        Number(m.amountPaid || 0) +
+        Number(
+            m.amountPaid || 0
+        ) +
         paid;
 
 
@@ -2483,10 +3398,13 @@ function renew() {
         );
 
 
-    if (paid > 0) {
+    if (
+        paid > 0
+    ) {
 
         m.paymentsHistory =
-            m.paymentsHistory || [];
+            m.paymentsHistory ||
+            [];
 
 
         m.paymentsHistory.push({
@@ -2511,9 +3429,11 @@ function renew() {
 
     save();
 
+
     closeModal(
         "renewModal"
     );
+
 
     render();
 
@@ -2527,8 +3447,9 @@ function renew() {
 }
 
 
+
 /* =====================================================
-   EDIT MEMBER
+   EDIT
 ===================================================== */
 
 function openEdit(id) {
@@ -2536,28 +3457,34 @@ function openEdit(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     $("editId").value =
         id;
 
+
     $("editName").value =
         m.name || "";
+
 
     $("editPhone").value =
         m.phone || "";
 
+
     $("editAddress").value =
         m.address || "";
 
+
     $("editPlan").value =
-        m.plan || "Monthly";
+        m.plan ||
+        "Monthly";
+
 
     $("editCardio").value =
-        m.cardio || "no";
+        m.cardio ||
+        "no";
 
 
     openModal(
@@ -2565,6 +3492,7 @@ function openEdit(id) {
     );
 
 }
+
 
 
 function saveEdit() {
@@ -2575,9 +3503,7 @@ function saveEdit() {
         );
 
 
-    if (!m) {
-        return;
-    }
+    if (!m) return;
 
 
     m.name =
@@ -2608,15 +3534,18 @@ function saveEdit() {
 
     save();
 
+
     closeModal(
         "editModal"
     );
+
 
     render();
 
     updateStats();
 
 }
+
 
 
 /* =====================================================
@@ -2628,9 +3557,8 @@ function del(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     if (
@@ -2658,6 +3586,7 @@ function del(id) {
 }
 
 
+
 /* =====================================================
    RECEIPT
 ===================================================== */
@@ -2667,22 +3596,26 @@ function receipt(id) {
     const m =
         member(id);
 
-    if (!m) {
-        return;
-    }
+
+    if (!m) return;
 
 
     const history =
-        m.paymentsHistory || [];
+        m.paymentsHistory ||
+        [];
 
 
-    const lastPayment =
+    const last =
         history.length
-            ? history[history.length - 1]
-            : null;
+        ?
+        history[
+            history.length - 1
+        ]
+        :
+        null;
 
 
-    const receiptWindow =
+    const w =
         window.open(
             "",
             "_blank",
@@ -2690,7 +3623,7 @@ function receipt(id) {
         );
 
 
-    if (!receiptWindow) {
+    if (!w) {
 
         alert(
             "Please allow pop-ups to print receipt."
@@ -2701,7 +3634,7 @@ function receipt(id) {
     }
 
 
-    receiptWindow.document.write(`
+    w.document.write(`
 
         <!DOCTYPE html>
 
@@ -2716,7 +3649,7 @@ function receipt(id) {
             <style>
 
                 body {
-                    font-family: Arial, sans-serif;
+                    font-family: Arial;
                     padding: 35px;
                     color: #111;
                 }
@@ -2786,9 +3719,9 @@ function receipt(id) {
 
 
                 <tr>
-                    <td>Payment Date</td>
+                    <td>Date</td>
                     <td>
-                        ${lastPayment?.date || today()}
+                        ${last?.date || today()}
                     </td>
                 </tr>
 
@@ -2797,7 +3730,8 @@ function receipt(id) {
                     <td>Payment Method</td>
                     <td>
                         ${esc(
-                            lastPayment?.method || "-"
+                            last?.method ||
+                            "-"
                         )}
                     </td>
                 </tr>
@@ -2807,7 +3741,8 @@ function receipt(id) {
                     <td>Amount Paid</td>
                     <td class="amount">
                         ${money(
-                            lastPayment?.amount || 0
+                            last?.amount ||
+                            0
                         )}
                     </td>
                 </tr>
@@ -2816,7 +3751,9 @@ function receipt(id) {
                 <tr>
                     <td>Balance Due</td>
                     <td>
-                        ${money(m.balanceDue)}
+                        ${money(
+                            m.balanceDue
+                        )}
                     </td>
                 </tr>
 
@@ -2824,20 +3761,29 @@ function receipt(id) {
                 <tr>
                     <td>Expiry</td>
                     <td>
-                        ${esc(m.expiryDate)}
+                        ${esc(
+                            m.expiryDate
+                        )}
                     </td>
                 </tr>
 
             </table>
 
 
-            <p style="margin-top:40px">
-                Thank you for choosing Viraj Fitness.
+            <p
+                style="margin-top:40px"
+            >
+
+                Thank you for choosing
+                Viraj Fitness.
+
             </p>
 
 
             <script>
+
                 window.print();
+
             <\/script>
 
         </body>
@@ -2847,9 +3793,10 @@ function receipt(id) {
     `);
 
 
-    receiptWindow.document.close();
+    w.document.close();
 
 }
+
 
 
 /* =====================================================
@@ -2867,53 +3814,69 @@ function openFinance() {
 }
 
 
+
 function financeRender() {
 
     const month =
         $("financeMonth").value;
 
 
-    let income = 0;
+    let income =
+        0;
 
 
-    members.forEach(member => {
+    members.forEach(
+        m => {
 
-        (
-            member.paymentsHistory ||
-            []
-        ).forEach(payment => {
+            (
+                m.paymentsHistory ||
+                []
+            ).forEach(
+                p => {
 
-            if (
-                String(payment.date || "")
-                    .startsWith(month)
-            ) {
+                    if (
+                        String(
+                            p.date || ""
+                        ).startsWith(
+                            month
+                        )
+                    ) {
 
-                income +=
-                    Number(
-                        payment.amount || 0
-                    );
+                        income +=
+                            Number(
+                                p.amount ||
+                                0
+                            );
 
-            }
+                    }
 
-        });
+                }
+            );
 
-    });
+        }
+    );
 
 
     const monthExpenses =
         expenses.filter(
-            expense =>
-                String(expense.date)
-                    .startsWith(month)
+            e =>
+                String(e.date)
+                    .startsWith(
+                        month
+                    )
         );
 
 
     const totalExpense =
         monthExpenses.reduce(
-            (sum, expense) =>
+            (
+                sum,
+                e
+            ) =>
                 sum +
                 Number(
-                    expense.amount || 0
+                    e.amount ||
+                    0
                 ),
             0
         );
@@ -2924,7 +3887,9 @@ function financeRender() {
 
 
     $("expense").textContent =
-        money(totalExpense);
+        money(
+            totalExpense
+        );
 
 
     $("profit").textContent =
@@ -2935,59 +3900,66 @@ function financeRender() {
 
 
     $("expenseList").innerHTML =
+
         monthExpenses.length
 
         ?
 
         monthExpenses
-            .map(expense => `
+            .map(
+                e => `
 
-                <div
-                    class="flex justify-between rounded-xl bg-slate-950 p-3 text-sm"
-                >
+                    <div
+                        class="flex justify-between rounded-xl bg-slate-950 p-3 text-sm"
+                    >
 
-                    <span>
+                        <span>
 
-                        ${esc(expense.title)}
+                            ${esc(e.title)}
 
-                        <small
-                            class="block text-slate-500"
-                        >
-                            ${esc(expense.date)}
-                        </small>
+                            <small
+                                class="block text-slate-500"
+                            >
+                                ${esc(e.date)}
+                            </small>
 
-                    </span>
+                        </span>
 
 
-                    <span>
+                        <span>
 
-                        ${money(expense.amount)}
+                            ${money(e.amount)}
 
-                        <button
-                            onclick="removeExpense('${js(expense.id)}')"
-                            class="ml-3 text-rose-400"
-                        >
-                            🗑
-                        </button>
+                            <button
+                                onclick="removeExpense('${js(e.id)}')"
+                                class="ml-3 text-rose-400"
+                            >
+                                🗑
+                            </button>
 
-                    </span>
+                        </span>
 
-                </div>
+                    </div>
 
-            `)
+                `
+            )
             .join("")
+
 
         :
 
         `
 
-            <p class="text-sm text-slate-500">
+            <p
+                class="text-sm text-slate-500"
+            >
                 No expenses.
             </p>
 
         `;
 
 }
+
 
 
 function addExpense() {
@@ -3000,11 +3972,16 @@ function addExpense() {
 
     const amount =
         Number(
-            $("expenseAmount").value || 0
+            $("expenseAmount")
+                .value ||
+            0
         );
 
 
-    if (!title || amount <= 0) {
+    if (
+        !title ||
+        amount <= 0
+    ) {
 
         alert(
             "Enter valid expense."
@@ -3015,7 +3992,7 @@ function addExpense() {
     }
 
 
-    const selectedMonth =
+    const month =
         $("financeMonth").value ||
         today().slice(0, 7);
 
@@ -3032,7 +4009,7 @@ function addExpense() {
             amount,
 
         date:
-            selectedMonth +
+            month +
             "-01"
 
     });
@@ -3044,6 +4021,7 @@ function addExpense() {
     $("expenseTitle").value =
         "";
 
+
     $("expenseAmount").value =
         "";
 
@@ -3053,12 +4031,13 @@ function addExpense() {
 }
 
 
+
 function removeExpense(id) {
 
     expenses =
         expenses.filter(
-            expense =>
-                String(expense.id) !==
+            e =>
+                String(e.id) !==
                 String(id)
         );
 
@@ -3070,6 +4049,7 @@ function removeExpense(id) {
 }
 
 
+
 /* =====================================================
    ATTENDANCE
 ===================================================== */
@@ -3079,13 +4059,16 @@ function openAttendance() {
     $("attendanceDate").value =
         today();
 
+
     attendanceRender();
+
 
     openModal(
         "attendanceModal"
     );
 
 }
+
 
 
 function attendanceRender() {
@@ -3095,8 +4078,9 @@ function attendanceRender() {
         today();
 
 
-    const presentMembers =
-        attendance[date] || [];
+    const present =
+        attendance[date] ||
+        [];
 
 
     $("attendanceList").innerHTML =
@@ -3105,12 +4089,12 @@ function attendanceRender() {
 
         ?
 
-        members
-            .map(member => {
+        members.map(
+            m => {
 
                 const isPresent =
-                    presentMembers.includes(
-                        String(member.id)
+                    present.includes(
+                        String(m.id)
                     );
 
 
@@ -3123,31 +4107,31 @@ function attendanceRender() {
                         <div>
 
                             <b>
-                                ${esc(member.name)}
+                                ${esc(m.name)}
                             </b>
 
                             <small
                                 class="block text-slate-500"
                             >
-                                ${esc(member.phone)}
+                                ${esc(m.phone)}
                             </small>
 
                         </div>
 
 
                         <button
-                            onclick="toggleAttendance('${js(member.id)}')"
+                            onclick="toggleAttendance('${js(m.id)}')"
                             class="rounded-xl px-4 py-2 text-xs ${
                                 isPresent
-                                    ? "bg-emerald-600 text-white"
-                                    : "bg-slate-800 text-slate-300"
+                                ? "bg-emerald-600 text-white"
+                                : "bg-slate-800 text-slate-300"
                             }"
                         >
 
                             ${
                                 isPresent
-                                    ? "✓ Present"
-                                    : "Mark Present"
+                                ? "✓ Present"
+                                : "Mark Present"
                             }
 
                         </button>
@@ -3156,20 +4140,24 @@ function attendanceRender() {
 
                 `;
 
-            })
-            .join("")
+            }
+        ).join("")
+
 
         :
 
         `
 
-            <p class="text-sm text-slate-500">
+            <p
+                class="text-sm text-slate-500"
+            >
                 No members.
             </p>
 
         `;
 
 }
+
 
 
 function toggleAttendance(id) {
@@ -3179,26 +4167,31 @@ function toggleAttendance(id) {
 
 
     let list =
-        attendance[date] || [];
+        attendance[date] ||
+        [];
+
+
+    const stringId =
+        String(id);
 
 
     if (
         list.includes(
-            String(id)
+            stringId
         )
     ) {
 
         list =
             list.filter(
-                item =>
-                    item !==
-                    String(id)
+                x =>
+                    x !==
+                    stringId
             );
 
     } else {
 
         list.push(
-            String(id)
+            stringId
         );
 
     }
@@ -3210,11 +4203,13 @@ function toggleAttendance(id) {
 
     save();
 
+
     attendanceRender();
 
     updateStats();
 
 }
+
 
 </script>
 
