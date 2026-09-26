@@ -471,19 +471,6 @@
 
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">
-                            Address
-                        </label>
-
-                        <input
-                            id="memberAddress"
-                            type="text"
-                            class="input-style"
-                        >
-                    </div>
-
-
-                    <div>
-                        <label class="block text-sm text-slate-300 mb-2">
                             Plan
                         </label>
 
@@ -933,19 +920,6 @@
 
                 </div>
 
-
-                <div class="md:col-span-2">
-
-                    <label class="block text-sm text-slate-300 mb-2">
-                        Address
-                    </label>
-
-                    <textarea
-                        id="editAddress"
-                        rows="2"
-                        class="input-style"></textarea>
-
-                </div>
 
 
                 <div>
@@ -2764,12 +2738,6 @@ window.editMember = function(id) {
 
 
     document.getElementById(
-        "editAddress"
-    ).value =
-        member.address || "";
-
-
-    document.getElementById(
         "editPlan"
     ).value =
         member.plan || "Monthly";
@@ -2930,11 +2898,6 @@ document
                 phone:
                     document.getElementById(
                         "editPhone"
-                    ).value.trim(),
-
-                address:
-                    document.getElementById(
-                        "editAddress"
                     ).value.trim(),
 
                 plan:
@@ -3314,26 +3277,6 @@ window.showDetails = function(id) {
 
                 </div>
 
-
-                <div
-                    class="bg-slate-950
-                           rounded-lg
-                           p-3
-                           col-span-2">
-
-                    <p class="text-xs text-slate-500">
-                        Address
-                    </p>
-
-                    <p class="text-sm text-white mt-1">
-
-                        ${escapeHTML(
-                            member.address || "-"
-                        )}
-
-                    </p>
-
-                </div>
 
             </div>
 
