@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +19,21 @@
           rel="stylesheet">
 
     <style>
+
+        .input {
+    width: 100%;
+    border-radius: 0.75rem;
+    background: #020617;
+    border: 1px solid #1e293b;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    color: #fff;
+    outline: none;
+}
+.input:focus {
+    border-color: #6366f1;
+}
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -656,22 +671,13 @@
                             Register Member
                         </button>
 
-                        <button
-        type="button"
-        id="cancelEditBtn"
-        onclick="cancelEdit()"
-        class="hidden w-full rounded-xl bg-slate-700 py-2.5
-            text-xs font-semibold hover:bg-slate-600">
-
-        Cancel Edit
-    </button>
-
                     </form>
                 </div>
 
 
                 <!-- MEMBERS -->
 
+                
                 <div class="lg:col-span-2
                             rounded-2xl bg-slate-900
                             border border-slate-800 p-5
@@ -871,7 +877,6 @@
             </p>
 
             <input type="hidden" id="payId">
-            <input type="hidden" id="editMemberId" value="">
 
             <div class="space-y-3">
 
@@ -1092,6 +1097,138 @@
         </div>
     </div>
 
+    <!-- =====================================================
+     EDIT MODAL
+===================================================== -->
+
+<div
+    id="editModal"
+    class="modal fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div class="card w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+
+        <div class="mb-5 flex justify-between items-center">
+
+            <h3 class="text-lg font-bold">
+                Edit Member
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('editModal')"
+                class="text-slate-400 hover:text-white text-xl"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <input id="editId" type="hidden">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+            <input
+                id="editName"
+                type="text"
+                placeholder="Full Name"
+                class="input"
+            >
+
+            <input
+                id="editPhone"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="10-digit Phone"
+                class="input"
+            >
+
+            <input
+                id="editAddress"
+                type="text"
+                placeholder="Address"
+                class="input md:col-span-2"
+            >
+
+            <select id="editPlan" class="input">
+                <option value="Half-Monthly">Half-Monthly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Half-Yearly">Half-Yearly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+
+            <select id="editCardio" class="input">
+                <option value="no">Without Cardio</option>
+                <option value="yes">With Cardio</option>
+            </select>
+
+            <input
+                id="editTotalFee"
+                type="number"
+                min="0"
+                placeholder="Total Fee"
+                class="input"
+                oninput="calcEditDue()"
+            >
+
+            <input
+                id="editAmountPaid"
+                type="number"
+                min="0"
+                placeholder="Amount Paid"
+                class="input"
+                oninput="calcEditDue()"
+            >
+
+            <input
+                id="editBalanceDue"
+                type="number"
+                readonly
+                placeholder="Balance Due"
+                class="input text-rose-400"
+            >
+
+            <select id="editPaymentMethod" class="input">
+                <option value="Cash">Cash</option>
+                <option value="Online / UPI">Online / UPI</option>
+                <option value="Card">Card</option>
+            </select>
+
+            <div>
+                <label class="text-xs text-slate-400 block mb-1">Joining Date</label>
+                <input
+                    id="editJoiningDate"
+                    type="date"
+                    class="input w-full"
+                >
+            </div>
+
+            <div>
+                <label class="text-xs text-slate-400 block mb-1">Expiry Date</label>
+                <input
+                    id="editExpiryDate"
+                    type="date"
+                    class="input w-full"
+                >
+            </div>
+
+        </div>
+
+        <p id="editError" class="hidden mt-3 text-sm text-rose-400"></p>
+
+        <button
+            type="button"
+            onclick="saveEdit()"
+            class="w-full mt-5 rounded-xl bg-indigo-600 py-3 font-semibold hover:bg-indigo-500 transition"
+        >
+            Update Member
+        </button>
+
+    </div>
+
+</div>
 
     <!-- =========================================================
          FINANCE MODAL
@@ -1154,6 +1291,11 @@
                     </div>
                 </div>
 
+                <div
+    id="editModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+>
+    <div class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-slate-800 p-6">
 
                 <div class="rounded-xl bg-slate-950 p-3">
 
@@ -1834,18 +1976,10 @@
 
         window.addMember = async function(e) {
 
-    e.preventDefault();
+            e.preventDefault();
 
-    // Check if we are editing an existing member
-    const editId =
-        document.getElementById('editMemberId').value;
 
-    if (editId) {
-        await updateMember(editId);
-        return;
-    }
-
-    const member = {
+            const member = {
 
                 id: Date.now().toString(),
 
@@ -1935,214 +2069,6 @@
                 ]
             };
 
-            /* =====================================================
-   EDIT MEMBER
-===================================================== */
-
-window.editMember = function(docId) {
-
-    const member = members.find(m => m.docId === docId);
-
-    if (!member) {
-        alert("Member not found.");
-        return;
-    }
-
-    // Store member document ID
-    document.getElementById('editMemberId').value = docId;
-
-    // Fill existing data into form
-    document.getElementById('name').value =
-        member.name || '';
-
-    document.getElementById('phone').value =
-        member.phone || '';
-
-    document.getElementById('address').value =
-        member.address || '';
-
-    document.getElementById('plan').value =
-        member.plan || 'Monthly';
-
-    document.getElementById('cardio').value =
-        member.cardio || 'no';
-
-    document.getElementById('totalFee').value =
-        member.totalFee || 0;
-
-    document.getElementById('amountPaid').value =
-        member.amountPaid || 0;
-
-    document.getElementById('balanceDue').value =
-        member.balanceDue || 0;
-
-    document.getElementById('paymentMethod').value =
-        member.paymentMethod || 'Cash';
-
-    document.getElementById('joiningDate').value =
-        member.joiningDate || '';
-
-    document.getElementById('expiryDate').value =
-        member.expiryDate || '';
-
-    // Change button text
-    document.getElementById('memberSubmitBtn').innerHTML =
-        '<i class="fa-solid fa-floppy-disk mr-1"></i> Update Member';
-
-    document.getElementById('memberSubmitBtn').classList
-        .remove('bg-indigo-600');
-
-    document.getElementById('memberSubmitBtn').classList
-        .add('bg-emerald-600');
-
-    // Show cancel button
-    document.getElementById('cancelEditBtn')
-        .classList.remove('hidden');
-
-    // Change heading
-    const heading = document.querySelector(
-        '#memberForm'
-    ).previousElementSibling;
-
-    if (heading) {
-        heading.innerHTML = `
-            <i class="fa-solid fa-user-pen text-emerald-400"></i>
-            Edit Member
-        `;
-    }
-
-    // Scroll to form
-    document.getElementById('memberForm')
-        .scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-
-    calcDue();
-};
-
-
-/* =====================================================
-   UPDATE MEMBER
-===================================================== */
-
-async function updateMember(docId) {
-
-    const member = members.find(m => m.docId === docId);
-
-    if (!member) {
-        alert("Member not found.");
-        return;
-    }
-
-    const updatedData = {
-
-        name: document.getElementById('name').value,
-
-        phone: document.getElementById('phone').value,
-
-        address: document.getElementById('address').value,
-
-        plan: document.getElementById('plan').value,
-
-        cardio: document.getElementById('cardio').value,
-
-        totalFee:
-            parseFloat(
-                document.getElementById('totalFee').value
-            ) || 0,
-
-        amountPaid:
-            parseFloat(
-                document.getElementById('amountPaid').value
-            ) || 0,
-
-        balanceDue:
-            parseFloat(
-                document.getElementById('balanceDue').value
-            ) || 0,
-
-        paymentMethod:
-            document.getElementById('paymentMethod').value,
-
-        joiningDate:
-            document.getElementById('joiningDate').value,
-
-        expiryDate:
-            document.getElementById('expiryDate').value,
-
-        // Keep existing payment history
-        payments: member.payments || []
-    };
-
-    try {
-
-        await updateDoc(
-            doc(db, "members", docId),
-            updatedData
-        );
-
-        alert("Member updated successfully!");
-
-        cancelEdit();
-
-        await loadData();
-
-    } catch (err) {
-
-        console.error("Error updating member:", err);
-
-        alert(
-            "Error updating member: " +
-            err.message
-        );
-    }
-}
-
-
-/* =====================================================
-   CANCEL EDIT
-===================================================== */
-
-window.cancelEdit = function() {
-
-    document.getElementById('editMemberId').value = '';
-
-    document.getElementById('memberForm').reset();
-
-    document.getElementById('joiningDate')
-        .valueAsDate = new Date();
-
-    updateExpiry();
-
-    calcDue();
-
-    // Restore button
-    document.getElementById('memberSubmitBtn').innerHTML =
-        'Register Member';
-
-    document.getElementById('memberSubmitBtn').classList
-        .remove('bg-emerald-600');
-
-    document.getElementById('memberSubmitBtn').classList
-        .add('bg-indigo-600');
-
-    // Hide cancel
-    document.getElementById('cancelEditBtn')
-        .classList.add('hidden');
-
-    // Restore heading
-    const heading = document.querySelector(
-        '#memberForm'
-    ).previousElementSibling;
-
-    if (heading) {
-        heading.innerHTML = `
-            <i class="fa-solid fa-user-plus text-indigo-400"></i>
-            Register New Member
-        `;
-    }
-};
 
             try {
 
@@ -2498,18 +2424,6 @@ Keep Training! 🔥`
 
                         </button>
 
-                        <button
-    onclick="editMember('${m.docId}')"
-    class="rounded-lg
-           bg-amber-600/20
-           p-2 text-xs
-           text-amber-400
-           hover:bg-amber-600/30"
-    title="Edit Member">
-
-    <i class="fa-solid fa-pen-to-square"></i>
-
-</button>
 
                         <button
                             onclick="openPayment('${m.docId}')"
@@ -2538,6 +2452,17 @@ Keep Training! 🔥`
 
                         </button>
 
+                        <button
+                            onclick="openEdit('${m.docId}')"
+                            class="rounded-lg
+                                   bg-amber-600/20
+                                   p-2 text-xs
+                                   text-amber-400"
+                            title="Edit">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                        </button>
 
                         <button
                             onclick="deleteMember('${m.docId}')"
@@ -2857,6 +2782,121 @@ Keep Training! 🔥`
                 'detailModal'
             ).classList.add('flex');
         };
+
+        /* =====================================================
+   OPEN EDIT MODAL
+====================================================== */
+
+window.openEdit = function(docId) {
+
+    const m = members.find(x => x.docId === docId);
+
+    if (!m) {
+        alert("Member not found!");
+        return;
+    }
+
+    document.getElementById('editId').value = m.docId;
+    document.getElementById('editName').value = m.name || '';
+    document.getElementById('editPhone').value = m.phone || '';
+    document.getElementById('editAddress').value = m.address || '';
+    document.getElementById('editPlan').value = m.plan || 'Monthly';
+    document.getElementById('editCardio').value = m.cardio || 'no';
+    document.getElementById('editTotalFee').value = m.totalFee || 0;
+    document.getElementById('editAmountPaid').value = m.amountPaid || 0;
+    document.getElementById('editBalanceDue').value = m.balanceDue || 0;
+    document.getElementById('editPaymentMethod').value = m.paymentMethod || 'Cash';
+    document.getElementById('editJoiningDate').value = m.joiningDate || '';
+    document.getElementById('editExpiryDate').value = m.expiryDate || '';
+
+    document.getElementById('editError').classList.add('hidden');
+
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModal').classList.add('flex');
+};
+
+
+/* =====================================================
+   CALC EDIT DUE
+====================================================== */
+
+window.calcEditDue = function() {
+
+    const total = parseFloat(document.getElementById('editTotalFee').value) || 0;
+    const paid  = parseFloat(document.getElementById('editAmountPaid').value) || 0;
+
+    const due = Math.max(0, total - paid);
+
+    document.getElementById('editBalanceDue').value = due;
+};
+
+
+/* =====================================================
+   SAVE EDIT
+====================================================== */
+
+window.saveEdit = async function() {
+
+    const docId = document.getElementById('editId').value;
+
+    const m = members.find(x => x.docId === docId);
+
+    if (!m) {
+        alert("Member not found!");
+        return;
+    }
+
+    const name    = document.getElementById('editName').value.trim();
+    const phone   = document.getElementById('editPhone').value.trim();
+    const address = document.getElementById('editAddress').value.trim();
+
+    // Validation
+    if (!name || !phone) {
+        const err = document.getElementById('editError');
+        err.innerText = "Name and phone are required!";
+        err.classList.remove('hidden');
+        return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+        const err = document.getElementById('editError');
+        err.innerText = "Phone must be 10 digits!";
+        err.classList.remove('hidden');
+        return;
+    }
+
+    const updated = {
+        name: name,
+        phone: phone,
+        address: address,
+        plan: document.getElementById('editPlan').value,
+        cardio: document.getElementById('editCardio').value,
+        totalFee: parseFloat(document.getElementById('editTotalFee').value) || 0,
+        amountPaid: parseFloat(document.getElementById('editAmountPaid').value) || 0,
+        balanceDue: parseFloat(document.getElementById('editBalanceDue').value) || 0,
+        paymentMethod: document.getElementById('editPaymentMethod').value,
+        joiningDate: document.getElementById('editJoiningDate').value,
+        expiryDate: document.getElementById('editExpiryDate').value
+    };
+
+    try {
+
+        await updateDoc(
+            doc(db, "members", docId),
+            updated
+        );
+
+        closeModal('editModal');
+
+        await loadData();
+
+    } catch (err) {
+
+        const errEl = document.getElementById('editError');
+        errEl.innerText = "Error updating member: " + err.message;
+        errEl.classList.remove('hidden');
+    }
+};
 
 
         /* =====================================================
@@ -3915,3 +3955,4 @@ Keep Training! 🔥`
 
 </body>
 </html>
+```
