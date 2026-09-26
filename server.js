@@ -32,15 +32,18 @@ app.get('/api/members', async (req, res) => {
 });
 
 // POST - Add new member
-app.post('/api/members', async (req, res) => {
+// Firestore update example fix
+app.put('/api/members/:id', async (req, res) => {
     try {
-        const newMember = new Member(req.body);
-        const savedMember = await newMember.save();
-        console.log('✅ Member saved to DB:', savedMember.name);
-        res.json({ success: true, member: savedMember });
+        const memberId = req.params.id;
+        const memberRef = db.collection('members').doc(memberId);
+        
+        // .set() with { merge: true } use karne se agar document nahi bhi hoga, toh woh naya create kar dega aur error nahi aayega
+        await memberRef.set(req.body, { merge: true });
+        
+        res.status(200).json({ success: true, message: "Member updated successfully" });
     } catch (error) {
-        console.error('❌ Error saving member:', error);
-        res.status(500).json({ error: 'Failed to save member' });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
