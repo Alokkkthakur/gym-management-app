@@ -1,0 +1,224 @@
+{
+  "members": {
+    "2eRPBWibJmMTW1hi3zhh": {
+      "id": "1790412360333",
+      "phone": "6207219736",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 500,
+      "balanceDue": 100,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-08",
+      "expiryDate": "2026-10-08",
+      "payments": [
+        {
+          "date": "2026-09-26T08:46:00.333Z",
+          "amount": 500,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ],
+      "name": "Niraj Kumar(203)"
+    },
+    "ACFfuBaRw8VhpXTDAXEr": {
+      "id": "1790394595561",
+      "name": "saddam khan (204)",
+      "phone": "6200015193",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 700,
+      "amountPaid": 700,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-08",
+      "expiryDate": "2026-10-08",
+      "payments": [
+        {
+          "date": "2026-09-26T03:49:55.561Z",
+          "amount": 700,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "CyfXF3uiU7UVCACpxmO4": {
+      "id": "1790394897272",
+      "name": "Ayush kumar (207)",
+      "phone": "8102573532",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 700,
+      "amountPaid": 700,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-01",
+      "expiryDate": "2026-10-01",
+      "payments": [
+        {
+          "date": "2026-09-26T03:54:57.272Z",
+          "amount": 700,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "DlLSmUGwvpggSfPFPgwG": {
+      "id": "1790394104690",
+      "name": "md.faij hasan (201)",
+      "phone": "9756254654",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 600,
+      "balanceDue": 0,
+      "paymentMethod": "UPI",
+      "joiningDate": "2026-09-01",
+      "expiryDate": "2026-10-01",
+      "payments": [
+        {
+          "date": "2026-09-26T03:41:44.690Z",
+          "amount": 600,
+          "method": "UPI",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "RtF3t3ThwFnStNtmbA2K": {
+      "id": "1790394682588",
+      "name": "Md. naushad+Md.fahim (205)",
+      "phone": "7068223218",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 1200,
+      "amountPaid": 1200,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-10",
+      "expiryDate": "2026-10-10",
+      "payments": [
+        {
+          "date": "2026-09-26T03:51:22.588Z",
+          "amount": 1200,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "WGNoC4pgaYfN9vVZeUYU": {
+      "id": "1790393932258",
+      "name": "Atul kumar (202)",
+      "phone": "870892445",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 600,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-04",
+      "expiryDate": "2026-10-04",
+      "payments": [
+        {
+          "date": "2026-09-26T03:38:52.258Z",
+          "amount": 600,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "aN5CxiIY1GpfNJQ4NWP6": {
+      "id": "1790416381821",
+      "name": "Alok Kumar",
+      "phone": "9798469523",
+      "address": "Bhagwanpur",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 800,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-07-22",
+      "expiryDate": "2026-08-22",
+      "payments": [
+        {
+          "date": "2026-09-26T09:53:01.821Z",
+          "amount": 700,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ],
+      "amountPaid": 800,
+      "balanceDue": 0
+    },
+    "in9Cc82oh5zQIsUhvky0": {
+      "id": "1790394822083",
+      "name": "gopal singh (206)",
+      "phone": "7070952366",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 600,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-10",
+      "expiryDate": "2026-10-10",
+      "payments": [
+        {
+          "date": "2026-09-26T03:53:42.083Z",
+          "amount": 600,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "mpB1KbBiGrocgargAbtg": {
+      "id": "1790353232107",
+      "name": "Rahul Kumar",
+      "phone": "08789945227",
+      "address": "26",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 600,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-25",
+      "expiryDate": "2026-10-25",
+      "payments": [
+        {
+          "date": "2026-09-25T16:20:32.108Z",
+          "amount": 600,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    },
+    "tH2T9MGGfCzhakC75cY3": {
+      "id": "1790395207619",
+      "name": "Anshu kumar",
+      "phone": "7970643127",
+      "address": "",
+      "plan": "Monthly",
+      "cardio": "no",
+      "totalFee": 600,
+      "amountPaid": 600,
+      "balanceDue": 0,
+      "paymentMethod": "Cash",
+      "joiningDate": "2026-09-07",
+      "expiryDate": "2026-10-07",
+      "payments": [
+        {
+          "date": "2026-09-26T04:00:07.619Z",
+          "amount": 600,
+          "method": "Cash",
+          "note": "Initial Registration"
+        }
+      ]
+    }
+  }
+}

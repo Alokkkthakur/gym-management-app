@@ -1,2 +1,13 @@
-.env 
-node_modules/ 
+# Firebase / Google Cloud secrets
+serviceAccountKey.json
+serviceAccountKey.json.json
+*-serviceAccountKey.json
+firebase-service-account.json
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
