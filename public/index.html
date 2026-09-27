@@ -1236,159 +1236,105 @@
 
 </div>
 
-    <!-- =========================================================
+            <!-- =========================================================
          FINANCE MODAL
     ========================================================== -->
 
     <div id="financeModal"
-         class="fixed inset-0 z-50 hidden
-                items-center justify-center
-                bg-slate-950/80 backdrop-blur-sm p-4">
+         class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
 
-        <div class="w-full max-w-xl rounded-3xl
-                    bg-slate-900 border border-slate-800
-                    p-6">
+        <div class="w-full max-w-xl rounded-3xl bg-slate-900 border border-slate-800 p-6 max-h-[90vh] overflow-y-auto">
 
-            <div class="flex justify-between
-                        items-center mb-4">
+            <div class="flex justify-between items-center mb-5">
 
-                <h3 class="font-bold text-base">
+                <h3 class="font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-emerald-400"></i>
                     Monthly Finance Report
                 </h3>
 
-                <input
-                    type="month"
-                    id="financeMonth"
-                    onchange="financeRender()"
-                    class="rounded-xl bg-slate-950
-                           border border-slate-800
-                           px-3 py-1.5 text-xs">
+                <input type="month"
+                       id="financeMonth"
+                       onchange="financeRender()"
+                       class="rounded-xl bg-slate-950 border border-slate-800 px-3 py-1.5 text-xs text-white">
+
             </div>
 
+            <div class="grid grid-cols-3 gap-3 mb-5">
 
-            <div class="grid grid-cols-3 gap-3 mb-4">
-
-                <div class="rounded-xl bg-slate-950 p-3">
-
-                    <span class="text-[10px]
-                                 text-slate-400">
-                        Income
-                    </span>
-
-                    <div id="income"
-                         class="text-lg font-bold
-                                text-emerald-400">
-                        ₹0
-                    </div>
+                <div class="rounded-xl bg-slate-950 p-3 border border-slate-800">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Income</span>
+                    <div id="income" class="text-lg font-bold text-emerald-400 mt-1">₹0</div>
                 </div>
 
-
-                <div class="rounded-xl bg-slate-950 p-3">
-
-                    <span class="text-[10px]
-                                 text-slate-400">
-                        Expense
-                    </span>
-
-                    <div id="expense"
-                         class="text-lg font-bold
-                                text-rose-400">
-                        ₹0
-                    </div>
+                <div class="rounded-xl bg-slate-950 p-3 border border-slate-800">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Expense</span>
+                    <div id="expense" class="text-lg font-bold text-rose-400 mt-1">₹0</div>
                 </div>
 
-                <div
-    id="editModal"
-    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
->
-    <div class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-slate-800 p-6">
-
-                <div class="rounded-xl bg-slate-950 p-3">
-
-                    <span class="text-[10px]
-                                 text-slate-400">
-                        Net Profit
-                    </span>
-
-                    <div id="profit"
-                         class="text-lg font-bold
-                                text-indigo-400">
-                        ₹0
-                    </div>
+                <div class="rounded-xl bg-slate-950 p-3 border border-slate-800">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Net Profit</span>
+                    <div id="profit" class="text-lg font-bold text-indigo-400 mt-1">₹0</div>
                 </div>
 
             </div>
 
+            <div class="bg-slate-950/50 rounded-2xl p-4 border border-slate-800 mb-5">
 
-            <div class="space-y-3">
-
-                <h4 class="font-bold text-xs">
-                    Add Expense
+                <h4 class="font-bold text-xs text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-indigo-400"></i>
+                    Add New Expense
                 </h4>
 
-                <div class="grid grid-cols-3 gap-2">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
 
-                    <input
-                        type="text"
-                        id="expenseTitle"
-                        placeholder="Expense title..."
-                        class="rounded-xl bg-slate-950
-                               border border-slate-800
-                               px-3 py-2 text-xs
-                               col-span-2">
+                    <input type="text"
+                           id="expenseTitle"
+                           placeholder="Expense title (e.g., Electricity Bill)"
+                           class="sm:col-span-2 rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
 
-                    <input
-                        type="number"
-                        id="expenseAmount"
-                        placeholder="Amount"
-                        class="rounded-xl bg-slate-950
-                               border border-slate-800
-                               px-3 py-2 text-xs">
+                    <input type="number"
+                           id="expenseAmount"
+                           placeholder="Amount (₹)"
+                           class="rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
 
                 </div>
 
-                <button
-                    onclick="addExpense()"
-                    class="w-full rounded-xl
-                           bg-slate-800 py-2 text-xs
-                           font-semibold">
+                <button onclick="addExpense()"
+                        class="w-full mt-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-2 text-xs font-semibold transition-colors">
 
-                    Add Expense Record
+                    <i class="fa-solid fa-save mr-1"></i>
+                    Save Expense Record
+
                 </button>
 
             </div>
 
+            <div>
 
-            <div class="mt-4">
-
-                <h4 class="font-bold text-xs mb-2">
+                <h4 class="font-bold text-xs text-slate-300 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-list text-rose-400"></i>
                     Expense Records
                 </h4>
 
                 <div id="expenseList"
-                     class="max-h-36 overflow-y-auto
-                            space-y-2">
+                     class="max-h-40 overflow-y-auto space-y-2 pr-1">
                 </div>
 
             </div>
 
+            <div class="mt-6 flex justify-end border-t border-slate-800 pt-4">
 
-            <div class="mt-5 flex justify-end">
-
-                <button
-                    onclick="closeModal('financeModal')"
-                    class="rounded-xl bg-slate-800
-                           px-4 py-2 text-xs">
+                <button onclick="closeModal('financeModal')"
+                        class="rounded-xl bg-slate-800 hover:bg-slate-700 px-5 py-2 text-xs font-semibold transition-colors">
 
                     Close
+
                 </button>
 
             </div>
 
         </div>
     </div>
-
-
     <!-- =========================================================
          ATTENDANCE MODAL
     ========================================================== -->
@@ -3328,33 +3274,26 @@ window.saveEdit = async function() {
         };
 
 
-        /* =====================================================
+                 /* =====================================================
            FINANCE
         ====================================================== */
 
-        window.openFinance = function() {
+        window.openFinance = function () {
 
-            const now =
-                new Date();
-
+            const now = new Date();
 
             const yearMonth =
                 now.toISOString().slice(0, 7);
 
-
             document.getElementById(
                 'financeMonth'
-            ).value =
-                yearMonth;
-
+            ).value = yearMonth;
 
             financeRender();
-
 
             document.getElementById(
                 'financeModal'
             ).classList.remove('hidden');
-
 
             document.getElementById(
                 'financeModal'
@@ -3362,196 +3301,198 @@ window.saveEdit = async function() {
         };
 
 
-        window.financeRender = function() {
+        window.financeRender = function () {
 
             const ym =
                 document.getElementById(
                     'financeMonth'
                 ).value;
 
-
             let income = 0;
-
 
             members.forEach(m => {
 
-                (m.payments || [])
-                    .forEach(p => {
+                (m.payments || []).forEach(p => {
 
-                        if (
-                            p.date.slice(0, 7)
-                            === ym
-                        ) {
-
-                            income +=
-                                p.amount;
-                        }
-                    });
+                    if (
+                        p.date &&
+                        p.date.slice(0, 7) === ym
+                    ) {
+                        income += p.amount;
+                    }
+                });
             });
 
-
             let expTotal = 0;
-
 
             const filteredExpenses =
                 expenses.filter(
                     e =>
                         e.date &&
-                        e.date.slice(0, 7)
-                        === ym
+                        e.date.slice(0, 7) === ym
                 );
-
 
             filteredExpenses.forEach(e => {
-
                 expTotal += e.amount;
-
             });
 
-
-            document.getElementById(
-                'income'
-            ).innerText =
+            document.getElementById('income').innerText =
                 '₹' + income;
 
-
-            document.getElementById(
-                'expense'
-            ).innerText =
+            document.getElementById('expense').innerText =
                 '₹' + expTotal;
 
-
-            document.getElementById(
-                'profit'
-            ).innerText =
-                '₹' +
-                (income - expTotal);
-
+            document.getElementById('profit').innerText =
+                '₹' + (income - expTotal);
 
             const expList =
-                document.getElementById(
-                    'expenseList'
-                );
+                document.getElementById('expenseList');
 
+            if (filteredExpenses.length === 0) {
+
+                expList.innerHTML = `
+                    <p class="text-xs text-slate-500 text-center py-4">
+                        No expenses recorded for this month.
+                    </p>
+                `;
+
+                return;
+            }
 
             expList.innerHTML =
-                filteredExpenses.length
+                filteredExpenses.map(e => `
 
-                ? filteredExpenses
-                    .map(e => `
+                    <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl text-xs">
 
-                        <div class="flex
-                                    justify-between
-                                    items-center
-                                    bg-slate-950
-                                    p-2.5 rounded-xl
-                                    text-xs">
+                        <span class="text-slate-300">${e.title}</span>
 
-                            <span>
-                                ${e.title}
-                            </span>
+                        <div class="flex items-center gap-3">
 
-                            <span class="text-rose-400">
+                            <span class="text-rose-400 font-semibold">
                                 ₹${e.amount}
                             </span>
 
+                            <button
+                                onclick="deleteExpense('${e.docId}')"
+                                class="text-slate-500 hover:text-rose-500 transition-colors"
+                                title="Delete Expense">
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
                         </div>
 
-                    `)
-                    .join('')
+                    </div>
 
-                : `
-                    <p class="text-xs
-                              text-slate-500
-                              text-center">
-
-                        No expenses recorded
-                        for this month.
-
-                    </p>
-                `;
+                `).join('');
         };
 
 
-        window.addExpense = async function() {
+        window.addExpense = async function () {
 
             const title =
-                document.getElementById(
-                    'expenseTitle'
-                ).value;
-
+                document.getElementById('expenseTitle')
+                    .value.trim();
 
             const amount =
                 parseFloat(
-                    document.getElementById(
-                        'expenseAmount'
-                    ).value
+                    document.getElementById('expenseAmount').value
                 ) || 0;
 
-
             const ym =
-                document.getElementById(
-                    'financeMonth'
-                ).value;
+                document.getElementById('financeMonth').value;
 
+            if (!title || amount <= 0) {
 
-            if (!title || amount <= 0)
+                alert('Kripya title aur amount dono bharein!');
+
                 return;
-
+            }
 
             try {
 
                 await addDoc(
-                    collection(
-                        db,
-                        "expenses"
-                    ),
+                    collection(db, "expenses"),
                     {
-                        title:
-                            title,
-
-                        amount:
-                            amount,
-
-                        date:
-                            ym + '-01'
+                        title: title,
+                        amount: amount,
+                        date: ym + '-01'
                     }
                 );
 
-
-                document.getElementById(
-                    'expenseTitle'
-                ).value = '';
-
-
-                document.getElementById(
-                    'expenseAmount'
-                ).value = '';
-
+                document.getElementById('expenseTitle').value = '';
+                document.getElementById('expenseAmount').value = '';
 
                 const expSnapshot =
                     await getDocs(
-                        collection(
-                            db,
-                            "expenses"
-                        )
+                        collection(db, "expenses")
                     );
-
 
                 expenses = [];
 
+                expSnapshot.forEach(docSnap => {
+                    expenses.push({
+                        docId: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
 
-                expSnapshot.forEach(
-                    docSnap => {
+                financeRender();
 
-                        expenses.push({
-                            docId:
-                                docSnap.id,
-                            ...docSnap.data()
-                        });
+            } catch (err) {
 
-                    }
+                alert("Error adding expense: " + err.message);
+            }
+        };
+
+
+        window.deleteExpense = async function (docId) {
+
+            if (!confirm('Kya aap is expense ko delete karna chahte hain?'))
+                return;
+
+            try {
+
+                await deleteDoc(
+                    doc(db, "expenses", docId)
                 );
+
+                expenses =
+                    expenses.filter(e => e.docId !== docId);
+
+                financeRender();
+
+            } catch (err) {
+
+                alert("Error deleting expense: " + err.message);
+            }
+        };
+        
+        /* =====================================================
+           DELETE EXPENSE
+        ====================================================== */
+
+        window.deleteExpense = async function (docId) {
+
+            if (
+                !confirm(
+                    'Kya aap is expense ko delete karna chahte hain?'
+                )
+            ) return;
+
+
+            try {
+
+                await deleteDoc(
+                    doc(db, "expenses", docId)
+                );
+
+
+                expenses =
+                    expenses.filter(
+                        e => e.docId !== docId
+                    );
 
 
                 financeRender();
@@ -3560,13 +3501,11 @@ window.saveEdit = async function() {
             } catch (err) {
 
                 alert(
-                    "Error adding expense: " +
+                    "Error deleting expense: " +
                     err.message
                 );
             }
         };
-
-
         /* =====================================================
            ATTENDANCE
         ====================================================== */
