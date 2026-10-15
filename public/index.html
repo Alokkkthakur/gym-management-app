@@ -1029,6 +1029,7 @@
                             Plan Fee
                         </label>
 
+
                         <input
                             type="number"
                             id="renewFee"
@@ -1056,6 +1057,25 @@
                     </div>
 
                 </div>
+
+                <!-- Renewal Date -->
+<div class="mt-4">
+    <label for="renewDate"
+           class="block text-sm text-blue-200 mb-2">
+        Renewal Date *
+    </label>
+
+    <input
+        type="date"
+        id="renewDate"
+        required
+        class="w-full rounded-xl p-3 bg-slate-950
+               text-white border border-slate-800
+               focus:outline-none focus:ring-2
+               focus:ring-indigo-500"
+        style="color-scheme: dark;"
+    />
+</div>
 
 
                 <div>
@@ -3024,225 +3044,160 @@ window.saveEdit = async function() {
            RENEW
         ====================================================== */
 
-        window.openRenew = function(docId) {
+        
+window.openRenew = function(docId) {
+    const m = members.find(x => x.docId === docId);
+    if (!m) return;
 
-            const m =
-                members.find(
-                    x => x.docId === docId
-                );
+    document.getElementById('renewId').value = m.docId;
 
+    document.getElementById('renewName').innerText =
+        `Renewing membership for ${m.name}`;
+
+    document.getElementById('renewPlan').value = m.plan;
+    document.getElementById('renewFee').value = '';
+    document.getElementById('renewPaid').value = '';
+
+    // Default renewal date: today, using local date
+    const today = new Date();
+    const todayStr =
+        `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+    document.getElementById('renewDate').value = todayStr;
 
-            if (!m) return;
-
-
-            document.getElementById(
-                'renewId'
-            ).value = m.docId;
-
-
-            document.getElementById(
-                'renewName'
-            ).innerText =
-                `Renewing membership for ${m.name}`;
-
-
-            document.getElementById(
-                'renewPlan'
-            ).value =
-                m.plan;
-
-
-            document.getElementById(
-                'renewFee'
-            ).value = '';
-
-
-            document.getElementById(
-                'renewPaid'
-            ).value = '';
-
-
-            document.getElementById(
-                'renewModal'
-            ).classList.remove('hidden');
-
-
-            document.getElementById(
-                'renewModal'
-            ).classList.add('flex');
-        };
-
-
-        window.renew = async function() {
-
-            const docId =
-                document.getElementById(
-                    'renewId'
-                ).value;
-
-
-            const plan =
-                document.getElementById(
-                    'renewPlan'
-                ).value;
-
-
-            const fee =
-                parseFloat(
-                    document.getElementById(
-                        'renewFee'
-                    ).value
-                ) || 0;
-
-
-            const paid =
-                parseFloat(
-                    document.getElementById(
-                        'renewPaid'
-                    ).value
-                ) || 0;
-
-
-            const method =
-                document.getElementById(
-                    'renewMethod'
-                ).value;
-
-
-            const m =
-                members.find(
-                    x => x.docId === docId
-                );
-
-
-            if (!m) return;
-
-
-            m.plan = plan;
-
-            m.totalFee += fee;
-
-            m.amountPaid += paid;
-
-            m.balanceDue =
-                Math.max(
-                    0,
-                    m.totalFee -
-                    m.amountPaid
-                );
-
-
-            let baseDate =
-                new Date(
-                    m.expiryDate >
-                    new Date()
-                        .toISOString()
-                        .split('T')[0]
-                    ? m.expiryDate
-                    : new Date()
-                );
-
-
-            if (plan === 'Half-Monthly')
-                baseDate.setDate(
-                    baseDate.getDate() + 15
-                );
-
-            else if (plan === 'Monthly')
-                baseDate.setMonth(
-                    baseDate.getMonth() + 1
-                );
-
-            else if (plan === 'Quarterly')
-                baseDate.setMonth(
-                    baseDate.getMonth() + 3
-                );
-
-            else if (plan === 'Half-Yearly')
-                baseDate.setMonth(
-                    baseDate.getMonth() + 6
-                );
-
-            else if (plan === 'Yearly')
-                baseDate.setFullYear(
-                    baseDate.getFullYear() + 1
-                );
-
-
-            m.expiryDate =
-                baseDate
-                    .toISOString()
-                    .split('T')[0];
-
-
-            if (!m.payments)
-                m.payments = [];
-
-
-            m.payments.push({
-
-                date:
-                    new Date().toISOString(),
-
-                amount:
-                    paid,
-
-                method:
-                    method,
-
-                note:
-                    `Renewal (${plan})`
-
-            });
-
-
-            try {
-
-                await updateDoc(
-                    doc(
-                        db,
-                        "members",
-                        docId
-                    ),
-                    {
-                        plan:
-                            m.plan,
-
-                        totalFee:
-                            m.totalFee,
-
-                        amountPaid:
-                            m.amountPaid,
-
-                        balanceDue:
-                            m.balanceDue,
-
-                        expiryDate:
-                            m.expiryDate,
-
-                        payments:
-                            m.payments
-                    }
-                );
-
-
-                closeModal(
-                    'renewModal'
-                );
-
-
-                await loadData();
-
-
-            } catch (err) {
-
-                alert(
-                    "Error renewing membership: " +
-                    err.message
-                );
-            }
-        };
-
+    document.getElementById('renewModal').classList.remove('hidden');
+    document.getElementById('renewModal').classList.add('flex');
+};
+
+
+// Parse YYYY-MM-DD as a local date (avoids timezone shifts)
+function parseLocalDate(dateStr) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
+
+// Add months without overflowing into the following month
+function addMonthsSafe(date, months) {
+    const result = new Date(date);
+    const day = result.getDate();
+
+    result.setDate(1);
+    result.setMonth(result.getMonth() + months);
+
+    const lastDay = new Date(
+        result.getFullYear(),
+        result.getMonth() + 1,
+        0
+    ).getDate();
+
+    result.setDate(Math.min(day, lastDay));
+    return result;
+}
+
+
+window.renew = async function() {
+    const docId = document.getElementById('renewId').value;
+    const plan = document.getElementById('renewPlan').value;
+    const renewalDate = document.getElementById('renewDate').value;
+
+    const fee = parseFloat(
+        document.getElementById('renewFee').value
+    ) || 0;
+
+    const paid = parseFloat(
+        document.getElementById('renewPaid').value
+    ) || 0;
+
+    const method = document.getElementById('renewMethod').value;
+
+    const m = members.find(x => x.docId === docId);
+    if (!m) return;
+
+    if (!renewalDate) {
+        alert('Please select the renewal date.');
+        return;
+    }
+
+    if (fee < 0 || paid < 0) {
+        alert('Fee and payment cannot be negative.');
+        return;
+    }
+
+    const duration = {
+        'Half-Monthly': { days: 15 },
+        'Monthly': { months: 1 },
+        'Quarterly': { months: 3 },
+        'Half-Yearly': { months: 6 },
+        'Yearly': { months: 12 }
+    };
+
+    const selectedPlan = duration[plan];
+
+    if (!selectedPlan) {
+        alert('Please select a valid membership plan.');
+        return;
+    }
+
+    // Keep an active membership's remaining time.
+    // Otherwise, start from the selected renewal date.
+    const oldExpiry = m.expiryDate || '';
+    const baseDateStr =
+        oldExpiry && oldExpiry >= renewalDate
+            ? oldExpiry
+            : renewalDate;
+
+    const baseDate = parseLocalDate(baseDateStr);
+
+    if (selectedPlan.days) {
+        baseDate.setDate(baseDate.getDate() + selectedPlan.days);
+    } else {
+        const months = selectedPlan.months;
+        const newDate = addMonthsSafe(baseDate, months);
+        baseDate.setTime(newDate.getTime());
+    }
+
+    const expiryDate =
+        `${baseDate.getFullYear()}-${String(baseDate.getMonth() + 1).padStart(2, '0')}-${String(baseDate.getDate()).padStart(2, '0')}`;
+
+    // Prepare payment history
+    const payments = [...(m.payments || [])];
+
+    payments.push({
+        date: new Date(`${renewalDate}T12:00:00`).toISOString(),
+        amount: paid,
+        method: method,
+        note: `Renewal (${plan})`
+    });
+
+    const updated = {
+        plan: plan,
+        totalFee: (Number(m.totalFee) || 0) + fee,
+        amountPaid: (Number(m.amountPaid) || 0) + paid,
+        expiryDate: expiryDate,
+        lastRenewalDate: renewalDate,
+        payments: payments
+    };
+
+    updated.balanceDue = Math.max(
+        0,
+        updated.totalFee - updated.amountPaid
+    );
+
+    try {
+        await updateDoc(
+            doc(db, 'members', docId),
+            updated
+        );
+
+        closeModal('renewModal');
+        await loadData();
+
+        alert(`Membership renewed successfully!\nExpiry Date: ${expiryDate}`);
+    } catch (err) {
+        alert('Error renewing membership: ' + err.message);
+    }
+};
 
         /* =====================================================
            DELETE
