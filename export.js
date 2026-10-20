@@ -1,13 +1,14 @@
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-const fs = require('fs');
+const admin = require('firebase-admin');
+const fs = require('fs'); // ✅ fs import kiya
 const serviceAccount = require('./serviceAccountKey.json');
 
-initializeApp({
-  credential: cert(serviceAccount)
+// Firebase initialize karo
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
 });
 
-const db = getFirestore();
+// ✅ Sahi tarika: admin.firestore()
+const db = admin.firestore();
 
 async function exportCollection(collectionName) {
   const snapshot = await db.collection(collectionName).get();

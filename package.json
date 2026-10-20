@@ -12,11 +12,20 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.18.2",
-    "firebase": "^12.18.0",
-    "firebase-admin": "^14.5.0",
+    "firebase": "^9.14.0",
+    "firebase-admin": "^13.10.0",
+    "firestore-export-import": "^1.7.0",
     "mongoose": "^7.8.12"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^1.14.10"
+  },
+  "allowScripts": {
+    "protobufjs@6.11.3": true,
+    "protobufjs@6.11.6": true,
+    "protobufjs@7.6.6": true,
+    "@firebase/util@1.15.3": true,
+    "@firebase/util@1.5.2": true,
+    "nodemon@1.19.4": true
   }
 }
