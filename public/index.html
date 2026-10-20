@@ -1543,7 +1543,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
 
         /* =====================================================
@@ -1554,7 +1553,9 @@
   getAuth,
   signInWithEmailAndPassword,
   signOut
-} from "firebase/auth";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+const auth = getAuth(app);
 
 
         let inactivityTimer = null;
