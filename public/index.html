@@ -242,7 +242,7 @@
 
             <!-- STATS -->
 
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
 
                 <div class="rounded-2xl bg-slate-900
                             border border-slate-800 p-4">
@@ -260,6 +260,20 @@
                     </div>
                 </div>
 
+                <!-- ACTIVE MEMBERS -->
+<div class="rounded-2xl bg-slate-900
+            border border-emerald-800 p-4">
+
+    <span class="text-[10px] text-emerald-400
+                 uppercase tracking-wider font-semibold">
+        Active Members
+    </span>
+
+    <div id="sActive"
+         class="text-2xl font-bold mt-1 text-emerald-400">
+        0
+    </div>
+</div>
 
                 <div class="rounded-2xl bg-slate-900
                             border border-slate-800 p-4">
@@ -483,6 +497,11 @@
                                     <option value="Quarterly">
                                         Quarterly
                                     </option>
+
+                                    <option value="4-Month">
+                                        4-Month
+                                    </option>
+
 
                                     <option value="Half-Yearly">
                                         Half-Yearly
@@ -724,6 +743,15 @@
                                        px-3 py-1 bg-slate-950">
                             All
                         </button>
+
+                        <button onclick="setFilter('active')"
+        id="f-active"
+        class="chip rounded-xl
+               border border-slate-800
+               px-3 py-1 bg-slate-950">
+
+    Active
+</button>
 
                         <button onclick="setFilter('due')"
                                 id="f-due"
@@ -1004,15 +1032,15 @@
                                border border-slate-800
                                px-3 py-2 text-xs">
 
+                        <option value="Half-Monthly">Half-Monthly</option>
                         <option value="Monthly">Monthly</option>
+                        <option value="2-Month">2-Month</option>
                         <option value="Quarterly">Quarterly</option>
-                        <option value="Half-Yearly">
-                            Half-Yearly
-                        </option>
+                        <option value="4-Month">4-Month</option>
+                        <option value="Half-Yearly">Half-Yearly</option>
                         <option value="Yearly">Yearly</option>
-                        <option value="Half-Monthly">
-                            Half-Monthly
-                        </option>
+                       
+                        
 
                     </select>
                 </div>
@@ -1178,6 +1206,8 @@
             <select id="editPlan" class="input">
                 <option value="Half-Monthly">Half-Monthly</option>
                 <option value="Monthly">Monthly</option>
+                <option value="2-Month">2-Month</option>
+                <option value="4-Month">4-Month</option>
                 <option value="Quarterly">Quarterly</option>
                 <option value="Half-Yearly">Half-Yearly</option>
                 <option value="Yearly">Yearly</option>
@@ -1890,7 +1920,14 @@ window.logout = async function() {
                     d.getMonth() + 3
                 );
 
-            } else if (plan === 'Half-Yearly') {
+            }
+            else if (plan === '4-Month') {
+
+                d.setMonth(
+                    d.getMonth() + 4
+                );
+
+            }  else if (plan === 'Half-Yearly') {
 
                 d.setMonth(
                     d.getMonth() + 6
@@ -2177,6 +2214,10 @@ window.logout = async function() {
                         diffDays >= 0 &&
                         diffDays <= 7;
 
+
+                        // ACTIVE MEMBERS FILTER
+if (currentFilter === 'active')
+    return !isExpired;
 
                     if (currentFilter === 'due')
                         return m.balanceDue > 0;
@@ -2476,11 +2517,11 @@ Keep Training! 🔥`
 
 
             let total = members.length;
-            let due = 0;
-            let expired = 0;
-            let expiring = 0;
-            let cardio = 0;
-
+let active = 0;
+let due = 0;
+let expired = 0;
+let expiring = 0;
+let cardio = 0;
 
             members.forEach(m => {
 
@@ -2493,9 +2534,11 @@ Keep Training! 🔥`
 
                 if (m.expiryDate < today) {
 
-                    expired++;
+    expired++;
 
-                } else {
+} else {
+
+    active++;
 
                     const expDate =
                         new Date(
@@ -2536,6 +2579,7 @@ Keep Training! 🔥`
                 'sTotal'
             ).innerText = total;
 
+            document.getElementById('sActive').innerText = active;
 
             document.getElementById(
                 'sDue'
@@ -3124,7 +3168,9 @@ window.renew = async function() {
     const duration = {
         'Half-Monthly': { days: 15 },
         'Monthly': { months: 1 },
+        '2-Month': { months: 2 },
         'Quarterly': { months: 3 },
+        '4-Month': { months: 4 },
         'Half-Yearly': { months: 6 },
         'Yearly': { months: 12 }
     };
